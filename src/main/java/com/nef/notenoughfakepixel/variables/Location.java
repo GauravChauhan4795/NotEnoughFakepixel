@@ -53,4 +53,8 @@ public enum Location {
         return this == THE_END;
     }
 
+    public boolean isCrystalHollows() {
+        return this == CRYSTAL_HOLLOWS;
+    }
+
 }

@@ -11,10 +11,10 @@ import java.util.concurrent.locks.ReentrantLock;
 public final class TreasureTriangulator {
 
     // ---------- Adjustable params ----------
-    private final double epsilon = 4.0;
+    private final double epsilon = 1.0; // metal detector reports to 1 decimal → true error ≤ 0.5 blocks
     private final int maxSamples = 24;
     private final int minSamples = 4;
-    private final double minPlayerDelta = 0.9; // bocks
+    private final double minPlayerDelta = 0.9; // blocks
     private final long estimateCooldownMs = 250; // 4hz
     private final double pruneK = 2.5;
 

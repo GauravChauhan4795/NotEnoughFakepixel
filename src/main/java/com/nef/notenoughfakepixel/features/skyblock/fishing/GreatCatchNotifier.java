@@ -16,6 +16,7 @@ public class GreatCatchNotifier {
     @SubscribeEvent
     public void onChat(@NotNull ClientChatReceivedEvent e) {
         if (!Config.feature.fishing.fishingLegendaryCreatures) return;
+        if (e.type != 1) return;
 
         String message = e.message.getUnformattedText();
         String title = null;

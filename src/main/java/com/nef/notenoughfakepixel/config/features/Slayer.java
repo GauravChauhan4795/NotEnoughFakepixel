@@ -162,14 +162,40 @@ public class Slayer {
     @ConfigEditorDropdown(values = {"Auto Open", "Semi Auto", "Disabled"})
     public int slayerMaddoxCalling = 1;
 
+    // Inferno Demonlord Subcategory
     @Expose
-    @ConfigOption(name = "Display Blaze Pillar Title", desc = "Display title when blaze pillar is nearby.")
+    @ConfigOption(name = "Inferno Demonlord", desc = "Settings for the Inferno Demonlord boss fight.")
+    @ConfigEditorAccordion(id = 4)
+    public boolean infernoDemonlordAccordion = false;
+
+    @Expose
+    @ConfigOption(name = "Display Blaze Pillar Title", desc = "Display title when a blaze pillar is nearby.")
     @ConfigEditorBoolean
+    @ConfigAccordionId(id = 4)
     public boolean slayerFirePillarDisplay = true;
 
     @Expose
-    @ConfigOption(name = "Blaze Attunements Display", desc = "Display blaze attunements.")
+    @ConfigOption(name = "Show Attunements Overlay", desc = "Settings for attunement outline and highlight.")
+    @ConfigEditorAccordion(id = 4_1)
+    @ConfigAccordionId(id = 4)
+    public boolean blazeAttunementAccordion = false;
+
+    @Expose
+    @ConfigOption(name = "Show Outline", desc = "Draw a coloured outline around attunement minions.")
     @ConfigEditorBoolean
-    public boolean slayerBlazeAttunements = true;
+    @ConfigAccordionId(id = 4_1)
+    public boolean slayerBlazeAttunementOutline = true;
+
+    @Expose
+    @ConfigOption(name = "Show Full Attunement", desc = "Fill the attunement minion model with its attunement colour.")
+    @ConfigEditorBoolean
+    @ConfigAccordionId(id = 4_1)
+    public boolean slayerBlazeAttunementFill = false;
+
+    @Expose
+    @ConfigOption(name = "Filter Hellion Shield Spam", desc = "Hide the 'Hellion Shield' and 'Strike using attunement' messages when hitting with the wrong attunement.")
+    @ConfigEditorBoolean
+    @ConfigAccordionId(id = 4)
+    public boolean slayerHellionShieldFilter = true;
 
 }

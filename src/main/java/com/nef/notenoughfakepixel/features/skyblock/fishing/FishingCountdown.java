@@ -9,216 +9,400 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.EntityFishHook;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.server.S2APacketParticles;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.Vec3;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @RegisterEvents
 public class FishingCountdown {
+
     private final Minecraft mc = Minecraft.getMinecraft();
-    private EntityFishHook playerBobber;
-    private long fishBiteTime;
-    private String countdownText = null;
-    private long countdownEndTime = 0;
-    private final List<ParticleData> particleHistory = new ArrayList<>();
-    private static final int MIN_PARTICLES_FOR_PATH = 3;
-    private static final long MAX_PARTICLE_AGE = 1000;
-    private static final double MAX_INTER_PARTICLE_DISTANCE = 1.0;
-    private boolean biteTriggered = false;
 
-    private static class ParticleData {
-        Vec3 position;
-        long timestamp;
+    private final HashMap<Integer, EntityFishHook> hookEntities = new HashMap<>();
+    private final HashMap<WakeChain, List<Integer>> chains = new HashMap<>();
 
-        ParticleData(Vec3 position, long timestamp) {
-            this.position = position;
-            this.timestamp = timestamp;
+    private long lastCastRodMillis = 0;
+    private int pingDelayTicks = 0;
+    private final List<Integer> pingDelayList = new ArrayList<>();
+    private int buildupSoundDelay = 0;
+    private int hookedStateTicks = 0;
+    private int tickCounter = 0;
+
+    // Used to deduplicate the double-fire from MixinNetHandlerPlayClient
+    private S2APacketParticles lastProcessedPacket = null;
+
+    // Absolute timestamp (ms) when the wake chain is predicted to reach the bobber
+    private long countdownEtaMs = 0;
+
+    // Slug mode: timestamp when the bobber first entered lava (0 = not in lava)
+    private long slugLavaEntryMs = 0;
+    private static final long SLUG_DELAY_MS = 20_000;
+
+    public enum WarningState { NOTHING, INCOMING, HOOKED }
+    private WarningState warningState = WarningState.NOTHING;
+
+    private static class WakeChain {
+        int particleNum = 0;
+        long lastUpdate;
+        double currentAngle;
+        final HashMap<Integer, Double> distances = new HashMap<>();
+
+        WakeChain(long lastUpdate, double angle) {
+            this.lastUpdate = lastUpdate;
+            this.currentAngle = angle;
         }
     }
+
+    // ── Entity tracking ──────────────────────────────────────────────────────
 
     @SubscribeEvent
-    public void onClientTick(TickEvent.ClientTickEvent event) {
-        if (event.phase != TickEvent.Phase.END || mc.theWorld == null || mc.thePlayer == null) return;
-        if (!Config.feature.fishing.fishingCountdown) return;
+    public void onEntityJoin(EntityJoinWorldEvent event) {
+        if (!event.world.isRemote) return;
+        Entity e = event.entity;
+        if (!(e instanceof EntityFishHook)) return;
 
-        updatePlayerBobber();
-        mc.addScheduledTask(() -> {
-            checkFishBiteStatus();
-        });
-        mc.addScheduledTask(() -> {
-            cleanupParticleHistory();
-        });
-    }
+        EntityFishHook hook = (EntityFishHook) e;
+        hookEntities.put(hook.getEntityId(), hook);
 
-    private void updatePlayerBobber() {
-        playerBobber = mc.thePlayer.fishEntity;
-    }
-
-    private void checkFishBiteStatus() {
-        if (mc.thePlayer == null) return;
-
-        if (playerBobber == null) {
-            countdownText = null;
-            particleHistory.clear();
-            biteTriggered = false;
-            return;
-        }
-
-        if (!biteTriggered && System.currentTimeMillis() >= fishBiteTime && countdownText != null) {
-            countdownText = "§c§l!!!";
-            SoundUtils.playSound(
-                    mc.thePlayer.getPosition().getX(),
-                    mc.thePlayer.getPosition().getY(),
-                    mc.thePlayer.getPosition().getZ(),
-                    "note.pling",
-                    1.0f,
-                    1.0f
-            );
-            countdownEndTime = System.currentTimeMillis() + 2000;
-            biteTriggered = true; // prevent spam
-        }
-
-        if (biteTriggered && System.currentTimeMillis() > countdownEndTime) {
-            countdownText = null;
-            biteTriggered = false;
-        }
-    }
-
-    @SubscribeEvent
-    public void onParticlePacketReceived(ParticlePacketEvent event) {
-        S2APacketParticles packet = event.getPacket();
-        if (playerBobber == null) return;
-
-        EnumParticleTypes[] fishingParticles = {
-                EnumParticleTypes.WATER_WAKE,
-                EnumParticleTypes.LAVA
-        };
-
-        for (EnumParticleTypes particleType : fishingParticles) {
-            if (particleType == packet.getParticleType()) {
-                Vec3 particlePos = new Vec3(
-                        packet.getXCoordinate(),
-                        packet.getYCoordinate(),
-                        packet.getZCoordinate()
-                );
-                processFishingParticle(particlePos);
-                break;
+        if (hook.angler == mc.thePlayer) {
+            long now = System.currentTimeMillis();
+            long delay = now - lastCastRodMillis;
+            if (delay > 0 && delay < 500) {
+                pingDelayList.add(0, (int) Math.min(delay, 300));
             }
         }
     }
 
-    private void processFishingParticle(Vec3 particlePos) {
-        if (playerBobber == null) return;
+    @SubscribeEvent
+    public void onPlayerInteract(PlayerInteractEvent event) {
+        if (event.action != PlayerInteractEvent.Action.RIGHT_CLICK_AIR) return;
+        if (event.entityPlayer != mc.thePlayer) return;
+        ItemStack held = event.entityPlayer.getHeldItem();
+        if (held == null || held.getItem() != Items.fishing_rod) return;
+        long now = System.currentTimeMillis();
+        if (now - lastCastRodMillis > 500) lastCastRodMillis = now;
+    }
 
-        double dx = particlePos.xCoord - playerBobber.posX;
-        double dz = particlePos.zCoord - playerBobber.posZ;
-        double horizontalDist = Math.sqrt(dx * dx + dz * dz);
+    // ── Tick: warning state + cleanup ────────────────────────────────────────
 
-        if (horizontalDist > 3) return;
+    @SubscribeEvent
+    public void onClientTick(TickEvent.ClientTickEvent event) {
+        if (event.phase != TickEvent.Phase.END || mc.thePlayer == null) return;
+        if (!Config.feature.fishing.fishingCountdown) return;
 
-        long currentTime = System.currentTimeMillis();
-        particleHistory.add(new ParticleData(particlePos, currentTime));
+        if (buildupSoundDelay > 0) buildupSoundDelay--;
 
-        List<ParticleData> snapshot = new ArrayList<>(particleHistory);
+        if (mc.thePlayer.fishEntity == null) {
+            countdownEtaMs = 0;
+            slugLavaEntryMs = 0;
+        }
 
-        if (snapshot.size() >= MIN_PARTICLES_FOR_PATH) {
-            if (isValidParticlePath(new Vec3(playerBobber.posX, 0, playerBobber.posZ), snapshot)) {
-                ParticleData firstParticle = snapshot.get(0);
-                ParticleData lastParticle = snapshot.get(snapshot.size() - 1);
+        // Slug mode: track whether the bobber is sitting in lava
+        if (Config.feature.fishing.fishingSlugMode && mc.thePlayer.fishEntity != null && mc.theWorld != null) {
+            BlockPos bobberPos = new BlockPos(
+                    mc.thePlayer.fishEntity.posX,
+                    mc.thePlayer.fishEntity.posY,
+                    mc.thePlayer.fishEntity.posZ);
+            net.minecraft.block.Block block = mc.theWorld.getBlockState(bobberPos).getBlock();
+            boolean inLava = block == Blocks.lava || block == Blocks.flowing_lava;
+            if (inLava) {
+                if (slugLavaEntryMs == 0) slugLavaEntryMs = System.currentTimeMillis();
+            } else {
+                slugLavaEntryMs = 0;
+            }
+        }
 
-                double firstDistance = new Vec3(firstParticle.position.xCoord, 0, firstParticle.position.zCoord)
-                        .distanceTo(new Vec3(playerBobber.posX, 0, playerBobber.posZ));
-                double lastDistance = new Vec3(lastParticle.position.xCoord, 0, lastParticle.position.zCoord)
-                        .distanceTo(new Vec3(playerBobber.posX, 0, playerBobber.posZ));
-                long totalTimeDiff = lastParticle.timestamp - firstParticle.timestamp;
+        // Refine ping estimate while bobber is out
+        if (mc.thePlayer.fishEntity != null && !pingDelayList.isEmpty()) {
+            while (pingDelayList.size() > 5) pingDelayList.remove(pingDelayList.size() - 1);
+            int total = 0;
+            for (int d : pingDelayList) total += d;
+            pingDelayTicks = (int) Math.floor((total / (double) pingDelayList.size()) / 50.0);
+        }
 
-                if (totalTimeDiff > 0 && firstDistance > lastDistance) {
-                    double distanceDecrease = firstDistance - lastDistance;
-                    double speed = distanceDecrease / totalTimeDiff; // blocks per ms
-
-                    if (speed > 0) {
-                        double currentDistance = lastDistance;
-                        double timeToReach = currentDistance / speed; // ms
-                        fishBiteTime = currentTime + (long) timeToReach;
-
-                        if (timeToReach > 100) {
-                            double countdownVal = MathHelper.clamp_double(timeToReach / 1000.0, 0.1, 5.0);
-                            countdownText = "§e§l" + formatCountdownNumber(countdownVal);
-                            countdownEndTime = currentTime + 1000;
-                        }
+        // Advance warning state
+        if (hookedStateTicks > 0) {
+            hookedStateTicks--;
+            warningState = WarningState.HOOKED;
+        } else {
+            warningState = WarningState.NOTHING;
+            if (mc.thePlayer.fishEntity != null) {
+                int myId = mc.thePlayer.fishEntity.getEntityId();
+                for (Map.Entry<WakeChain, List<Integer>> entry : chains.entrySet()) {
+                    if (entry.getKey().particleNum >= 3 && entry.getValue().contains(myId)) {
+                        warningState = WarningState.INCOMING;
+                        break;
                     }
                 }
             }
         }
-    }
 
-    private boolean isValidParticlePath(Vec3 bobberPos, List<ParticleData> history) {
-        if (bobberPos == null) return false;
-        if (history.size() < MIN_PARTICLES_FOR_PATH) return false;
-
-        for (int i = 1; i < history.size(); i++) {
-            if (history.get(i) == null || history.get(i).position == null ||
-                    history.get(i - 1) == null || history.get(i - 1).position == null) {
-                return false;
-            }
-            double interParticleDistance = history.get(i).position.distanceTo(history.get(i - 1).position);
-            if (interParticleDistance > MAX_INTER_PARTICLE_DISTANCE) {
-                return false;
-            }
+        // Cleanup dead hooks and stale chains every second
+        if (tickCounter++ >= 20) {
+            tickCounter = 0;
+            long now = System.currentTimeMillis();
+            hookEntities.entrySet().removeIf(e -> e.getValue().isDead);
+            chains.entrySet().removeIf(entry ->
+                now - entry.getKey().lastUpdate > 200 ||
+                entry.getValue().isEmpty() ||
+                Collections.disjoint(entry.getValue(), hookEntities.keySet())
+            );
         }
-
-        if (history.get(0) == null || history.get(0).position == null ||
-                history.get(history.size() - 1) == null || history.get(history.size() - 1).position == null) {
-            return false;
-        }
-
-        double firstDistance = history.get(0).position.distanceTo(bobberPos);
-        double lastDistance = history.get(history.size() - 1).position.distanceTo(bobberPos);
-
-        return lastDistance < firstDistance;
     }
 
-    private void cleanupParticleHistory() {
-        long currentTime = System.currentTimeMillis();
-        particleHistory.removeIf(particle -> currentTime - particle.timestamp > MAX_PARTICLE_AGE);
-    }
-
-    private String formatCountdownNumber(double value) {
-        return String.format("%.1f", Math.round(value * 10) / 10.0);
-    }
+    // ── Particle detection ───────────────────────────────────────────────────
 
     @SubscribeEvent
-    @SideOnly(Side.CLIENT)
+    public void onParticlePacket(ParticlePacketEvent event) {
+        if (!Config.feature.fishing.fishingCountdown) return;
+        if (!SkyblockData.getCurrentGamemode().isSkyblock()) return;
+        if (hookEntities.isEmpty()) return;
+
+        S2APacketParticles p = event.getPacket();
+        // MixinNetHandlerPlayClient posts the event twice — skip the duplicate
+        if (p == lastProcessedPacket) return;
+        lastProcessedPacket = p;
+
+        EnumParticleTypes type = p.getParticleType();
+        if (type != EnumParticleTypes.WATER_WAKE
+                && type != EnumParticleTypes.SMOKE_NORMAL
+                && type != EnumParticleTypes.FLAME) return;
+        if (Math.abs(p.getYOffset() - 0.01f) > 0.001f) return;
+
+        double x = p.getXCoordinate(), y = p.getYCoordinate(), z = p.getZCoordinate();
+        double xOff = p.getXOffset(), zOff = p.getZOffset();
+
+        double angle1 = calcAngle(xOff, -zOff);
+        double angle2 = calcAngle(-xOff, zOff);
+
+        List<Integer> possible1 = new ArrayList<>();
+        List<Integer> possible2 = new ArrayList<>();
+
+        for (EntityFishHook hook : hookEntities.values()) {
+            if (hook.isDead) continue;
+            HookResult ret = classifyHook(hook, x, y, z, angle1, angle2);
+            switch (ret) {
+                case ANGLE1: possible1.add(hook.getEntityId()); break;
+                case ANGLE2: possible2.add(hook.getEntityId()); break;
+                case EITHER:
+                    possible1.add(hook.getEntityId());
+                    possible2.add(hook.getEntityId());
+                    break;
+                default: break;
+            }
+        }
+
+        if (possible1.isEmpty() && possible2.isEmpty()) return;
+
+        long now = System.currentTimeMillis();
+        boolean foundChain = false;
+
+        for (Map.Entry<WakeChain, List<Integer>> entry : chains.entrySet()) {
+            WakeChain chain = entry.getKey();
+            if (now - chain.lastUpdate > 200) continue;
+
+            List<Integer> possible;
+            double updateAngle;
+            if (angleWithinRange(chain.currentAngle, angle1, 16)) {
+                possible = possible1; updateAngle = angle1;
+            } else if (angleWithinRange(chain.currentAngle, angle2, 16)) {
+                possible = possible2; updateAngle = angle2;
+            } else continue;
+
+            if (Collections.disjoint(entry.getValue(), possible)) continue;
+
+            Set<Integer> kept = new HashSet<>();
+            for (int hookId : possible) {
+                if (!entry.getValue().contains(hookId) || !chain.distances.containsKey(hookId)) continue;
+                EntityFishHook hook = hookEntities.get(hookId);
+                if (hook == null || hook.isDead) continue;
+
+                double oldDist = chain.distances.get(hookId);
+                double dx = hook.posX - x, dz = hook.posZ - z;
+                double newDist = Math.sqrt(dx * dx + dz * dz);
+                double delta = oldDist - newDist;
+
+                if (newDist >= 0.2 && (delta <= -0.1 || delta >= 0.3)) continue;
+
+                // Sound + state for the player's own hook
+                if (mc.thePlayer.fishEntity != null
+                        && mc.thePlayer.fishEntity.getEntityId() == hookId
+                        && chain.particleNum > 3) {
+                    float lavaOff = (type == EnumParticleTypes.SMOKE_NORMAL) ? 0.03f : 0.1f;
+                    if (newDist <= 0.2f + lavaOff * pingDelayTicks) {
+                        if (hookedStateTicks <= 0 && !isSlugWaiting()) {
+                            SoundUtils.playGlobalSound("note.pling", 1.0f, 2.0f);
+                        }
+                        hookedStateTicks = 12;
+                    } else if (newDist >= 0.4f + 0.1f * pingDelayTicks && buildupSoundDelay <= 0 && !isSlugWaiting()) {
+                        SoundUtils.playGlobalSound("note.pling", 0.5f, calcPitch((float) newDist - (0.3f + 0.1f * pingDelayTicks)));
+                        buildupSoundDelay = 4;
+                    }
+                }
+
+                // Countdown ETA: speed = distDecrease / timeSinceLastParticle
+                if (mc.thePlayer.fishEntity != null && mc.thePlayer.fishEntity.getEntityId() == hookId) {
+                    long timeDiff = now - chain.lastUpdate;
+                    double distDecrease = oldDist - newDist;
+                    if (timeDiff > 0 && distDecrease > 0) {
+                        double speedBlocksPerMs = distDecrease / timeDiff;
+                        countdownEtaMs = now + (long) (newDist / speedBlocksPerMs);
+                    }
+                }
+
+                chain.distances.put(hookId, newDist);
+                kept.add(hookId);
+            }
+
+            if (kept.isEmpty()) continue;
+
+            entry.getValue().retainAll(kept);
+            chain.distances.keySet().retainAll(kept);
+            chain.lastUpdate = now;
+            chain.particleNum++;
+            chain.currentAngle = updateAngle;
+            foundChain = true;
+        }
+
+        if (!foundChain) {
+            possible1.removeAll(possible2);
+            List<Integer> toUse = !possible1.isEmpty() ? possible1 : possible2;
+            double useAngle = !possible1.isEmpty() ? angle1 : angle2;
+            if (toUse.isEmpty()) return;
+
+            WakeChain chain = new WakeChain(now, useAngle);
+            for (int hookId : toUse) {
+                EntityFishHook hook = hookEntities.get(hookId);
+                if (hook == null || hook.isDead) continue;
+                double dx = hook.posX - x, dz = hook.posZ - z;
+                chain.distances.put(hookId, Math.sqrt(dx * dx + dz * dz));
+            }
+            chains.put(chain, toUse);
+        }
+    }
+
+    // ── Rendering ────────────────────────────────────────────────────────────
+
+    @SubscribeEvent
     public void onRenderOverlay(RenderGameOverlayEvent.Post event) {
+        if (event.type != RenderGameOverlayEvent.ElementType.TEXT) return;
         if (!SkyblockData.getCurrentGamemode().isSkyblock()) return;
         if (!Config.feature.fishing.fishingCountdown) return;
-        if (event.type != RenderGameOverlayEvent.ElementType.TEXT || countdownText == null) return;
-        if (System.currentTimeMillis() > countdownEndTime) {
-            countdownText = null;
-            return;
+        if (warningState == WarningState.NOTHING) return;
+        if (isSlugWaiting()) return;
+
+        String text;
+        if (warningState == WarningState.HOOKED) {
+            text = "§c§l!!!";
+        } else {
+            // INCOMING state: ETA takes priority if enabled and valid, else fall back to text
+            long remaining = countdownEtaMs - System.currentTimeMillis();
+            boolean etaValid = remaining > 100 && remaining < 10_000;
+            if (Config.feature.fishing.fishingBiteEta && etaValid) {
+                text = "§e§l" + String.format("%.1f", remaining / 1000.0) + "s";
+            } else if (Config.feature.fishing.fishingIncomingMessage) {
+                text = "§e§lINCOMING";
+            } else {
+                return; // neither sub-option is enabled, nothing to show
+            }
         }
 
         FontRenderer fr = mc.fontRendererObj;
         ScaledResolution res = new ScaledResolution(mc);
-
         GlStateManager.pushMatrix();
         GlStateManager.scale(2.0, 2.0, 2.0);
-
-        int textWidth = fr.getStringWidth(countdownText);
-        int x = (res.getScaledWidth() / 4) - (textWidth / 2);
+        int x = (res.getScaledWidth() / 4) - (fr.getStringWidth(text) / 2);
         int y = (res.getScaledHeight() / 4) + 10;
-
-        fr.drawStringWithShadow(countdownText, x, y, 0xFFFFFF);
+        fr.drawStringWithShadow(text, x, y, 0xFFFFFF);
         GlStateManager.popMatrix();
+    }
+
+    // ── World unload ─────────────────────────────────────────────────────────
+
+    @SubscribeEvent
+    public void onWorldUnload(WorldEvent.Unload event) {
+        hookEntities.clear();
+        chains.clear();
+        warningState = WarningState.NOTHING;
+        hookedStateTicks = 0;
+        countdownEtaMs = 0;
+        slugLavaEntryMs = 0;
+        lastProcessedPacket = null;
+    }
+
+    // ── Helpers ──────────────────────────────────────────────────────────────
+
+    private boolean isSlugWaiting() {
+        return Config.feature.fishing.fishingSlugMode
+                && slugLavaEntryMs > 0
+                && System.currentTimeMillis() - slugLavaEntryMs < SLUG_DELAY_MS;
+    }
+
+    private double calcAngle(double xOff, double zOff) {
+        double aX = Math.toDegrees(Math.acos(xOff / 0.04));
+        double aZ = Math.toDegrees(Math.asin(zOff / 0.04));
+        if (xOff < 0) aZ = 180 - aZ;
+        if (zOff < 0) aX = 360 - aX;
+        aX = ((aX % 360) + 360) % 360;
+        aZ = ((aZ % 360) + 360) % 360;
+        double d = aX - aZ;
+        if (d < -180) d += 360;
+        if (d > 180) d -= 360;
+        return aZ + d / 2.0;
+    }
+
+    private boolean angleWithinRange(double a, double b, double range) {
+        double d = Math.abs(a - b);
+        if (d > 180) d = 360 - d;
+        return d <= range;
+    }
+
+    private enum HookResult { NOT_POSSIBLE, EITHER, ANGLE1, ANGLE2 }
+
+    private HookResult classifyHook(EntityFishHook hook, double px, double py, double pz, double a1, double a2) {
+        double dY = py - hook.posY;
+        double tolerance = 0.5;
+        if (mc.theWorld != null) {
+            for (int i = -2; i < 2; i++) {
+                net.minecraft.block.Block b = mc.theWorld.getBlockState(new BlockPos(px, py + i, pz)).getBlock();
+                if (b == Blocks.flowing_lava || b == Blocks.flowing_water || b == Blocks.lava) {
+                    tolerance = 2.0;
+                    break;
+                }
+            }
+        }
+        if (Math.abs(dY) > tolerance) return HookResult.NOT_POSSIBLE;
+
+        double dX = px - hook.posX, dZ = pz - hook.posZ;
+        double dist = Math.sqrt(dX * dX + dZ * dZ);
+        if (dist < 0.2) return HookResult.EITHER;
+
+        float allowance = (float) Math.toDegrees(Math.atan2(0.03125, dist)) * 1.5f;
+        float hookAngle = (float) Math.toDegrees(Math.atan2(dX, dZ));
+        hookAngle = ((hookAngle % 360) + 360) % 360;
+
+        if (angleWithinRange(a1, hookAngle, allowance)) return HookResult.ANGLE1;
+        if (angleWithinRange(a2, hookAngle, allowance)) return HookResult.ANGLE2;
+        return HookResult.NOT_POSSIBLE;
+    }
+
+    private static final float ZERO_PITCH = 1.0f, MAX_PITCH = 0.1f, MAX_DIST = 5f;
+
+    private float calcPitch(float d) {
+        d = Math.max(0.1f, Math.min(d, MAX_DIST));
+        return 1f / (d + (1f / (ZERO_PITCH - MAX_PITCH))) * (1f - d / MAX_DIST) + MAX_PITCH;
     }
 }
