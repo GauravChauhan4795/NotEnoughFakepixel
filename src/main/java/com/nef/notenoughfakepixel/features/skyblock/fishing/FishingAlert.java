@@ -27,7 +27,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import java.util.*;
 
 @RegisterEvents
-public class FishingCountdown {
+public class FishingAlert {
 
     private final Minecraft mc = Minecraft.getMinecraft();
 
