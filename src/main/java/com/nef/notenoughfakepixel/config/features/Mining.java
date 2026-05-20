@@ -194,6 +194,18 @@ public class Mining {
     public int crystalHeatLevel = 80;
 
     @Expose
+    @ConfigOption(name = "Chest Tracker", desc = "Highlights nearby chests and draws a trail to them.")
+    @ConfigEditorBoolean
+    @ConfigAccordionId(id = 2)
+    public boolean chestTracker = true;
+
+    @Expose
+    @ConfigOption(name = "Chest Tracker Clear Key", desc = "Keybind to clear all tracked chests.")
+    @ConfigEditorKeybind(defaultKey = Keyboard.KEY_NONE)
+    @ConfigAccordionId(id = 2)
+    public int chestTrackerClearKey = Keyboard.KEY_NONE;
+
+    @Expose
     @ConfigOption(name = "Crystal Hollows Map Settings", desc = "Settings for the Crystal Hollows map.")
     @ConfigAccordionId(id = 2)
     @ConfigEditorAccordion(id = 2_1)

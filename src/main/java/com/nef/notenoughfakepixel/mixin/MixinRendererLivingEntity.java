@@ -16,7 +16,6 @@ import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityWither;
-import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.util.IChatComponent;
 import net.minecraftforge.common.MinecraftForge;
 import org.spongepowered.asm.mixin.Final;
@@ -30,9 +29,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.awt.*;
 import java.nio.FloatBuffer;
-import java.util.List;
 import java.util.Set;
-import java.util.regex.Matcher;
 
 import static org.lwjgl.opengl.GL11.glTexEnv;
 import static org.lwjgl.opengl.GL11.glTexEnvi;
@@ -54,15 +51,11 @@ public abstract class MixinRendererLivingEntity<T extends EntityLivingBase> {
     private final Diana notEnoughFakepixel$diana = new Diana();
     private final LividDisplay notEnoughFakepixel$lividDisplay = new LividDisplay();
     private final SlayerMobsDisplay notEnoughFakepixel$slayerMobsDisplay = new SlayerMobsDisplay();
-    private final BlazeAttunements notEnoughFakepixel$blaze = new BlazeAttunements();
-
     private final Set<EntityLivingBase> notEnoughFakepixel$starredEntities = notEnoughFakepixel$starredMobDisplay.getCurrentEntities();
     private final Set<EntityLivingBase> notEnoughFakepixel$inqEntities = notEnoughFakepixel$diana.getCurrentEntities();
     private final Set<EntityLivingBase> notEnoughFakepixel$lividEntities = notEnoughFakepixel$lividDisplay.getLividEntity();
     private final Set<EntityLivingBase> notEnoughFakepixel$slayerEntities = notEnoughFakepixel$slayerMobsDisplay.getSlayerEntity();
     private final Set<EntityLivingBase> notEnoughFakepixel$slayerMiniEntities = notEnoughFakepixel$slayerMobsDisplay.getSlayerMiniEntity();
-    private final Set<EntityLivingBase> notEnoughFakepixel$blazeEntities = notEnoughFakepixel$blaze.getBlazeEntity();
-
     @Redirect(method = "renderName*", at = @At(value = "INVOKE", target =
             "Lnet/minecraft/entity/EntityLivingBase;getDisplayName()Lnet/minecraft/util/IChatComponent;"))
     public IChatComponent renderName_getDisplayName(EntityLivingBase entity) {
@@ -149,8 +142,8 @@ public abstract class MixinRendererLivingEntity<T extends EntityLivingBase> {
             return true;
         }
 
-        // Blaze Attunements
-        if (notEnoughFakepixel$blazeEntities.contains(entity)) {
+        // Blaze Attunements fill
+        if (Config.feature.slayer.slayerBlazeAttunementFill && BlazeAttunements.blazeEntity.containsKey(entity)) {
             return true;
         }
 
@@ -185,23 +178,11 @@ public abstract class MixinRendererLivingEntity<T extends EntityLivingBase> {
 
         }
 
-        if (notEnoughFakepixel$blazeEntities.contains(entity)) {
-            List<Entity> armorStands = entity.worldObj.getEntitiesWithinAABB(
-                    EntityArmorStand.class,
-                    entity.getEntityBoundingBox().offset(0, 2.0, 0).expand(1.0, 1.0, 1.0)
-            );
-            for (Entity armorStand : armorStands) {
-                if (armorStand instanceof EntityArmorStand) {
-                    String displayName = armorStand.getDisplayName().getUnformattedText();
-                    Matcher matcher = BlazeAttunements.COLOR_PATTERN.matcher(displayName);
-                    if (matcher.find()) {
-                        String attunement = matcher.group().toUpperCase();
-                        int colorInt = BlazeAttunements.getColorForAttunement(attunement);
-                        if (colorInt != -1) {
-                            return new Color(colorInt);
-                        }
-                    }
-                }
+        if (Config.feature.slayer.slayerBlazeAttunementFill) {
+            String blazeAttunement = BlazeAttunements.blazeEntity.get(entity);
+            if (blazeAttunement != null) {
+                int colorInt = BlazeAttunements.getColorForAttunement(blazeAttunement);
+                if (colorInt != -1) return new Color(colorInt);
             }
         }
 
