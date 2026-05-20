@@ -74,16 +74,16 @@ public class RenameCommand extends SimpleCommand {
                     Constants.PREFIX_INFO + "Usage: /rename <name>"
             ));
             mc.thePlayer.addChatMessage(new ChatComponentText(
-                    Constants.PREFIX_INFO + "Add colors using §r§7\\u00A7§a + color code§r§a. Examples:"
+                    Constants.PREFIX_INFO + "Add colors using §r§7&§a + color code§r§a. Examples:"
             ));
             mc.thePlayer.addChatMessage(new ChatComponentText(
-                    "  §7\\u00A7a§aGreen text   §7\\u00A7c§cRed text   §7\\u00A7e§eYellow text"
+                    "  §7&a§aGreen text   §7&c§cRed text   §7&e§eYellow text"
             ));
             mc.thePlayer.addChatMessage(new ChatComponentText(
-                    "  §7\\u00A7l§lBold   §7\\u00A7o§oItalic   §7\\u00A7n§nUnderline   §7\\u00A7k§kObfuscated"
+                    "  §7&l§lBold   §7&o§oItalic   §7&n§nUnderline§r   §7&k§kObfuscated"
             ));
             mc.thePlayer.addChatMessage(new ChatComponentText(
-                    Constants.PREFIX_INFO + "Example: §r/rename §a\\u00A7aMy Cool Sword"
+                    Constants.PREFIX_INFO + "Example: §r/rename §a&aMy Cool Sword"
             ));
             return;
         }
@@ -100,7 +100,7 @@ public class RenameCommand extends SimpleCommand {
             return;
         }
 
-        String rawName = String.join(" ", args).replace("\\u00A7", "§").replace("&", "§");
+        String rawName = String.join(" ", args).replace("&", "§").replace("&", "§");
 
         // Always kill italic unless the player explicitly used §o .
         // default to §b (aqua) if no color was specified at all.
