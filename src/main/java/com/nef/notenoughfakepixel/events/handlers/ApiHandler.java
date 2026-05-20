@@ -73,6 +73,7 @@ public class ApiHandler {
         sendRequest(createApiModel());
     }
 
+    @Deprecated
     public static void sendRequest(ApiModel model) {
         if (model == null) return;
 
@@ -88,6 +89,7 @@ public class ApiHandler {
         }
     }
 
+    @Deprecated
     private static int postJson(URL url, String jsonPayload) throws IOException {
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
@@ -138,14 +140,16 @@ public class ApiHandler {
     private static void notifyMissingOptifine() {
         if (hasOptifine()) {
             hasShownOptifineNotice = true;
+            Logger.log("Has Optifine");
             return;
         }
+        Logger.log("Does not have Optifine");
 
         Minecraft mc = Minecraft.getMinecraft();
         if (mc.thePlayer == null) return;
 
         ChatComponentText message = new ChatComponentText(
-                EnumChatFormatting.RED + "You are not using Optifine! Consider adding it for better performance clicking here"
+                EnumChatFormatting.RED + "You are not using Optifine! Consider adding it for better performance §aclicking here"
         );
         message.setChatStyle(new ChatStyle()
                 .setColor(EnumChatFormatting.RED)
