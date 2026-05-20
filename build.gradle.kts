@@ -163,6 +163,7 @@ tasks.shadowJar {
     destinationDirectory.set(layout.buildDirectory.dir("intermediates"))
     archiveClassifier.set("non-obfuscated-with-deps")
     configurations = listOf(shadowImpl, shadowModImpl)
+    mergeServiceFiles()
 
     relocate("org.reflections", "$baseGroup.deps.org.reflections")
     relocate("io.github.notenoughupdates.moulconfig", "$baseGroup.deps.moulconfig")
