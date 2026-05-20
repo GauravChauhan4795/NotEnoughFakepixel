@@ -38,6 +38,8 @@ public enum Resources {
 
     RESET(new ResourceLocation("notenoughfakepixel:core/reset.png")),
 
+    STATBAR(new ResourceLocation("notenoughfakepixel:skyblock/stats/bars/bar.png")),
+
     ;
 
     private final ResourceLocation resource;

@@ -5,6 +5,7 @@ import com.nef.notenoughfakepixel.events.PacketWriteEvent;
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
+import io.netty.handler.codec.DecoderException;
 import net.minecraft.network.Packet;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -23,8 +24,15 @@ public class PacketHandler extends ChannelDuplexHandler {
         if (msg instanceof Packet) {
             if (MinecraftForge.EVENT_BUS.post(new PacketWriteEvent((Packet) msg))) return;
         }
-
         super.write(ctx, msg, promise);
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        if (cause instanceof DecoderException) {
+            ConnectionHandler.onDecoderError();
+        }
+        super.exceptionCaught(ctx, cause);
     }
 
 }

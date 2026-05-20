@@ -212,7 +212,7 @@ public class TablistParser {
                     if (StringUtils.startsWithFast(line, "Speed: ")){
                         String speedString = line.substring(7).replace("✦", "").trim();
                         int speed = NumberUtils.parseIntSafe(speedString);
-                        StatBars.setSpeed(speed);
+                        StatBars.getSTATS().setSpeed(speed);
                     }
 
                     accountInfo.add(line);

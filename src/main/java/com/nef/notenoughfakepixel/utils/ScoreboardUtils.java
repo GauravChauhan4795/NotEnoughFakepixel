@@ -196,7 +196,7 @@ public class ScoreboardUtils {
                     if (star >= 0) {
                         final int val = NumberUtils.parseTrailingInt(unformattedName, star + 1);
                         if (val >= 0) {
-                            StatBars.setSpeed(val);
+                            StatBars.getSTATS().setSpeed(val);
                             gotSpeed = true;
                         }
                     } else {
@@ -204,7 +204,7 @@ public class ScoreboardUtils {
                         if (idx >= 0) {
                             final int val = NumberUtils.parseTrailingInt(unformattedName, idx + 7);
                             if (val >= 0) {
-                                StatBars.setSpeed(val);
+                                StatBars.getSTATS().setSpeed(val);
                                 gotSpeed = true;
                             }
                         }

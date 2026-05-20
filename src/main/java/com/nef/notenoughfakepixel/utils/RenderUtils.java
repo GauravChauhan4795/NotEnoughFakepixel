@@ -1416,5 +1416,116 @@ public class RenderUtils {
         }
     }
 
+    /**
+     * Draws a textured rectangle with float precision for position and dimensions.
+     * UV coordinates are computed as pixel offsets within the texture:
+     *   U = [u / textureWidth,  (u + width)  / textureWidth]
+     *   V = [v / textureHeight, (v + height) / textureHeight]
+     *
+     * @param x             screen x
+     * @param y             screen y
+     * @param u             horizontal pixel offset into the texture
+     * @param v             vertical pixel offset into the texture
+     * @param width         draw width in screen pixels (also the UV width in texture pixels)
+     * @param height        draw height in screen pixels (also the UV height in texture pixels)
+     * @param textureWidth  full width of the bound texture in pixels
+     * @param textureHeight full height of the bound texture in pixels
+     * @param linearTexture true to use GL_LINEAR filtering; false for GL_NEAREST
+     */
+    public static void drawModalRectWithCustomSizedTexture(
+            float x, float y,
+            float u, float v,
+            float width, float height,
+            float textureWidth, float textureHeight,
+            boolean linearTexture) {
+
+        if (linearTexture) {
+            GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+            GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+        }
+
+        float f  = 1.0f / textureWidth;
+        float f1 = 1.0f / textureHeight;
+
+        Tessellator tessellator = Tessellator.getInstance();
+        WorldRenderer wr = tessellator.getWorldRenderer();
+        wr.begin(7, DefaultVertexFormats.POSITION_TEX);
+        wr.pos(x,         y + height, 0.0).tex( u          * f, (v + height) * f1).endVertex();
+        wr.pos(x + width, y + height, 0.0).tex((u + width) * f, (v + height) * f1).endVertex();
+        wr.pos(x + width, y,          0.0).tex((u + width) * f,  v           * f1).endVertex();
+        wr.pos(x,         y,          0.0).tex( u          * f,  v           * f1).endVertex();
+        tessellator.draw();
+
+        if (linearTexture) {
+            GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
+            GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+        }
+    }
+
+    /** Overload without the linearTexture flag (defaults to GL_NEAREST). */
+    public static void drawModalRectWithCustomSizedTexture(
+            float x, float y,
+            float u, float v,
+            float width, float height,
+            float textureWidth, float textureHeight) {
+        drawModalRectWithCustomSizedTexture(x, y, u, v, width, height, textureWidth, textureHeight, false);
+    }
+
+    /**
+     * Draws a scaled textured rectangle where the UV sample region is independent
+     * from the screen draw size.  Equivalent to SBA's DrawUtils.drawScaledCustomSizeModalRect.
+     *
+     * @param x             screen x
+     * @param y             screen y
+     * @param u             horizontal pixel offset into the texture (UV region start)
+     * @param v             vertical pixel offset into the texture (UV region start)
+     * @param uWidth        width of the UV region to sample (in texture pixels)
+     * @param vHeight       height of the UV region to sample (in texture pixels)
+     * @param width         draw width on screen (may differ from uWidth to scale)
+     * @param height        draw height on screen (may differ from vHeight to scale)
+     * @param textureWidth  full width of the bound texture in pixels
+     * @param textureHeight full height of the bound texture in pixels
+     * @param linearTexture true to use GL_LINEAR filtering; false for GL_NEAREST
+     */
+    public static void drawScaledCustomSizeModalRect(
+            float x, float y,
+            float u, float v,
+            float uWidth, float vHeight,
+            float width, float height,
+            float textureWidth, float textureHeight,
+            boolean linearTexture) {
+
+        if (linearTexture) {
+            GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+            GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+        }
+
+        float f  = 1.0f / textureWidth;
+        float f1 = 1.0f / textureHeight;
+
+        Tessellator tessellator = Tessellator.getInstance();
+        WorldRenderer wr = tessellator.getWorldRenderer();
+        wr.begin(7, DefaultVertexFormats.POSITION_TEX);
+        wr.pos(x,         y + height, 0.0).tex( u           * f, (v + vHeight) * f1).endVertex();
+        wr.pos(x + width, y + height, 0.0).tex((u + uWidth) * f, (v + vHeight) * f1).endVertex();
+        wr.pos(x + width, y,          0.0).tex((u + uWidth) * f,  v            * f1).endVertex();
+        wr.pos(x,         y,          0.0).tex( u           * f,  v            * f1).endVertex();
+        tessellator.draw();
+
+        if (linearTexture) {
+            GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
+            GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+        }
+    }
+
+    /** Overload without linearTexture flag (defaults to GL_NEAREST). */
+    public static void drawScaledCustomSizeModalRect(
+            float x, float y,
+            float u, float v,
+            float uWidth, float vHeight,
+            float width, float height,
+            float textureWidth, float textureHeight) {
+        drawScaledCustomSizeModalRect(x, y, u, v, uWidth, vHeight, width, height, textureWidth, textureHeight, false);
+    }
 
 }
