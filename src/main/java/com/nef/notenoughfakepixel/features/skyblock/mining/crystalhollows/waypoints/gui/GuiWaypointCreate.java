@@ -240,7 +240,7 @@ public class GuiWaypointCreate extends GuiScreen {
     private int getColorOrDefault(ChWaypoint wp) {
         try { return (int) ChWaypoint.class.getMethod("getColorRgbOrDefault").invoke(wp); }
         catch (Exception ignore) {
-            return ColorUtils.getColor(Config.feature.mining.crystalWaypointColor).getRGB();
+            return ColorUtils.getColor(Config.feature.mining.waypointSettings.crystalWaypointColor).getRGB();
         }
     }
 
@@ -271,3 +271,4 @@ public class GuiWaypointCreate extends GuiScreen {
         tf.textboxKeyTyped(typedChar, keyCode);
     }
 }
+

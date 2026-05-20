@@ -21,12 +21,12 @@ public class SoundRemover {
             switch (soundEffect.getSoundName()) {
                 case "mob.villager.yes":
                 case "mob.villager.haggle":
-                    if (Config.feature.qol.qolDisableJerryChineGunSounds && InventoryUtils.getSlot("Jerry-chine Gun") == InventoryUtils.getCurrentSlot()) {
+                    if (Config.feature.qol.soundTweaks.qolDisableJerryChineGunSounds && InventoryUtils.getSlot("Jerry-chine Gun") == InventoryUtils.getCurrentSlot()) {
                         if (event.isCancelable()) event.setCanceled(true);
                     }
                     break;
                 case "mob.endermen.portal":
-                    if (Config.feature.qol.qolDisableAoteSounds && InventoryUtils.getSlot("Aspect of the End") == InventoryUtils.getCurrentSlot()) {
+                    if (Config.feature.qol.soundTweaks.qolDisableAoteSounds && InventoryUtils.getSlot("Aspect of the End") == InventoryUtils.getCurrentSlot()) {
                         if (event.isCancelable()) event.setCanceled(true);
                     }
                     break;
@@ -47,3 +47,4 @@ public class SoundRemover {
         }
     }
 }
+

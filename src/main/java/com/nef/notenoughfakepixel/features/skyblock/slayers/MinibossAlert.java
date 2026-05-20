@@ -23,10 +23,10 @@ public class MinibossAlert {
         if (event.packet instanceof S29PacketSoundEffect) {
             S29PacketSoundEffect packet = (S29PacketSoundEffect) event.packet;
             if (packet.getSoundName().equals("random.explode") && packet.getVolume() == 0.6f && packet.getPitch() == 9 / 7f) {
-                if (Config.feature.slayer.slayerMinibossTitle) {
+                if (Config.feature.slayer.minibossSettings.slayerMinibossTitle) {
                     TitleUtils.showTitle(EnumChatFormatting.RED + "MINIBOSS!", 1000);
                 }
-                if (Config.feature.slayer.slayerMinibossSound) {
+                if (Config.feature.slayer.minibossSettings.slayerMinibossSound) {
                     SoundUtils.playSound(mc.thePlayer.getPosition(), "random.orb", 1.0F, 1.0F);
                 }
             }

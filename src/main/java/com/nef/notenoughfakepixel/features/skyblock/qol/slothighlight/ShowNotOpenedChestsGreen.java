@@ -23,7 +23,8 @@ public class ShowNotOpenedChestsGreen extends HightlightSlot {
 
     @Override
     public boolean getConfigOption() {
-        return Config.feature.dungeons.dungeonsShowOpenedChests;
+        return Config.feature.dungeons.general.dungeonsShowOpenedChests;
     }
 
 }
+

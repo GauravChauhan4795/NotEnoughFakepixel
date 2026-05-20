@@ -1,4 +1,4 @@
-package com.nef.notenoughfakepixel.config.gui.core;
+package com.nef.notenoughfakepixel.utils;
 
 import java.awt.*;
 
@@ -90,3 +90,4 @@ public class ChromaColour {
         return (a & 0xFF) << 24 | (Color.HSBtoRGB(hsv[0], hsv[1], hsv[2]) & 0x00FFFFFF);
     }
 }
+

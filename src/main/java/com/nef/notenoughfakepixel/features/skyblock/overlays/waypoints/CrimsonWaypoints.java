@@ -33,17 +33,17 @@ public class CrimsonWaypoints extends IslandWaypoints {
 
     @Override
     public boolean shouldShow() {
-        return Config.feature.waypoints.crimsonWaypoints;
+        return Config.feature.waypoints.crimsonWaypointsSettings.crimsonWaypoints;
     }
 
     @Override
     public boolean renderBeacon() {
-        return Config.feature.waypoints.crimsonBeacons;
+        return Config.feature.waypoints.crimsonWaypointsSettings.crimsonBeacons;
     }
 
     @Override
     public Color getWaypointColor() {
-        return ColorUtils.getColor(Config.feature.waypoints.crimsonBeaconsColor);
+        return ColorUtils.getColor(Config.feature.waypoints.crimsonWaypointsSettings.crimsonBeaconsColor);
     }
 
     @Override
@@ -52,3 +52,4 @@ public class CrimsonWaypoints extends IslandWaypoints {
     }
 
 }
+

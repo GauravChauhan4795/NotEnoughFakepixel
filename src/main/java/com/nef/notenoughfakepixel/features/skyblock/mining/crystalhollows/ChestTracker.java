@@ -1,7 +1,7 @@
 package com.nef.notenoughfakepixel.features.skyblock.mining.crystalhollows;
 
 import com.nef.notenoughfakepixel.config.gui.Config;
-import com.nef.notenoughfakepixel.config.gui.core.config.KeybindHelper;
+import com.nef.notenoughfakepixel.utils.KeybindHelper;
 import com.nef.notenoughfakepixel.env.registers.RegisterEvents;
 import com.nef.notenoughfakepixel.events.PacketReadEvent;
 import com.nef.notenoughfakepixel.serverdata.SkyblockData;
@@ -32,7 +32,7 @@ public class ChestTracker {
 
     @SubscribeEvent
     public void onPacketRead(PacketReadEvent event) {
-        if (!Config.feature.mining.chestTracker) return;
+        if (!Config.feature.mining.crystalHollows.chestTracker) return;
         if (!SkyblockData.getCurrentLocation().isCrystalHollows()) return;
 
         if (event.packet instanceof S23PacketBlockChange) {
@@ -63,10 +63,10 @@ public class ChestTracker {
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
         if (event.phase != TickEvent.Phase.END || mc.thePlayer == null) return;
-        if (!Config.feature.mining.chestTracker) return;
+        if (!Config.feature.mining.crystalHollows.chestTracker) return;
 
         if (!SkyblockData.getCurrentLocation().isCrystalHollows()
-                || KeybindHelper.isKeyDown(Config.feature.mining.chestTrackerClearKey)) {
+                || KeybindHelper.isKeyDown(Config.feature.mining.crystalHollows.chestTrackerClearKey)) {
             chests.clear();
             return;
         }
@@ -83,7 +83,7 @@ public class ChestTracker {
 
     @SubscribeEvent
     public void onRenderWorld(RenderWorldLastEvent event) {
-        if (!Config.feature.mining.chestTracker) return;
+        if (!Config.feature.mining.crystalHollows.chestTracker) return;
         if (!SkyblockData.getCurrentLocation().isCrystalHollows()) return;
         if (chests.isEmpty()) return;
         if (mc.thePlayer == null) return;
@@ -174,3 +174,4 @@ public class ChestTracker {
         return new float[]{ 1.0f - lifeRatio, lifeRatio };
     }
 }
+

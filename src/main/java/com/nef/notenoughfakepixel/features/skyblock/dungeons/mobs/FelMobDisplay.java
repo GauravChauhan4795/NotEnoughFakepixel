@@ -22,7 +22,7 @@ public class FelMobDisplay {
 
     @SubscribeEvent
     public void onRenderLast(RenderWorldLastEvent event) {
-        if (!Config.feature.dungeons.dungeonsFelMob) return;
+        if (!Config.feature.dungeons.mobs.dungeonsFelMob) return;
         if (Minecraft.getMinecraft().thePlayer == null) return;
         if (Minecraft.getMinecraft().theWorld == null) return;
         if (!SkyblockData.getCurrentLocation().isDungeon()) return;
@@ -41,7 +41,7 @@ public class FelMobDisplay {
                 ItemStack head = armorStand.getEquipmentInSlot(4);
                 if (ItemUtils.hasSkinValue(Skins.ENDERMAN_HEAD, head)) {
                     Color color = new Color(
-                            ColorUtils.getColor(Config.feature.dungeons.dungeonsFelColor).getRGB()
+                            ColorUtils.getColor(Config.feature.dungeons.mobs.dungeonsFelColor).getRGB()
                     );
 
                     RenderUtils.renderEntityHitbox(
@@ -56,3 +56,4 @@ public class FelMobDisplay {
         });
     }
 }
+

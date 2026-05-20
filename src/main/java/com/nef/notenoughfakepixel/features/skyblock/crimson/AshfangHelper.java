@@ -63,7 +63,7 @@ public class AshfangHelper {
         if (Crimson.checkEssentials()) return;
         int[] position = new int[]{Minecraft.getMinecraft().thePlayer.getPosition().getX(), Minecraft.getMinecraft().thePlayer.getPosition().getY(), Minecraft.getMinecraft().thePlayer.getPosition().getZ()};
         if (!Crimson.checkAshfangArea(position)) return;
-        if (Config.feature.crimson.crimsonAshfangWaypoint || Config.feature.crimson.crimsonGravityOrbWaypoint)
+        if (Config.feature.crimson.ashfangSettings.crimsonAshfangWaypoint || Config.feature.crimson.ashfangSettings.crimsonGravityOrbWaypoint)
             drawWaypoints(event.partialTicks);
         renderEntities(event.partialTicks);
         checkHPForSound();
@@ -72,7 +72,7 @@ public class AshfangHelper {
     @SubscribeEvent
     public void onChat(@NotNull ClientChatReceivedEvent e) {
         if (Crimson.checkEssentials()) return;
-        if (Config.feature.crimson.crimsonAshfangMuteChat) {
+        if (Config.feature.crimson.ashfangSettings.crimsonAshfangMuteChat) {
             Matcher matcher = Pattern.compile("can only be damaged by").matcher(e.message.getUnformattedText());
             Matcher matcher2 = Pattern.compile("hit you for").matcher(e.message.getUnformattedText());
             if (matcher.find() || matcher2.find()) {
@@ -80,11 +80,11 @@ public class AshfangHelper {
                 return;
             }
         }
-        if (Config.feature.crimson.crimsonAshfangMuteChat) {
+        if (Config.feature.crimson.ashfangSettings.crimsonAshfangMuteChat) {
             Matcher matcher3 = Pattern.compile("The Blazing Soul dealt").matcher(e.message.getUnformattedText());
             if (matcher3.find()) {
                 int[] position = new int[]{Minecraft.getMinecraft().thePlayer.getPosition().getX(), Minecraft.getMinecraft().thePlayer.getPosition().getY(), Minecraft.getMinecraft().thePlayer.getPosition().getZ()};
-                if (Config.feature.crimson.crimsonAshfangMuteChat) e.setCanceled(true);
+                if (Config.feature.crimson.ashfangSettings.crimsonAshfangMuteChat) e.setCanceled(true);
             }
         }
     }
@@ -92,7 +92,7 @@ public class AshfangHelper {
     @SubscribeEvent
     public void onSoundPacketReceive(PacketReadEvent event) {
         if (Crimson.checkEssentials()) return;
-        if (!Config.feature.crimson.crimsonAshfangMuteSound) return;
+        if (!Config.feature.crimson.ashfangSettings.crimsonAshfangMuteSound) return;
         Packet packet = event.packet;
         if (packet instanceof S29PacketSoundEffect) {
             S29PacketSoundEffect soundEffect = (S29PacketSoundEffect) packet;
@@ -123,7 +123,7 @@ public class AshfangHelper {
                 ItemStack it = ((EntityArmorStand) entity).getEquipmentInSlot(4);
                 String blazingSoul = "Blazing Soul";
                 if (it != null && it.getItem() == Items.skull) {
-                    if (!Config.feature.crimson.crimsonGravityOrbWaypoint) continue;
+                    if (!Config.feature.crimson.ashfangSettings.crimsonGravityOrbWaypoint) continue;
 
                     String texture = ItemUtils.getSkullTexture(it);
                     if (texture == null || texture.isEmpty()) continue;
@@ -140,14 +140,14 @@ public class AshfangHelper {
 
                 } else if (entityName.contains("Ashfang") && !isNameAshfangMinion(entityName) &&
                         (currentAshfang == null || currentAshfang.getUniqueID() != entity.getUniqueID())) {
-                    if (!Config.feature.crimson.crimsonAshfangWaypoint) continue;
+                    if (!Config.feature.crimson.ashfangSettings.crimsonAshfangWaypoint) continue;
                     if (!Crimson.checkAshfangArea(position)) continue;
                     waypointAshfang = new Waypoint(ashfangName, position);
 
                     currentAshfang = entity;
                 } else if (isNameAshfangMinion(entityName)) {
 
-                    if (!Config.feature.crimson.crimsonAshfangHitboxes) continue;
+                    if (!Config.feature.crimson.ashfangSettings.crimsonAshfangHitboxes) continue;
                     if (entityName.contains(underling)) {
                         newColor[0] = new Color(255, 0, 0, 150);
                     } else if (entityName.contains(acolyte)) {
@@ -164,7 +164,7 @@ public class AshfangHelper {
                     );
 
                 } else if (entityName.contains(blazingSoul)) {
-                    if (!Config.feature.crimson.crimsonAshfangHitboxes) continue;
+                    if (!Config.feature.crimson.ashfangSettings.crimsonAshfangHitboxes) continue;
                     blazingSoulCounter.getAndIncrement();
                     newColor[0] = new Color(255, 255, 0, 255);
                     RenderUtils.renderEntityHitbox(
@@ -194,9 +194,9 @@ public class AshfangHelper {
         int offsetBossY = 0;
 
         if (waypoint.getType().equals("GRAVITYORB"))
-            colorDrawWaypoint = ColorUtils.getColor(Config.feature.crimson.crimsonBlazingSoulWaypointColor);
+            colorDrawWaypoint = ColorUtils.getColor(Config.feature.crimson.ashfangSettings.crimsonBlazingSoulWaypointColor);
         if (waypoint.getType().equals(ashfangName)) {
-            colorDrawWaypoint = ColorUtils.getColor(Config.feature.crimson.crimsonAshfangWaypointColor);
+            colorDrawWaypoint = ColorUtils.getColor(Config.feature.crimson.ashfangSettings.crimsonAshfangWaypointColor);
             offsetBossY = -6;
         }
 
@@ -219,10 +219,10 @@ public class AshfangHelper {
     }
 
     private void drawWaypoints(float partialTicks) {
-        if (Config.feature.crimson.crimsonAshfangWaypoint && !BossNotifier.getAshfangScheduled()[0]) {
+        if (Config.feature.crimson.ashfangSettings.crimsonAshfangWaypoint && !BossNotifier.getAshfangScheduled()[0]) {
             drawWaypoint(waypointAshfang, partialTicks);
         }
-        if (Config.feature.crimson.crimsonGravityOrbWaypoint) {
+        if (Config.feature.crimson.ashfangSettings.crimsonGravityOrbWaypoint) {
             drawWaypoint(waypointGravityOrb, partialTicks);
         }
     }
@@ -262,3 +262,4 @@ public class AshfangHelper {
     }
 
 }
+

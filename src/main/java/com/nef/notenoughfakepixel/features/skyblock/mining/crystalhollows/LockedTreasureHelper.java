@@ -59,7 +59,7 @@ public class LockedTreasureHelper {
         if (e.phase != TickEvent.Phase.END) return;
         if (MC.theWorld == null || MC.thePlayer == null) return;
         if (!SkyblockData.getCurrentGamemode().isSkyblock()) return;
-        if (!Config.feature.mining.lockedTreasureChest) return;
+        if (!Config.feature.mining.crystalHollows.lockedTreasureChest) return;
 
         tickCounter++;
         if (tickCounter % 10 == 0) {
@@ -100,7 +100,7 @@ public class LockedTreasureHelper {
     @SubscribeEvent
     public void onParticlePacket(ParticlePacketEvent e) {
         if (!SkyblockData.getCurrentGamemode().isSkyblock()) return;
-        if (!Config.feature.mining.lockedTreasureChest) return;
+        if (!Config.feature.mining.crystalHollows.lockedTreasureChest) return;
 
         final S2APacketParticles p = e.getPacket();
         if (p.getParticleType() != EnumParticleTypes.CRIT) return;
@@ -127,7 +127,7 @@ public class LockedTreasureHelper {
     @SubscribeEvent
     public void onRenderWorld(RenderWorldLastEvent evt) {
         if (!SkyblockData.getCurrentGamemode().isSkyblock()) return;
-        if (!Config.feature.mining.lockedTreasureChest) return;
+        if (!Config.feature.mining.crystalHollows.lockedTreasureChest) return;
         if (MC.theWorld == null || MC.thePlayer == null) return;
 
         final long now = System.currentTimeMillis();
@@ -221,3 +221,4 @@ public class LockedTreasureHelper {
     }
 
 }
+

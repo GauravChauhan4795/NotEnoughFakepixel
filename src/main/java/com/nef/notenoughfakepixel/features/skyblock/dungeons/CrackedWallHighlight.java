@@ -17,8 +17,9 @@ public class CrackedWallHighlight {
         System.out.println("EVENT");
         if (w.getBlockState(e.blockPos).getBlock() == Blocks.stonebrick && w.getBlockState(e.blockPos).getValue(BlockStoneBrick.VARIANT) == BlockStoneBrick.EnumType.CRACKED) {
             System.out.println("CRACKED BLOCK");
-            RenderUtils.highlightBlock(e.blockPos, ColorUtils.getColor(Config.feature.waypoints.fairySoulWaypointsColor), false, e.renderPartialTicks);
+            RenderUtils.highlightBlock(e.blockPos, ColorUtils.getColor(Config.feature.waypoints.fairySoulWaypointsSettings.fairySoulWaypointsColor), false, e.renderPartialTicks);
         }
     }
 
 }
+

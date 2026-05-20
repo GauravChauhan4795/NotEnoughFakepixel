@@ -1,7 +1,7 @@
 package com.nef.notenoughfakepixel.features.skyblock.crimson;
 
 import com.nef.notenoughfakepixel.config.gui.Config;
-import com.nef.notenoughfakepixel.config.gui.core.config.Position;
+import com.nef.notenoughfakepixel.config.position.Position;
 import com.nef.notenoughfakepixel.env.registers.RegisterEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
@@ -17,7 +17,7 @@ public class AshfangOverlay {
     private final Position position;
 
     public AshfangOverlay() {
-        this.position = Config.feature.crimson.ashfangOverlayPos;
+        this.position = Config.feature.crimson.ashfangSettings.ashfangOverlayPos;
     }
 
     @SubscribeEvent
@@ -71,7 +71,7 @@ public class AshfangOverlay {
      */
     private void getLines(List<String> lines, boolean example) {
         if (Crimson.checkEssentials()) return; // Skip if essentials check fails
-        if (Config.feature.crimson.crimsonAshfangOverlay) {
+        if (Config.feature.crimson.ashfangSettings.crimsonAshfangOverlay) {
             lines.add("\u00a77Ashfang HP: \u00a7r" + formatAshfangHP(AshfangHelper.getAshfangHP()));
             lines.add("\u00a77Blazing souls: \u00a7r" + AshfangHelper.getBlazingSoulsCounter() + " / " + AshfangHelper.getHitsNeeded());
         }
@@ -81,7 +81,7 @@ public class AshfangOverlay {
      * Determines if the overlay should be shown
      */
     private boolean shouldShow() {
-        return Config.feature.crimson.crimsonAshfangOverlay &&
+        return Config.feature.crimson.ashfangSettings.crimsonAshfangOverlay &&
                 Crimson.checkAshfangArea(new int[]{
                         Minecraft.getMinecraft().thePlayer.getPosition().getX(),
                         Minecraft.getMinecraft().thePlayer.getPosition().getY(),

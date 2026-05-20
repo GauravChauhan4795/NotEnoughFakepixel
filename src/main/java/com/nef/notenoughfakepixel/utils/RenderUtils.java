@@ -17,6 +17,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL14;
 import org.lwjgl.util.vector.Vector3f;
 
 import java.awt.*;
@@ -25,6 +26,40 @@ import java.util.List;
 public class RenderUtils {
 
     private static final Minecraft mc = Minecraft.getMinecraft();
+
+    public static void drawTexturedRect(float x, float y, float width, float height) {
+        drawTexturedRect(x, y, width, height, 0, 1, 0, 1);
+    }
+
+    public static void drawTexturedRect(float x, float y, float width, float height, int filter) {
+        drawTexturedRect(x, y, width, height, 0, 1, 0, 1, filter);
+    }
+
+    public static void drawTexturedRect(float x, float y, float width, float height, float uMin, float uMax, float vMin, float vMax) {
+        drawTexturedRect(x, y, width, height, uMin, uMax, vMin, vMax, GL11.GL_NEAREST);
+    }
+
+    public static void drawTexturedRect(float x, float y, float width, float height, float uMin, float uMax, float vMin, float vMax, int filter) {
+        GlStateManager.enableBlend();
+        GL14.glBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
+        GlStateManager.enableTexture2D();
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, filter);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, filter);
+
+        Tessellator tessellator = Tessellator.getInstance();
+        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+        worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
+        worldrenderer.pos(x, y + height, 0.0D).tex(uMin, vMax).endVertex();
+        worldrenderer.pos(x + width, y + height, 0.0D).tex(uMax, vMax).endVertex();
+        worldrenderer.pos(x + width, y, 0.0D).tex(uMax, vMin).endVertex();
+        worldrenderer.pos(x, y, 0.0D).tex(uMin, vMin).endVertex();
+        tessellator.draw();
+
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+        GlStateManager.disableBlend();
+    }
 
     public static void drawOnSlot(int size, int xSlotPos, int ySlotPos, int colour) {
         drawOnSlot(size, xSlotPos, ySlotPos, colour, -1);
@@ -383,7 +418,7 @@ public class RenderUtils {
         AxisAlignedBB bb = entity.getEntityBoundingBox();
         if (bb == null) return;
 
-        double scale = Config.feature.dungeons.dungeonsScaleItemDrop;
+        double scale = Config.feature.dungeons.scoreSecrets.dungeonsScaleItemDrop;
 
         Entity player = mc.getRenderViewEntity();
         double playerX = player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTicks;
@@ -411,7 +446,7 @@ public class RenderUtils {
         z1 = centerZ + (z1 - centerZ) * scale;
         z2 = centerZ + (z2 - centerZ) * scale;
 
-        double yOffset = (Config.feature.dungeons.dungeonsScaleItemDrop - 1f) * (entity.height / 2f);
+        double yOffset = (Config.feature.dungeons.scoreSecrets.dungeonsScaleItemDrop - 1f) * (entity.height / 2f);
         y1 += yOffset;
         y2 += yOffset;
 

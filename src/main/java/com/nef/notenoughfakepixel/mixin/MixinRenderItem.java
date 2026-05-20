@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MixinRenderItem {
     @Inject(method = "renderItemIntoGUI(Lnet/minecraft/item/ItemStack;II)V", at = @At("HEAD"))
     private void renderRarity(ItemStack itemStack, int xPosition, int yPosition, CallbackInfo info) {
-        if (Config.feature.qol.qolItemRarity) {
+        if (Config.feature.qol.visualTweaks.qolItemRarity) {
             ItemBackgroundRarity.renderRarityOverlay(itemStack, xPosition, yPosition);
         }
     }

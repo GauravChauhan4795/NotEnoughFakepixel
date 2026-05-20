@@ -1,9 +1,9 @@
 package com.nef.notenoughfakepixel.config.features;
 
 import com.google.gson.annotations.Expose;
-import com.nef.notenoughfakepixel.config.gui.core.config.annotations.ConfigEditorBoolean;
-import com.nef.notenoughfakepixel.config.gui.core.config.annotations.ConfigEditorDropdown;
-import com.nef.notenoughfakepixel.config.gui.core.config.annotations.ConfigOption;
+import io.github.notenoughupdates.moulconfig.annotations.ConfigEditorBoolean;
+import io.github.notenoughupdates.moulconfig.annotations.ConfigEditorDropdown;
+import io.github.notenoughupdates.moulconfig.annotations.ConfigOption;
 
 public class Experimentation {
 

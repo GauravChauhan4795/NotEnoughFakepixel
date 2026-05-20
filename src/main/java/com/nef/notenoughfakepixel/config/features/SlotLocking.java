@@ -1,7 +1,7 @@
 package com.nef.notenoughfakepixel.config.features;
 
 import com.google.gson.annotations.Expose;
-import com.nef.notenoughfakepixel.config.gui.core.config.annotations.*;
+import io.github.notenoughupdates.moulconfig.annotations.*;
 import org.lwjgl.input.Keyboard;
 
 public class SlotLocking {
@@ -11,7 +11,7 @@ public class SlotLocking {
             name = "\u00A7cWarning",
             desc = "Make sure you have SBA's and NEU's locked slots off before you turn NEF's on"
     )
-    @ConfigEditorText()
+    @ConfigEditorBoolean
     public boolean slotLockWarning = false;
 
     @Expose
@@ -102,8 +102,9 @@ public class SlotLocking {
             desc = "Resets Slot Locking"
     )
     @ConfigEditorButton(
-            runnableId = "slotReset",
+            runnableId = 5,
             buttonText = "Reset"
     )
     public float resetSlotLocking = 39;
 }
+

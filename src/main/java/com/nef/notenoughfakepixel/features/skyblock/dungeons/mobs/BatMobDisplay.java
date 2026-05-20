@@ -19,7 +19,7 @@ public class BatMobDisplay {
 
     @SubscribeEvent
     public void onRenderLast(RenderWorldLastEvent event) {
-        if (!Config.feature.dungeons.dungeonsBatMobs) return;
+        if (!Config.feature.dungeons.mobs.dungeonsBatMobs) return;
         if (Minecraft.getMinecraft().thePlayer == null) return;
         if (Minecraft.getMinecraft().theWorld == null) return;
         if (!SkyblockData.getCurrentLocation().isDungeon()) return;
@@ -31,7 +31,7 @@ public class BatMobDisplay {
             if (entity.getName() == null) return;
             if (entity instanceof EntityBat) {
                 Color color = new Color(
-                        ColorUtils.getColor(Config.feature.dungeons.dungeonsBatColor).getRGB()
+                        ColorUtils.getColor(Config.feature.dungeons.mobs.dungeonsBatColor).getRGB()
                 );
 
                 RenderUtils.renderEntityHitbox(
@@ -46,3 +46,4 @@ public class BatMobDisplay {
 
 
 }
+

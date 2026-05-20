@@ -19,7 +19,7 @@ public class TerminalWaypoints {
 
     @SubscribeEvent
     public void onRenderWorldLast(RenderWorldLastEvent event) {
-        if (Config.feature.dungeons.dungeonsTerminalWaypoints && DungeonManager.checkEssentialsF7()) {
+        if (Config.feature.dungeons.terminals.dungeonsTerminalWaypoints && DungeonManager.checkEssentialsF7()) {
             Minecraft mc = Minecraft.getMinecraft();
             if (mc.thePlayer == null) return;
 
@@ -123,3 +123,4 @@ public class TerminalWaypoints {
         GL11.glEnd();
     }
 }
+

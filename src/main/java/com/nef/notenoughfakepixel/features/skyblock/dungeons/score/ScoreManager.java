@@ -58,7 +58,7 @@ public class ScoreManager {
                 DungeonFloor.getFloor(SkyblockData.getCurrentFloor().name()).getSecretPercentage());
         int virtualTotalScore = currentScore + virtualSecretScore;
 
-        if (virtualTotalScore >= 270 && !hasNotified270 & Config.feature.dungeons.dungeonsSNotifier) {
+        if (virtualTotalScore >= 270 && !hasNotified270 & Config.feature.dungeons.scoreSecrets.dungeonsSNotifier) {
             Minecraft.getMinecraft().thePlayer.sendChatMessage("/pc 270 Score!");
             SoundUtils.playSound(mc.thePlayer.getPosition(), "note.pling", 2.0F, 2.0F);
             TitleUtils.showTitle(EnumChatFormatting.RED + "270 Score!", 2000);
@@ -119,7 +119,7 @@ public class ScoreManager {
 
     public static int getBonusScore() {
         int crypts = TablistParser.crypts;
-        return (Config.feature.dungeons.dungeonsIsPaul ? 10 : 0) + Math.min(5, crypts);
+        return (Config.feature.dungeons.general.dungeonsIsPaul ? 10 : 0) + Math.min(5, crypts);
     }
 
     public static int getSecretPercentage() {

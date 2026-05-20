@@ -41,9 +41,9 @@ public class SlayerMobsDisplay {
     public void onRenderLast(RenderWorldLastEvent event) {
         Minecraft mc = Minecraft.getMinecraft();
         if (mc.thePlayer == null || mc.theWorld == null) return;
-        if (Config.feature.slayer.slayerBossesOutline) return;
-        if (Config.feature.slayer.slayerBosses) onRender(event, true);
-        if (Config.feature.slayer.slayerMinibosses) onRender(event, false);
+        if (Config.feature.slayer.bossSettings.slayerBossesOutline) return;
+        if (Config.feature.slayer.bossSettings.slayerBosses) onRender(event, true);
+        if (Config.feature.slayer.minibossSettings.slayerMinibosses) onRender(event, false);
     }
 
     private void onRender(RenderWorldLastEvent event, boolean isBoss) {
@@ -68,8 +68,8 @@ public class SlayerMobsDisplay {
     }
 
     private void showHitboxHub(float partialTicks) {
-        Color bossColor = ColorUtils.getColor(Config.feature.slayer.slayerBossColor);
-        Color minibossColor = ColorUtils.getColor(Config.feature.slayer.slayerColor);
+        Color bossColor = ColorUtils.getColor(Config.feature.slayer.bossSettings.slayerBossColor);
+        Color minibossColor = ColorUtils.getColor(Config.feature.slayer.minibossSettings.slayerColor);
 
         WorldClient world = Minecraft.getMinecraft().theWorld;
         if (world == null) return;
@@ -106,7 +106,7 @@ public class SlayerMobsDisplay {
     }
 
     private void showHitbox(MobDisplayTypes type, float partialTicks, String[] namesList, boolean isBoss) {
-        Color color = ColorUtils.getColor(Config.feature.slayer.slayerBossColor);
+        Color color = ColorUtils.getColor(Config.feature.slayer.bossSettings.slayerBossColor);
         WorldClient world = Minecraft.getMinecraft().theWorld;
         world.loadedEntityList.forEach(entity -> {
             if (entity == null || entity.getName() == null) return;
@@ -123,7 +123,7 @@ public class SlayerMobsDisplay {
 
     @SubscribeEvent
     public void onRenderEntity(RenderLivingEvent.Pre<EntityLivingBase> event) {
-        if (!Config.feature.slayer.slayerBossesOutline) return;
+        if (!Config.feature.slayer.bossSettings.slayerBossesOutline) return;
 
         long currentTime = System.currentTimeMillis();
         if (currentTime - lastUpdateTime > 20) {
@@ -146,7 +146,7 @@ public class SlayerMobsDisplay {
 
             // Check for bosses
             for (String name : Constants.SLAYER_BOSSES) {
-                if (armorStand.getName().contains(name) && Config.feature.slayer.slayerBosses) {
+                if (armorStand.getName().contains(name) && Config.feature.slayer.bossSettings.slayerBosses) {
                     slayerEntity.add(entity);
                     return;
                 }
@@ -161,7 +161,7 @@ public class SlayerMobsDisplay {
                     Constants.BLAZE_SLAYER_MINIBOSSES
             }) {
                 for (String name : minibosses) {
-                    if (armorStand.getName().contains(name) && Config.feature.slayer.slayerMinibosses) {
+                    if (armorStand.getName().contains(name) && Config.feature.slayer.minibossSettings.slayerMinibosses) {
                         slayerMiniEntity.add(entity);
                         return;
                     }
@@ -172,13 +172,13 @@ public class SlayerMobsDisplay {
 
     @SubscribeEvent(priority = EventPriority.HIGH)
     public void onRenderEntityModel(RenderEntityModelEvent event) {
-        if (!Config.feature.slayer.slayerBossesOutline) return;
+        if (!Config.feature.slayer.bossSettings.slayerBossesOutline) return;
 
         EntityLivingBase entity = event.getEntity();
         if (entity == null || !slayerEntity.contains(entity)) return;
 
-        Color bossColor = ColorUtils.getColor(Config.feature.slayer.slayerBossColor);
-        Color minibossColor = ColorUtils.getColor(Config.feature.slayer.slayerColor);
+        Color bossColor = ColorUtils.getColor(Config.feature.slayer.bossSettings.slayerBossColor);
+        Color minibossColor = ColorUtils.getColor(Config.feature.slayer.minibossSettings.slayerColor);
         Color color = minibossColor;
 
         List<Entity> armorStands = Minecraft.getMinecraft().theWorld.getEntitiesWithinAABB(
@@ -188,7 +188,7 @@ public class SlayerMobsDisplay {
         for (Entity armorStand : armorStands) {
             if (!(armorStand instanceof EntityArmorStand) || armorStand.getName() == null) continue;
             for (String name : Constants.SLAYER_BOSSES) {
-                if (armorStand.getName().contains(name) && Config.feature.slayer.slayerBosses) {
+                if (armorStand.getName().contains(name) && Config.feature.slayer.bossSettings.slayerBosses) {
                     color = bossColor;
                     break;
                 }

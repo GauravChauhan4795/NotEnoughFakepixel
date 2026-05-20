@@ -16,7 +16,7 @@ public class Fullbright {
 
     @SubscribeEvent
     public void onRender(RenderHandEvent event) {
-        if (Config.feature.qol.qolFullbright) changeBrightness(FULLBRIGHT);
+        if (Config.feature.qol.visualTweaks.qolFullbright) changeBrightness(FULLBRIGHT);
         else changeBrightness(BRIGHTEST);
     }
 
@@ -27,3 +27,4 @@ public class Fullbright {
         mc.gameSettings.saveOptions();
     }
 }
+

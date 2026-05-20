@@ -1,7 +1,7 @@
 package com.nef.notenoughfakepixel.features.skyblock.qol.shortcuts;
 
 import com.nef.notenoughfakepixel.config.gui.Config;
-import com.nef.notenoughfakepixel.config.gui.core.config.KeybindHelper;
+import com.nef.notenoughfakepixel.utils.KeybindHelper;
 import com.nef.notenoughfakepixel.env.registers.RegisterEvents;
 import com.nef.notenoughfakepixel.serverdata.SkyblockData;
 import net.minecraft.client.Minecraft;
@@ -19,13 +19,13 @@ public class WarpsShortcut {
 
     @SubscribeEvent
     public void onKeyPress(InputEvent.KeyInputEvent event) {
-        if (!Config.feature.qol.qolShortcutWarps) return;
+        if (!Config.feature.qol.shortcuts.qolShortcutWarps) return;
         if (!SkyblockData.getCurrentGamemode().isSkyblock()) return;
         EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
 
-        checkWarp(player, Config.feature.qol.qolShortcutWarpIs, "/warp is");
-        checkWarp(player, Config.feature.qol.qolShortcutWarpHub, "/warp hub");
-        checkWarp(player, Config.feature.qol.qolShortcutWarpDh, "/warp dh");
+        checkWarp(player, Config.feature.qol.shortcuts.qolShortcutWarpIs, "/warp is");
+        checkWarp(player, Config.feature.qol.shortcuts.qolShortcutWarpHub, "/warp hub");
+        checkWarp(player, Config.feature.qol.shortcuts.qolShortcutWarpDh, "/warp dh");
     }
 
     private void checkWarp(EntityPlayerSP player, int keyBind, String command) {

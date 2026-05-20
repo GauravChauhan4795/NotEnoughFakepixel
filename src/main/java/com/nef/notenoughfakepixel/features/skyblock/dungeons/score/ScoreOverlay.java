@@ -36,14 +36,14 @@ public class ScoreOverlay {
         ScaledResolution sr = new ScaledResolution(mc);
         int overlayWidth = getWidth(1.0f); // Base width, scaled later
         int overlayHeight = getHeight(1.0f); // Base height, scaled later
-        float x = Config.feature.dungeons.scoreOverlayPos.getAbsX(sr, overlayWidth);
-        float y = Config.feature.dungeons.scoreOverlayPos.getAbsY(sr, overlayHeight);
-        draw(x, y, Config.feature.dungeons.scoreOverlayScale, false);
+        float x = Config.feature.dungeons.scoreSecrets.scoreOverlayPos.getAbsX(sr, overlayWidth);
+        float y = Config.feature.dungeons.scoreSecrets.scoreOverlayPos.getAbsY(sr, overlayHeight);
+        draw(x, y, Config.feature.dungeons.scoreSecrets.scoreOverlayScale, false);
     }
 
     private boolean shouldShow() {
         if (!DungeonManager.checkEssentials()) return false;
-        return Config.feature.dungeons.dungeonsScoreOverlay;
+        return Config.feature.dungeons.scoreSecrets.dungeonsScoreOverlay;
     }
 
     private void draw(float x, float y, float scale, boolean example) {
@@ -55,7 +55,7 @@ public class ScoreOverlay {
         getLines(lines, example);
 
         // Parse background color
-        String[] colorParts = Config.feature.dungeons.scoreOverlayBackgroundColor.split(":");
+        String[] colorParts = Config.feature.dungeons.scoreSecrets.scoreOverlayBackgroundColor.split(":");
         int alpha = Integer.parseInt(colorParts[1]);
         int red = Integer.parseInt(colorParts[2]);
         int green = Integer.parseInt(colorParts[3]);
@@ -87,9 +87,9 @@ public class ScoreOverlay {
         ScaledResolution sr = new ScaledResolution(mc);
         int overlayWidth = getWidth(1.0f);
         int overlayHeight = getHeight(1.0f);
-        float x = Config.feature.dungeons.scoreOverlayPos.getAbsX(sr, overlayWidth);
-        float y = Config.feature.dungeons.scoreOverlayPos.getAbsY(sr, overlayHeight);
-        draw(x, y, Config.feature.dungeons.scoreOverlayScale, true);
+        float x = Config.feature.dungeons.scoreSecrets.scoreOverlayPos.getAbsX(sr, overlayWidth);
+        float y = Config.feature.dungeons.scoreSecrets.scoreOverlayPos.getAbsY(sr, overlayHeight);
+        draw(x, y, Config.feature.dungeons.scoreSecrets.scoreOverlayScale, true);
     }
 
     public int getWidth(float scale) {
@@ -103,7 +103,7 @@ public class ScoreOverlay {
 
     private void getLines(List<String> lines, boolean example) {
         if (example) {
-            if (Config.feature.dungeons.dungeonsScoreSimple) {
+            if (Config.feature.dungeons.scoreSecrets.dungeonsScoreSimple) {
                 lines.add("\u00a77Total score: \u00a7a300\u00a76 (S+)");
                 lines.add("");
                 lines.add("\u00a77Secrets: \u00a7a100% \u00a7a/ 80% \u00a7a/ 100%");
@@ -118,7 +118,7 @@ public class ScoreOverlay {
                 lines.add("\u00a77Secrets: \u00a7a100% \u00a7a/ 80% \u00a7a/ 100%");
             }
         } else {
-            if (Config.feature.dungeons.dungeonsScoreSimple) {
+            if (Config.feature.dungeons.scoreSecrets.dungeonsScoreSimple) {
                 lines.add(getRankingDisplay());
                 lines.add("");
                 lines.add(getSecretDisplay());
@@ -184,7 +184,7 @@ public class ScoreOverlay {
     }
 
     private String getBonusDisplay() {
-        int threshold = Config.feature.dungeons.dungeonsIsPaul ? 15 : 5;
+        int threshold = Config.feature.dungeons.general.dungeonsIsPaul ? 15 : 5;
         EnumChatFormatting enumChatFormatting;
         int bonusScore = ScoreManager.getBonusScore();
         if (bonusScore >= threshold) enumChatFormatting = EnumChatFormatting.GREEN;

@@ -33,7 +33,7 @@ public class ScavengedToolsOverlay extends Overlay {
         if (Minecraft.getMinecraft().gameSettings.showDebugInfo) return false;
         if (Minecraft.getMinecraft().gameSettings.keyBindPlayerList.isKeyDown()) return false;
         if (Config.feature.mining.miningOverlayHideOnChat && mc.currentScreen instanceof GuiChat) return false;
-        return Config.feature.mining.scavengedOverlay;
+        return Config.feature.mining.crystalHollows.scavengedOverlay;
     }
 
     @Override
@@ -77,18 +77,19 @@ public class ScavengedToolsOverlay extends Overlay {
         if (!shouldShow()) return;
 
         ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft());
-        int width = (int) getWidth(Config.feature.mining.scavengedOverlayScale, getLines());
-        int height = (int) getHeight(Config.feature.mining.scavengedOverlayScale, getLines());
-        int x = Config.feature.mining.scavengedOverlayPos.getAbsX(sr, width);
-        int y = Config.feature.mining.scavengedOverlayPos.getAbsY(sr, height);
+        int width = (int) getWidth(Config.feature.mining.scavengedOverlaySettings.scavengedOverlayScale, getLines());
+        int height = (int) getHeight(Config.feature.mining.scavengedOverlaySettings.scavengedOverlayScale, getLines());
+        int x = Config.feature.mining.scavengedOverlaySettings.scavengedOverlayPos.getAbsX(sr, width);
+        int y = Config.feature.mining.scavengedOverlaySettings.scavengedOverlayPos.getAbsY(sr, height);
 
         draw(
                 x - ((float) width /2),
                 y - ((float) height /2),
-                Config.feature.mining.scavengedOverlayScale,
-                Config.feature.mining.miningOverlayBackgroundColor
+                Config.feature.mining.scavengedOverlaySettings.scavengedOverlayScale,
+                Config.feature.mining.miningOverlaySettings.miningOverlayBackgroundColor
         );
     }
 
 
 }
+

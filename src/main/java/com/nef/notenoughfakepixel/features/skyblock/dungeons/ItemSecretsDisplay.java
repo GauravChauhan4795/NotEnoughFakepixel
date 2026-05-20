@@ -27,18 +27,18 @@ public class ItemSecretsDisplay {
 
     @SubscribeEvent
     public void onRenderLast(RenderWorldLastEvent event) {
-        if (!Config.feature.dungeons.dungeonsItemSecretsDisplay) return;
+        if (!Config.feature.dungeons.scoreSecrets.dungeonsItemSecretsDisplay) return;
         if (Minecraft.getMinecraft().thePlayer == null) return;
         if (Minecraft.getMinecraft().theWorld == null) return;
         if (!SkyblockData.getCurrentLocation().isDungeon()) return;
 
         WorldClient world = Minecraft.getMinecraft().theWorld;
 
-        Color color = ColorUtils.getColor(Config.feature.dungeons.dungeonsItemSecretsColor);
+        Color color = ColorUtils.getColor(Config.feature.dungeons.scoreSecrets.dungeonsItemSecretsColor);
 
 
         MobDisplayTypes hitboxType;
-        if (Config.feature.dungeons.dungeonsItemSecretsBig) hitboxType = MobDisplayTypes.ITEMBIG;
+        if (Config.feature.dungeons.scoreSecrets.dungeonsItemSecretsBig) hitboxType = MobDisplayTypes.ITEMBIG;
         else {
             hitboxType = MobDisplayTypes.ITEM;
         }
@@ -91,3 +91,4 @@ public class ItemSecretsDisplay {
         });
     }
 }
+

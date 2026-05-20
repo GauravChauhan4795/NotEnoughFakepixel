@@ -42,16 +42,16 @@ public class BossNotifier {
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent e) {
         if (Crimson.checkEssentials()) return;
-        if (Config.feature.crimson.crimsonBladesoulNotifier) {
+        if (Config.feature.crimson.bossNotifiers.crimsonBladesoulNotifier) {
             playCountdown("Bladesoul", bladesoulReady, bladesoulLastKill, bladesoulScheduled);
         }
-        if (Config.feature.crimson.crimsonMageOutlawNotifier) {
+        if (Config.feature.crimson.bossNotifiers.crimsonMageOutlawNotifier) {
             playCountdown("Mage Outlaw", mageOutlawReady, mageOutlawLastKill, mageOutlawScheduled);
         }
-        if (Config.feature.crimson.crimsonAshfangNotifier) {
+        if (Config.feature.crimson.bossNotifiers.crimsonAshfangNotifier) {
             playCountdown("Ashfang", ashfangReady, ashfangLastKill, ashfangScheduled);
         }
-        if (Config.feature.crimson.crimsonBarbarianDukeXNotifier) {
+        if (Config.feature.crimson.bossNotifiers.crimsonBarbarianDukeXNotifier) {
             playCountdown("Barbarian Duke X", barbarianDukeXReady, barbarianDukeXLastKill, barbarianDukeXScheduled);
         }
     }
@@ -61,7 +61,7 @@ public class BossNotifier {
         if (Crimson.checkEssentials()) return;
         int spawnBossMilliseconds = 125000;
 
-        if (Config.feature.crimson.crimsonBladesoulNotifier) {
+        if (Config.feature.crimson.bossNotifiers.crimsonBladesoulNotifier) {
             Matcher matcher = Pattern.compile("BLADESOUL DOWN!").matcher(e.message.getUnformattedText());
             if (matcher.find()) {
                 bladesoulLastKill = System.currentTimeMillis();
@@ -71,7 +71,7 @@ public class BossNotifier {
             }
         }
 
-        if (Config.feature.crimson.crimsonMageOutlawNotifier) {
+        if (Config.feature.crimson.bossNotifiers.crimsonMageOutlawNotifier) {
             Matcher matcher = Pattern.compile("MAGE OUTLAW DOWN!").matcher(e.message.getUnformattedText());
             if (matcher.find()) {
                 mageOutlawLastKill = System.currentTimeMillis();
@@ -81,7 +81,7 @@ public class BossNotifier {
             }
         }
 
-        if (Config.feature.crimson.crimsonAshfangNotifier) {
+        if (Config.feature.crimson.bossNotifiers.crimsonAshfangNotifier) {
             Matcher matcher = Pattern.compile("ASHFANG DOWN!").matcher(e.message.getUnformattedText());
             if (matcher.find()) {
                 ashfangLastKill = System.currentTimeMillis();
@@ -91,7 +91,7 @@ public class BossNotifier {
             }
         }
 
-        if (Config.feature.crimson.crimsonBarbarianDukeXNotifier) {
+        if (Config.feature.crimson.bossNotifiers.crimsonBarbarianDukeXNotifier) {
             Matcher matcher = Pattern.compile("BARBARIAN DUKE X DOWN!").matcher(e.message.getUnformattedText());
             if (matcher.find()) {
                 barbarianDukeXLastKill = System.currentTimeMillis();
@@ -104,22 +104,22 @@ public class BossNotifier {
     @SubscribeEvent()
     public void onWorldUnload(WorldEvent.Unload event) {
         if (Crimson.checkEssentials()) return;
-        if (Config.feature.crimson.crimsonBladesoulNotifier) {
+        if (Config.feature.crimson.bossNotifiers.crimsonBladesoulNotifier) {
             Arrays.fill(bladesoulScheduled, false);
             bladesoulReady = -1;
             bladesoulLastKill = -1;
         }
-        if (Config.feature.crimson.crimsonMageOutlawNotifier) {
+        if (Config.feature.crimson.bossNotifiers.crimsonMageOutlawNotifier) {
             Arrays.fill(mageOutlawScheduled, false);
             mageOutlawReady = -1;
             mageOutlawLastKill = -1;
         }
-        if (Config.feature.crimson.crimsonAshfangNotifier) {
+        if (Config.feature.crimson.bossNotifiers.crimsonAshfangNotifier) {
             Arrays.fill(ashfangScheduled, false);
             ashfangReady = -1;
             ashfangLastKill = -1;
         }
-        if (Config.feature.crimson.crimsonBarbarianDukeXNotifier) {
+        if (Config.feature.crimson.bossNotifiers.crimsonBarbarianDukeXNotifier) {
             Arrays.fill(barbarianDukeXScheduled, false);
             barbarianDukeXReady = -1;
             barbarianDukeXLastKill = -1;

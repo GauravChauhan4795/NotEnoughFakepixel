@@ -38,7 +38,7 @@ public class SalvageItemsSaver {
     @SubscribeEvent
     public void onGuiRender(GuiScreenEvent.BackgroundDrawnEvent event) {
         if (SkyblockData.getCurrentLocation() != Location.DUNGEON_HUB) return;
-        if (!Config.feature.dungeons.dungeonsSalvageItemsPrevention) return;
+        if (!Config.feature.dungeons.general.dungeonsSalvageItemsPrevention) return;
         if (event.gui instanceof GuiChest) {
             GuiChest chest = (GuiChest) event.gui;
             Container container = chest.inventorySlots;
@@ -58,7 +58,7 @@ public class SalvageItemsSaver {
     @SubscribeEvent
     public void onMouseClick(GuiScreenEvent.MouseInputEvent.Pre event) {
         if (SkyblockData.getCurrentLocation() != Location.DUNGEON_HUB) return;
-        if (!Config.feature.dungeons.dungeonsSalvageItemsPrevention) return;
+        if (!Config.feature.dungeons.general.dungeonsSalvageItemsPrevention) return;
         if (!Mouse.getEventButtonState()) return;
         if (!(Minecraft.getMinecraft().currentScreen instanceof GuiChest))
             return; // Check if the current screen is a chest GUI
@@ -87,3 +87,4 @@ public class SalvageItemsSaver {
         }
     }
 }
+

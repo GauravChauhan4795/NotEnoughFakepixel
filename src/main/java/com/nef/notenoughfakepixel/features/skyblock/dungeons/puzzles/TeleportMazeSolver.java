@@ -33,7 +33,7 @@ public class TeleportMazeSolver {
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
         if (event.phase != TickEvent.Phase.START) return;
-        if (!Config.feature.dungeons.dungeonsTeleportMaze || !SkyblockData.getCurrentLocation().isDungeon()) return;
+        if (!Config.feature.dungeons.puzzles.dungeonsTeleportMaze || !SkyblockData.getCurrentLocation().isDungeon()) return;
         if (mc.thePlayer == null || mc.theWorld == null) return;
         BlockPos groundBlock = new BlockPos(mc.thePlayer.posX, 69, mc.thePlayer.posZ);
         IBlockState state = mc.theWorld.getBlockState(groundBlock);
@@ -73,7 +73,7 @@ public class TeleportMazeSolver {
 
     @SubscribeEvent
     public void onWorldRender(RenderWorldLastEvent event) {
-        if (!Config.feature.dungeons.dungeonsTeleportMaze) return;
+        if (!Config.feature.dungeons.puzzles.dungeonsTeleportMaze) return;
         Entity viewer = Minecraft.getMinecraft().getRenderViewEntity();
         double viewerX = viewer.lastTickPosX + (viewer.posX - viewer.lastTickPosX) * event.partialTicks;
         double viewerY = viewer.lastTickPosY + (viewer.posY - viewer.lastTickPosY) * event.partialTicks;
@@ -156,3 +156,4 @@ public class TeleportMazeSolver {
         GlStateManager.disableBlend();
     }
 }
+

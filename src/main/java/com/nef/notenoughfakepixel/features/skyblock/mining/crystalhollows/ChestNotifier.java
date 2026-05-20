@@ -9,7 +9,7 @@ public class ChestNotifier extends ChatNotifier {
 
     @Override
     public boolean shouldNotify() {
-        return Config.feature.mining.crystalPowderNotifier;
+        return Config.feature.mining.crystalHollows.crystalPowderNotifier;
     }
 
     @Override
@@ -23,3 +23,4 @@ public class ChestNotifier extends ChatNotifier {
     }
 
 }
+

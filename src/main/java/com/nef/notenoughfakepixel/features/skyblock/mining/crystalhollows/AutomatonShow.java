@@ -23,12 +23,12 @@ public class AutomatonShow {
         Minecraft mc = Minecraft.getMinecraft();
         if (mc.thePlayer == null || mc.theWorld == null) return;
         if (!SkyblockData.getCurrentArea().equals(Area.CH_LOST_PRECURSOR) && !SkyblockData.getCurrentArea().equals(Area.CH_PRECURSOR)) return;
-        if (!Config.feature.mining.crystalShowAutomaton) return;
+        if (!Config.feature.mining.crystalHollows.crystalShowAutomaton) return;
         onRender(event);
     }
 
     private void onRender(RenderWorldLastEvent event) {
-        Color color = ColorUtils.getColor(Config.feature.mining.automatonColor);
+        Color color = ColorUtils.getColor(Config.feature.mining.automatonOverlaySettings.automatonColor);
         final float partialTicks = event.partialTicks;
 
         WorldClient world = Minecraft.getMinecraft().theWorld;
@@ -49,3 +49,4 @@ public class AutomatonShow {
     }
 
 }
+

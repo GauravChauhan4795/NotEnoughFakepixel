@@ -19,15 +19,16 @@ public class HeatNotifier {
         tickCount++;
         if (event.phase == TickEvent.Phase.END && event.side.isClient() && (tickCount % 120 == 0)) {
             tickCount = 0;
-            if (!Config.feature.mining.crystalHeatNotifier) return;
-            if (SkyblockData.getHeat() > Config.feature.mining.crystalHeatLevel && !notified) {
+            if (!Config.feature.mining.crystalHollows.crystalHeatNotifier) return;
+            if (SkyblockData.getHeat() > Config.feature.mining.crystalHollows.crystalHeatLevel && !notified) {
                 notified = true;
                 Minecraft.getMinecraft().ingameGUI.displayTitle(EnumChatFormatting.RED + "HEAT", "", 2, 70, 2);
             }
-            if (SkyblockData.getHeat() < Config.feature.mining.crystalHeatLevel && notified) {
+            if (SkyblockData.getHeat() < Config.feature.mining.crystalHollows.crystalHeatLevel && notified) {
                 notified = false;
             }
         }
     }
 
 }
+

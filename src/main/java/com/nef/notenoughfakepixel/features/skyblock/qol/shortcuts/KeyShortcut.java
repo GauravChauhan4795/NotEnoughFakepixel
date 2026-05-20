@@ -1,6 +1,6 @@
 package com.nef.notenoughfakepixel.features.skyblock.qol.shortcuts;
 
-import com.nef.notenoughfakepixel.config.gui.core.config.KeybindHelper;
+import com.nef.notenoughfakepixel.utils.KeybindHelper;
 import com.nef.notenoughfakepixel.serverdata.SkyblockData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiChest;
@@ -57,3 +57,4 @@ public abstract class KeyShortcut {
     public abstract String getMenuTitle();
 
 }
+

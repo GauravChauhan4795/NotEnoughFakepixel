@@ -75,21 +75,21 @@ public class StatBars {
 
         public int getX() {
             switch (this) {
-                case HEALTH:  return Config.feature.overlays.posHealth.getRawX();
-                case MANA:    return Config.feature.overlays.posMana.getRawX();
-                case SPEED:   return Config.feature.overlays.posSpeed.getRawX();
-                case EXP:     return Config.feature.overlays.posExp.getRawX();
-                default:      return Config.feature.overlays.posDefense.getRawX();
+                case HEALTH:  return Config.feature.overlays.healthBarSettings.posHealth.getRawX();
+                case MANA:    return Config.feature.overlays.manaBarSettings.posMana.getRawX();
+                case SPEED:   return Config.feature.overlays.speedBarSettings.posSpeed.getRawX();
+                case EXP:     return Config.feature.overlays.expBarSettings.posExp.getRawX();
+                default:      return Config.feature.overlays.defenceBarSettings.posDefense.getRawX();
             }
         }
 
         public int getY() {
             switch (this) {
-                case HEALTH:  return Config.feature.overlays.posHealth.getRawY();
-                case MANA:    return Config.feature.overlays.posMana.getRawY();
-                case SPEED:   return Config.feature.overlays.posSpeed.getRawY();
-                case EXP:     return Config.feature.overlays.posExp.getRawY();
-                default:      return Config.feature.overlays.posDefense.getRawY();
+                case HEALTH:  return Config.feature.overlays.healthBarSettings.posHealth.getRawY();
+                case MANA:    return Config.feature.overlays.manaBarSettings.posMana.getRawY();
+                case SPEED:   return Config.feature.overlays.speedBarSettings.posSpeed.getRawY();
+                case EXP:     return Config.feature.overlays.expBarSettings.posExp.getRawY();
+                default:      return Config.feature.overlays.defenceBarSettings.posDefense.getRawY();
             }
         }
 
@@ -149,7 +149,7 @@ public class StatBars {
         if (raw.contains("❤") || raw.contains("✎") || raw.contains("❇")) {
             updateStats(raw);
         }
-        if (Config.feature.overlays.disableActionBar
+        if (Config.feature.overlays.statBars.disableActionBar
                 && e.message.getUnformattedText().contains("Defense")) {
             e.setCanceled(true);
         }
@@ -157,7 +157,7 @@ public class StatBars {
 
     @SubscribeEvent
     public void onDraw(RenderGameOverlayEvent e) {
-        if (!STATS.isValid() || !Config.feature.overlays.disableIcons) return;
+        if (!STATS.isValid() || !Config.feature.overlays.statBars.disableIcons) return;
         if (e.type == RenderGameOverlayEvent.ElementType.EXPERIENCE
                 || e.type == RenderGameOverlayEvent.ElementType.ARMOR
                 || e.type == RenderGameOverlayEvent.ElementType.HEALTH
@@ -170,25 +170,25 @@ public class StatBars {
     @SubscribeEvent
     public void onRender(RenderGameOverlayEvent.Post e) {
         if (e.type != RenderGameOverlayEvent.ElementType.HOTBAR
-                || !Config.feature.overlays.statOverlay
+                || !Config.feature.overlays.statBars.statOverlay
                 || !STATS.isValid()) return;
 
         for (BarType type : BarType.values()) {
             switch (type) {
                 case HEALTH:
-                    if (!Config.feature.overlays.healthBar) continue;
+                    if (!Config.feature.overlays.healthBarSettings.healthBar) continue;
                     break;
                 case MANA:
-                    if (!Config.feature.overlays.manaBar) continue;
+                    if (!Config.feature.overlays.manaBarSettings.manaBar) continue;
                     break;
                 case SPEED:
-                    if (!Config.feature.overlays.speedBar) continue;
+                    if (!Config.feature.overlays.speedBarSettings.speedBar) continue;
                     break;
                 case DEFENCE:
-                    if (!Config.feature.overlays.defenceBar) continue;
+                    if (!Config.feature.overlays.defenceBarSettings.defenceBar) continue;
                     break;
                 case EXP:
-                    if (!Config.feature.overlays.expBar) continue;
+                    if (!Config.feature.overlays.expBarSettings.expBar) continue;
                     break;
                 default:
                     break;
@@ -354,11 +354,11 @@ public class StatBars {
 
     public BarLength getBarLength(BarType type) {
         switch (type) {
-            case HEALTH:  return fromIndex(Config.feature.overlays.barLengthH);
-            case MANA:    return fromIndex(Config.feature.overlays.barLengthM);
-            case EXP:     return fromIndex(Config.feature.overlays.barLengthE);
-            case SPEED:   return fromIndex(Config.feature.overlays.barLengthS);
-            default:      return fromIndex(Config.feature.overlays.barLengthD);
+            case HEALTH:  return fromIndex(Config.feature.overlays.healthBarSettings.barLengthH);
+            case MANA:    return fromIndex(Config.feature.overlays.manaBarSettings.barLengthM);
+            case EXP:     return fromIndex(Config.feature.overlays.expBarSettings.barLengthE);
+            case SPEED:   return fromIndex(Config.feature.overlays.speedBarSettings.barLengthS);
+            default:      return fromIndex(Config.feature.overlays.defenceBarSettings.barLengthD);
         }
     }
 
@@ -371,3 +371,4 @@ public class StatBars {
         }
     }
 }
+

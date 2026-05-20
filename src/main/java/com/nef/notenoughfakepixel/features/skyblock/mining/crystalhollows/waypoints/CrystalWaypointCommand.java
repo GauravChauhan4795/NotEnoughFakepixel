@@ -1,7 +1,7 @@
 package com.nef.notenoughfakepixel.features.skyblock.mining.crystalhollows.waypoints;
 
 import com.nef.notenoughfakepixel.config.gui.commands.SimpleCommand;
-import com.nef.notenoughfakepixel.config.gui.core.util.StringUtils;
+import com.nef.notenoughfakepixel.utils.StringUtils;
 import com.nef.notenoughfakepixel.env.registers.RegisterCommand;
 import com.nef.notenoughfakepixel.serverdata.SkyblockData;
 import com.nef.notenoughfakepixel.utils.NumberUtils;
@@ -153,3 +153,4 @@ public class CrystalWaypointCommand extends SimpleCommand {
     }
 
 }
+

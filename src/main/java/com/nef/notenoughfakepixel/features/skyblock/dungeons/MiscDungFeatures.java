@@ -34,7 +34,7 @@ public class MiscDungFeatures {
         if (!SkyblockData.getCurrentLocation().isDungeon()) return;
 
         if (message.startsWith("[BOSS] The Watcher: That will be enough for now.")) {
-            if (Config.feature.dungeons.dungeonsBloodReady) {
+            if (Config.feature.dungeons.general.dungeonsBloodReady) {
                 TitleUtils.showTitle(EnumChatFormatting.RED + "BLOOD READY!", 2000);
                 if (mc.theWorld != null) {
                     SoundUtils.playSound(mc.thePlayer.getPosition(), "note.pling", 2.0F, 1.0F);
@@ -43,7 +43,7 @@ public class MiscDungFeatures {
             }
         }
         if (message.startsWith("A Spirit Bear has appeared!")) {
-            if (mc.theWorld != null && Config.feature.dungeons.dungeonsSpiritBow) {
+            if (mc.theWorld != null && Config.feature.dungeons.general.dungeonsSpiritBow) {
                 SoundUtils.playSound(mc.thePlayer.getPosition(), "mob.enderdragon.growl", 2.0F, 1.0F);
             }
         }
@@ -59,7 +59,7 @@ public class MiscDungFeatures {
             if (entity instanceof EntityArmorStand) {
                 EntityArmorStand armorStand = (EntityArmorStand) entity;
                 if (armorStand.getName().contains("Spirit Bow")) {
-                    if (!Config.feature.dungeons.dungeonsSpiritBow) return;
+                    if (!Config.feature.dungeons.general.dungeonsSpiritBow) return;
                     RenderUtils.draw3DLine(new Vec3(entity.posX, entity.posY + 0.5, entity.posZ),
                             Minecraft.getMinecraft().thePlayer.getPositionEyes(event.partialTicks),
                             Color.RED,
@@ -94,4 +94,5 @@ public class MiscDungFeatures {
         }
     }
 }
+
 

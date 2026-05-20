@@ -51,7 +51,7 @@ public class SilverFishSolver {
         if (event.phase != TickEvent.Phase.START || !SkyblockData.getCurrentLocation().isDungeon() || mc.thePlayer == null || mc.theWorld == null)
             return;
 
-        if (!Config.feature.dungeons.dungeonsSilverfishSolver) return;
+        if (!Config.feature.dungeons.puzzles.dungeonsSilverfishSolver) return;
 
         List<EntitySilverfish> silverfishes = mc.theWorld.getEntities(EntitySilverfish.class, s -> mc.thePlayer.getDistanceToEntity(s) < 20);
         if (!silverfishes.isEmpty()) {
@@ -121,7 +121,7 @@ public class SilverFishSolver {
 
     @SubscribeEvent
     public void onWorldRender(RenderWorldLastEvent event) {
-        if (!Config.feature.dungeons.dungeonsSilverfishSolver) return;
+        if (!Config.feature.dungeons.puzzles.dungeonsSilverfishSolver) return;
 
         if (silverfishChestPos != null && roomFacing != null && grid != null && SilverFishSolver.silverfish.isEntityAlive()) {
             for (int i = 0; i < steps.size() - 1; i++) {
@@ -288,4 +288,5 @@ public class SilverFishSolver {
         return new Point(x + i * diffX, y + i * diffY);
     }
 }
+
 

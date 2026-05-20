@@ -56,7 +56,7 @@ public class ThirdDeviceSolver {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onPacket(PacketWriteEvent event) {
-        if (!Config.feature.dungeons.dungeonsThirdDeviceSolver) return;
+        if (!Config.feature.dungeons.terminals.dungeonsThirdDeviceSolver) return;
         if (!DungeonManager.checkEssentialsF7()) return;
 
         if (event.packet instanceof C02PacketUseEntity) {
@@ -99,7 +99,7 @@ public class ThirdDeviceSolver {
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
         if (event.phase != TickEvent.Phase.END) return;
-        if (!Config.feature.dungeons.dungeonsThirdDeviceSolver) return;
+        if (!Config.feature.dungeons.terminals.dungeonsThirdDeviceSolver) return;
         if (!DungeonManager.checkEssentialsF7()) return;
 
         tickCounter++;
@@ -130,7 +130,7 @@ public class ThirdDeviceSolver {
 
     @SubscribeEvent
     public void onRenderLast(RenderWorldLastEvent event) {
-        if (!Config.feature.dungeons.dungeonsThirdDeviceSolver) return;
+        if (!Config.feature.dungeons.terminals.dungeonsThirdDeviceSolver) return;
         if (!DungeonManager.checkEssentialsF7()) return;
 
         mc.theWorld.loadedEntityList.forEach(entity -> {
@@ -142,8 +142,8 @@ public class ThirdDeviceSolver {
                 if (pos == null) return;
 
                 Color color = mc.theWorld.getBlockState(pos).getBlock() instanceof BlockSeaLantern
-                        ? ColorUtils.getColor(Config.feature.dungeons.dungeonsCorrectColor)
-                        : ColorUtils.getColor(Config.feature.dungeons.dungeonsAlternativeColor);
+                        ? ColorUtils.getColor(Config.feature.dungeons.terminals.dungeonsCorrectColor)
+                        : ColorUtils.getColor(Config.feature.dungeons.terminals.dungeonsAlternativeColor);
 
                 RenderUtils.highlightBlock(pos, color, false, event.partialTicks);
 
@@ -157,8 +157,8 @@ public class ThirdDeviceSolver {
                     double[] renderPos = new double[]{posItemFrame.getX() - 0.7, posItemFrame.getY() - 3.3, posItemFrame.getZ()};
 
                     Color textColor = (clicksNeeded == 0)
-                            ? ColorUtils.getColor(Config.feature.dungeons.dungeonsCorrectColor)
-                            : ColorUtils.getColor(Config.feature.dungeons.dungeonsAlternativeColor);
+                            ? ColorUtils.getColor(Config.feature.dungeons.terminals.dungeonsCorrectColor)
+                            : ColorUtils.getColor(Config.feature.dungeons.terminals.dungeonsAlternativeColor);
                     RenderUtils.drawTag(String.valueOf(clicksNeeded), renderPos, textColor, event.partialTicks);
                 }
             }

@@ -16,7 +16,7 @@ import java.awt.*;
 public class WitherBloodKeysTracers {
     @SubscribeEvent
     public void onRenderLast(RenderWorldLastEvent event) {
-        if (!Config.feature.dungeons.dungeonsKeyTracers) return;
+        if (!Config.feature.dungeons.general.dungeonsKeyTracers) return;
         if (!SkyblockData.getCurrentLocation().isDungeon()) return;
         Minecraft.getMinecraft().theWorld.loadedEntityList.forEach(entity -> {
             if (entity == null) return;
@@ -35,3 +35,4 @@ public class WitherBloodKeysTracers {
         });
     }
 }
+

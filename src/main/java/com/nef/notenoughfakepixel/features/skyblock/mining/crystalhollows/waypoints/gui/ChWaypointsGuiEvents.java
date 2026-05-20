@@ -1,7 +1,7 @@
 package com.nef.notenoughfakepixel.features.skyblock.mining.crystalhollows.waypoints.gui;
 
 import com.nef.notenoughfakepixel.config.gui.Config;
-import com.nef.notenoughfakepixel.config.gui.core.config.KeybindHelper;
+import com.nef.notenoughfakepixel.utils.KeybindHelper;
 import com.nef.notenoughfakepixel.env.registers.RegisterEvents;
 import com.nef.notenoughfakepixel.serverdata.SkyblockData;
 import com.nef.notenoughfakepixel.variables.Location;
@@ -20,8 +20,8 @@ public class ChWaypointsGuiEvents {
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
-        handleWaypointGUI(Config.feature.mining.chWaypointsGUI, new GuiWaypointManager());
-        handleWaypointGUI(Config.feature.mining.chNewWaypointGUI, new GuiWaypointCreate());
+        handleWaypointGUI(Config.feature.mining.crystalHollowsMap.chWaypointsGUI, new GuiWaypointManager());
+        handleWaypointGUI(Config.feature.mining.crystalHollowsMap.chNewWaypointGUI, new GuiWaypointCreate());
     }
 
     private void handleWaypointGUI(int key, GuiScreen guiScreen) {
@@ -44,3 +44,4 @@ public class ChWaypointsGuiEvents {
     }
 
 }
+

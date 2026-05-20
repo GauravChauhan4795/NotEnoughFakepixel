@@ -134,7 +134,7 @@ public class DragonCloseAlert {
         if (!M7RelicWaypoints.isFinalPhase) return;
         drawDragonBox(e);
 
-        if (!Config.feature.dungeons.m7Relics) return;
+        if (!Config.feature.dungeons.masterMode7.m7Relics) return;
         ORBS.forEach(orb -> {
             Color color = orb.getColor();
             BlockPos position = orb.getPos().add(0, 20, 0);
@@ -176,7 +176,7 @@ public class DragonCloseAlert {
     }
 
     private void drawDragonBox(RenderWorldLastEvent e) {
-        if (!Config.feature.dungeons.dragOutline) return;
+        if (!Config.feature.dungeons.masterMode7.dragOutline) return;
         mc.theWorld.getLoadedEntityList().forEach(entity -> {
             if (!(entity instanceof EntityDragon)) return;
             EntityDragon dragon = (EntityDragon) entity;
@@ -192,7 +192,7 @@ public class DragonCloseAlert {
 
     @SubscribeEvent
     public void render(RenderEntityModelEvent e) {
-        if (!Config.feature.dungeons.dragOutline) return;
+        if (!Config.feature.dungeons.masterMode7.dragOutline) return;
         EntityLivingBase entity = e.getEntity();
         if (mc.thePlayer == null || mc.theWorld == null) return;
         if (!(entity instanceof EntityDragon) || entity.isInvisible() || isDying(entity))
@@ -213,3 +213,4 @@ public class DragonCloseAlert {
         return entity == null || entity.isDead;
     }
 }
+

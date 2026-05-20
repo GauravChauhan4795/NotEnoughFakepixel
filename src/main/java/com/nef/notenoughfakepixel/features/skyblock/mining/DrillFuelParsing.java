@@ -27,7 +27,7 @@ public class DrillFuelParsing {
 
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent e) {
-        if (!Config.feature.mining.miningDrillFuel) return;
+        if (!Config.feature.mining.miningOverlaySettings.miningDrillFuel) return;
         if (lastRead < 120) {
             lastRead++;
             return;
@@ -66,3 +66,4 @@ public class DrillFuelParsing {
                 Colors.GRAY + "/" + fuelMax;
     }
 }
+

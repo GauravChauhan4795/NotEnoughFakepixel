@@ -1,9 +1,9 @@
 package com.nef.notenoughfakepixel.config.features;
 
 import com.google.gson.annotations.Expose;
-import com.nef.notenoughfakepixel.config.gui.core.config.annotations.ConfigEditorBoolean;
-import com.nef.notenoughfakepixel.config.gui.core.config.annotations.ConfigEditorKeybind;
-import com.nef.notenoughfakepixel.config.gui.core.config.annotations.ConfigOption;
+import io.github.notenoughupdates.moulconfig.annotations.ConfigEditorBoolean;
+import io.github.notenoughupdates.moulconfig.annotations.ConfigEditorKeybind;
+import io.github.notenoughupdates.moulconfig.annotations.ConfigOption;
 import org.lwjgl.input.Keyboard;
 
 public class Accessories {
@@ -34,3 +34,4 @@ public class Accessories {
     public int accessoriesDataScrollDownKey = Keyboard.KEY_DOWN;
 
 }
+

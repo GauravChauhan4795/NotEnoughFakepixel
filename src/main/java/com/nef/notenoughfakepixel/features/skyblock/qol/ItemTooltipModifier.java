@@ -59,7 +59,7 @@ public class ItemTooltipModifier {
 
 
         // Admin Item Tag
-        if (Config.feature.qol.qolShowAdminTag) {
+        if (Config.feature.qol.itemTooltipSettings.qolShowAdminTag) {
             ItemUtils.AdminStatus adminStatus = ItemUtils.isAdminItem(hoveredItem);
             if (adminStatus.isAdmin()) {
                 String adminName = ItemUtils.getAdminName(hoveredItem);
@@ -77,7 +77,7 @@ public class ItemTooltipModifier {
         }
 
         // Farming tools Counter
-        if (Config.feature.qol.qolShowStackingCounter) {
+        if (Config.feature.qol.itemTooltipSettings.qolShowStackingCounter) {
             if (ItemUtils.hasStackingCounter(hoveredItem)) {
                 int counter = ItemUtils.getStackingCounter(hoveredItem);
                 String counterFormatted = String.format("%,d", counter);

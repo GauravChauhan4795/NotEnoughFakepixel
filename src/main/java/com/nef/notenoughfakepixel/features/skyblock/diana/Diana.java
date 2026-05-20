@@ -60,7 +60,7 @@ public class Diana {
 
     @SubscribeEvent
     public void onParticlePacketReceive(PacketReadEvent event) {
-        if (!Config.feature.diana.dianaShowWaypointsBurrows) return; // Check if the feature is enabled
+        if (!Config.feature.diana.burrowSettings.dianaShowWaypointsBurrows) return; // Check if the feature is enabled
         if (!SkyblockData.getCurrentLocation().isHub()) return; // Check if the player is in a hub
         //if (InventoryUtils.getSlot("Ancestral Spade") == -1) return;
 
@@ -103,10 +103,10 @@ public class Diana {
     @SubscribeEvent
     public void onRenderLast(RenderWorldLastEvent event) {
         if (!SkyblockData.getCurrentLocation().isHub()) return;
-        if (Config.feature.diana.dianaShowWaypointsBurrows) drawWaypoints(event.partialTicks);
-        if (Config.feature.diana.dianaShowTracersWaypoints) drawTracers(event.partialTicks);
-        if (Config.feature.diana.dianaShowLabelsWaypoints) drawLabels(event.partialTicks);
-        if (Config.feature.diana.dianaGaiaConstruct || Config.feature.diana.dianaSiamese) {
+        if (Config.feature.diana.burrowSettings.dianaShowWaypointsBurrows) drawWaypoints(event.partialTicks);
+        if (Config.feature.diana.burrowSettings.dianaShowTracersWaypoints) drawTracers(event.partialTicks);
+        if (Config.feature.diana.burrowSettings.dianaShowLabelsWaypoints) drawLabels(event.partialTicks);
+        if (Config.feature.diana.mobSettings.dianaGaiaConstruct || Config.feature.diana.mobSettings.dianaSiamese) {
             dianaMobCheck(); // Check entities on world, add to lists if not tracked
             dianaMobRemover(); // Remove mobs from lists if out of render distance
             dianaMobRender(event.partialTicks); // Check for mobs in entities and draw a hitbox
@@ -239,7 +239,7 @@ public class Diana {
         if (entity.isInvisible()) return;
 
         Color color = new Color(
-                ColorUtils.getColor(Config.feature.dungeons.dungeonsStarredBoxColor).getRGB()
+                ColorUtils.getColor(Config.feature.dungeons.mobs.dungeonsStarredBoxColor).getRGB()
         );
 
         if (Configuration.isPojav()) {
@@ -326,13 +326,13 @@ public class Diana {
         Color burrowColor = new Color(255, 255, 255, 100); // Default white color with alpha
         switch (type) {
             case "EMPTY":
-                burrowColor = ColorUtils.getColor(Config.feature.diana.dianaEmptyBurrowColor);
+                burrowColor = ColorUtils.getColor(Config.feature.diana.burrowSettings.dianaEmptyBurrowColor);
                 break;
             case "MOB":
-                burrowColor = ColorUtils.getColor(Config.feature.diana.dianaMobBurrowColor);
+                burrowColor = ColorUtils.getColor(Config.feature.diana.burrowSettings.dianaMobBurrowColor);
                 break;
             case "TREASURE":
-                burrowColor = ColorUtils.getColor(Config.feature.diana.dianaTreasureBurrowColor);
+                burrowColor = ColorUtils.getColor(Config.feature.diana.burrowSettings.dianaTreasureBurrowColor);
                 break;
             case "MINOS":
                 burrowColor = new Color(243, 225, 107);
@@ -408,15 +408,15 @@ public class Diana {
                     Entity gaiaEntity = gaia.getEntity();
                     if (gaia.canBeHit()) {
                         RenderUtils.renderEntityHitbox(gaiaEntity, partialTicks,
-                                new Color(ColorUtils.getColor(Config.feature.diana.dianaGaiaHittableColor).getRed(),
-                                        ColorUtils.getColor(Config.feature.diana.dianaGaiaHittableColor).getGreen(),
-                                        ColorUtils.getColor(Config.feature.diana.dianaGaiaHittableColor).getBlue(), 150),
+                                new Color(ColorUtils.getColor(Config.feature.diana.mobSettings.dianaGaiaHittableColor).getRed(),
+                                        ColorUtils.getColor(Config.feature.diana.mobSettings.dianaGaiaHittableColor).getGreen(),
+                                        ColorUtils.getColor(Config.feature.diana.mobSettings.dianaGaiaHittableColor).getBlue(), 150),
                                 MobDisplayTypes.GAIA);
                     } else {
                         RenderUtils.renderEntityHitbox(gaiaEntity, partialTicks,
-                                new Color(ColorUtils.getColor(Config.feature.diana.dianaGaiaUnhittableColor).getRed(),
-                                        ColorUtils.getColor(Config.feature.diana.dianaGaiaUnhittableColor).getGreen(),
-                                        ColorUtils.getColor(Config.feature.diana.dianaGaiaUnhittableColor).getBlue(), 150),
+                                new Color(ColorUtils.getColor(Config.feature.diana.mobSettings.dianaGaiaUnhittableColor).getRed(),
+                                        ColorUtils.getColor(Config.feature.diana.mobSettings.dianaGaiaUnhittableColor).getGreen(),
+                                        ColorUtils.getColor(Config.feature.diana.mobSettings.dianaGaiaUnhittableColor).getBlue(), 150),
                                 MobDisplayTypes.GAIA);
                     }
                 }
@@ -426,7 +426,7 @@ public class Diana {
                     RenderUtils.renderEntityHitbox(
                             siamese.getHittable(),
                             partialTicks,
-                            new Color(ColorUtils.getColor(Config.feature.diana.dianaSiameseHittableColor).getRed(), ColorUtils.getColor(Config.feature.diana.dianaSiameseHittableColor).getGreen(), ColorUtils.getColor(Config.feature.diana.dianaSiameseHittableColor).getBlue(), 150),
+                            new Color(ColorUtils.getColor(Config.feature.diana.mobSettings.dianaSiameseHittableColor).getRed(), ColorUtils.getColor(Config.feature.diana.mobSettings.dianaSiameseHittableColor).getGreen(), ColorUtils.getColor(Config.feature.diana.mobSettings.dianaSiameseHittableColor).getBlue(), 150),
                             MobDisplayTypes.SIAMESE
                     );
                 }
@@ -533,7 +533,7 @@ public class Diana {
                 // Remove waypoint at pling sound
                 case "note.pling":
                     //System.out.println(soundName + ", " + soundEffect.getVolume() + ", " + soundEffect.getPitch());
-                    if (Config.feature.diana.dianaShowWaypointsBurrows) {
+                    if (Config.feature.diana.burrowSettings.dianaShowWaypointsBurrows) {
                         deleteClosestWaypoint(coordsSound[0], coordsSound[1], coordsSound[2]);
                     }
 
@@ -542,7 +542,7 @@ public class Diana {
                 case "mob.zombie.metal":
                 case "mob.irongolem.death":
                 case "mob.irongolem.hit":
-                    if (!Config.feature.diana.dianaGaiaConstruct) return; // Check if the feature is enabled
+                    if (!Config.feature.diana.mobSettings.dianaGaiaConstruct) return; // Check if the feature is enabled
                     // Gaia track hits feature
                     GaiaConstruct closestGaia = getClosestGaia(coordsSound);
                     if (closestGaia == null) return;
@@ -682,9 +682,9 @@ public class Diana {
 
     @SubscribeEvent()
     public void onWorldUnload(WorldEvent.Unload event) {
-        if (Config.feature.diana.dianaShowWaypointsBurrows) processor.clearWaypoints();
-        if (Config.feature.diana.dianaGaiaConstruct) listGaiaAlive.clear();
-        if (Config.feature.diana.dianaSiamese) listSiameseAlive.clear();
+        if (Config.feature.diana.burrowSettings.dianaShowWaypointsBurrows) processor.clearWaypoints();
+        if (Config.feature.diana.mobSettings.dianaGaiaConstruct) listGaiaAlive.clear();
+        if (Config.feature.diana.mobSettings.dianaSiamese) listSiameseAlive.clear();
         scheduler.getQueue().clear();
     }
 

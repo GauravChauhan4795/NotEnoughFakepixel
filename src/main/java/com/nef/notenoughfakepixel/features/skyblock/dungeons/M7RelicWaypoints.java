@@ -53,7 +53,7 @@ public class M7RelicWaypoints {
     public void onRenderWorldLast(RenderWorldLastEvent event) {
         if (SkyblockData.getCurrentFloor() != DungeonFloor.M7) return;
         if (!isFinalPhase) return;
-        if (!Config.feature.dungeons.m7Relics) return;
+        if (!Config.feature.dungeons.masterMode7.m7Relics) return;
         float partialTicks = event.partialTicks;
 
         for (RelicColor color : RelicColor.values()) {

@@ -48,7 +48,7 @@ public class WaterSolver {
 
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
-        if (!Config.feature.dungeons.dungeonsWaterSolver) return;
+        if (!Config.feature.dungeons.puzzles.dungeonsWaterSolver) return;
         if (!DungeonManager.checkEssentials()) return;
         if (event.phase != TickEvent.Phase.START) return;
 
@@ -68,7 +68,7 @@ public class WaterSolver {
 
     @SubscribeEvent
     public void onWorldRender(RenderWorldLastEvent event) {
-        if (!Config.feature.dungeons.dungeonsWaterSolver) return;
+        if (!Config.feature.dungeons.puzzles.dungeonsWaterSolver) return;
         if (!DungeonManager.checkEssentials()) return;
         if (!inWaterRoom || woolBlocks == null || woolBlocks.isEmpty()) return;
         if (!woolBlocks.iterator().hasNext()) return;
@@ -164,7 +164,7 @@ public class WaterSolver {
 
     @SubscribeEvent()
     public void onWorldUnload(WorldEvent.Load event) {
-        if (!Config.feature.dungeons.dungeonsWaterSolver) return;
+        if (!Config.feature.dungeons.puzzles.dungeonsWaterSolver) return;
         if (!DungeonManager.checkEssentials()) return;
         waterLeverPos = null;
         //correctLevers = new boolean[]{true,true,true,true,true,true};
@@ -347,3 +347,4 @@ public class WaterSolver {
     }
 
 }
+

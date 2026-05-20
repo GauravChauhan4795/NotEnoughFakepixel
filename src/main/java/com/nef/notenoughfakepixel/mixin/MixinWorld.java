@@ -21,7 +21,7 @@ public class MixinWorld {
             int particleID, boolean p_175720_2_, double xCood, double yCoord, double zCoord,
             double xOffset, double yOffset, double zOffset, int[] p_175720_15_, CallbackInfo ci
     ) {
-        if (Config.feature.qol.qolDisableHyperionExplosions &&
+        if (Config.feature.qol.soundTweaks.qolDisableHyperionExplosions &&
             System.currentTimeMillis() - DisableHyperionExplosions.lastClickedHyperion < 500) {
 
             if ( particleID == 1 ) ci.cancel();
@@ -55,7 +55,7 @@ public class MixinWorld {
     @Inject(method = "updateWeather", at = @At("HEAD"), cancellable = true)
     private void disableRain(CallbackInfo ci) {
         // Check if the custom configuration option to disable rain is enabled
-        if (Config.feature.qol.qolDisableRain) {
+        if (Config.feature.qol.visualTweaks.qolDisableRain) {
             // Cast this mixin instance back to World
             World world = (World) (Object) this;
 
@@ -73,3 +73,4 @@ public class MixinWorld {
         }
     }
 }
+

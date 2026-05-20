@@ -21,7 +21,7 @@ public class SlayerTimer {
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
-        if (Config.feature.slayer.slayerBossTimer && SkyblockData.getCurrentGamemode().isSkyblock()) {
+        if (Config.feature.slayer.bossSettings.slayerBossTimer && SkyblockData.getCurrentGamemode().isSkyblock()) {
             if (event.side == net.minecraftforge.fml.relauncher.Side.CLIENT) {
                 List<String> sidebarLines = ScoreboardUtils.getScoreboardLines();
 
@@ -40,7 +40,7 @@ public class SlayerTimer {
 
     @SubscribeEvent
     public void onChat(ClientChatReceivedEvent event) {
-        if (Config.feature.slayer.slayerBossTimer && SkyblockData.getCurrentGamemode().isSkyblock()) {
+        if (Config.feature.slayer.bossSettings.slayerBossTimer && SkyblockData.getCurrentGamemode().isSkyblock()) {
             String message = StringUtils.stripControlCodes(event.message.getUnformattedText());
 
             if (message.contains("SLAYER QUEST COMPLETE!")) {

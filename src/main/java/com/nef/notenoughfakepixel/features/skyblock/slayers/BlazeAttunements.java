@@ -33,7 +33,7 @@ public class BlazeAttunements {
 
     @SubscribeEvent
     public void onRenderEntity(RenderLivingEvent.Pre<EntityLivingBase> event) {
-        if (!Config.feature.slayer.slayerBlazeAttunementOutline && !Config.feature.slayer.slayerBlazeAttunementFill) return;
+        if (!Config.feature.slayer.blazeAttunementSettings.slayerBlazeAttunementOutline && !Config.feature.slayer.blazeAttunementSettings.slayerBlazeAttunementFill) return;
         long currentTime = System.currentTimeMillis();
         if (currentTime - lastUpdateTime > 20) {
             blazeEntity.clear();
@@ -85,7 +85,7 @@ public class BlazeAttunements {
 
     @SubscribeEvent(priority = EventPriority.HIGH)
     public void onRenderEntityModel(RenderEntityModelEvent event) {
-        if (!Config.feature.slayer.slayerBlazeAttunementOutline) return;
+        if (!Config.feature.slayer.blazeAttunementSettings.slayerBlazeAttunementOutline) return;
         if (!SkyblockData.getCurrentGamemode().isSkyblock() || !SkyblockData.getCurrentLocation().isCrimson()) return;
 
         EntityLivingBase entity = event.getEntity();

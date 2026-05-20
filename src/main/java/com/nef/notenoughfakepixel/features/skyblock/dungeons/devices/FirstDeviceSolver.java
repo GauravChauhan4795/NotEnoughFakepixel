@@ -36,7 +36,7 @@ public class FirstDeviceSolver {
 
     @SubscribeEvent
     public void onRenderLast(RenderWorldLastEvent event) {
-        if (!Config.feature.dungeons.dungeonsFirstDeviceSolver) return;
+        if (!Config.feature.dungeons.terminals.dungeonsFirstDeviceSolver) return;
 
         // Check for sea lanterns
         if (startMemorising) {
@@ -57,11 +57,11 @@ public class FirstDeviceSolver {
                     reset();
                     return;
                 }
-                Color baseColor = ColorUtils.getColor(Config.feature.dungeons.dungeonsAlternativeColor);
+                Color baseColor = ColorUtils.getColor(Config.feature.dungeons.terminals.dungeonsAlternativeColor);
                 if (i == positionInRound) {
-                    RenderUtils.highlightBlock(positionsToSolve[positionsIndexSolved[i]], ColorUtils.getColor(Config.feature.dungeons.dungeonsCorrectColor), false, true, event.partialTicks);
+                    RenderUtils.highlightBlock(positionsToSolve[positionsIndexSolved[i]], ColorUtils.getColor(Config.feature.dungeons.terminals.dungeonsCorrectColor), false, true, event.partialTicks);
                 } else if (i == positionInRound + 1) {
-                    RenderUtils.highlightBlock(positionsToSolve[positionsIndexSolved[i]], ColorUtils.getColor(Config.feature.dungeons.dungeonsAlternativeColor), false, true, event.partialTicks);
+                    RenderUtils.highlightBlock(positionsToSolve[positionsIndexSolved[i]], ColorUtils.getColor(Config.feature.dungeons.terminals.dungeonsAlternativeColor), false, true, event.partialTicks);
                 } else if (i == positionInRound + 2) {
                     RenderUtils.highlightBlock(positionsToSolve[positionsIndexSolved[i]], new Color(
                             baseColor.getRed(),
@@ -77,7 +77,7 @@ public class FirstDeviceSolver {
     // Check for initial button interact
     @SubscribeEvent(priority = EventPriority.HIGH)
     public void onInteract(PlayerInteractEvent event) {
-        if (!Config.feature.dungeons.dungeonsFirstDeviceSolver) return;
+        if (!Config.feature.dungeons.terminals.dungeonsFirstDeviceSolver) return;
         if (!DungeonManager.checkEssentialsF7()) return;
         if (Minecraft.getMinecraft().thePlayer != event.entityPlayer) return;
         if (event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
@@ -116,7 +116,7 @@ public class FirstDeviceSolver {
 
     @SubscribeEvent
     public void onDiggingPacket(PacketWriteEvent event) {
-        if (!Config.feature.dungeons.dungeonsFirstDeviceSolver) return;
+        if (!Config.feature.dungeons.terminals.dungeonsFirstDeviceSolver) return;
         if (!DungeonManager.checkEssentialsF7()) return;
         Packet packet = event.packet;
         if (packet instanceof C07PacketPlayerDigging) {
@@ -160,7 +160,7 @@ public class FirstDeviceSolver {
 
     @SubscribeEvent()
     public void onWorldUnload(WorldEvent.Unload event) {
-        if (Config.feature.dungeons.dungeonsFirstDeviceSolver) reset();
+        if (Config.feature.dungeons.terminals.dungeonsFirstDeviceSolver) reset();
     }
 
     private static BlockPos getBlockUnderButton(BlockPos pos, EnumFacing facing) {
@@ -224,3 +224,4 @@ public class FirstDeviceSolver {
         round = 1;
     }
 }
+

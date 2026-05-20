@@ -55,7 +55,7 @@ public class TerminalTracker {
 
     @SubscribeEvent
     public void onChatReceived(ClientChatReceivedEvent event) {
-        if (!Config.feature.dungeons.dungeonsTerminalTracker) {
+        if (!Config.feature.dungeons.terminals.dungeonsTerminalTracker) {
             return;
         }
         if (!DungeonManager.checkEssentialsF7()) return;
@@ -120,7 +120,7 @@ public class TerminalTracker {
 
     @SubscribeEvent
     public void onRenderGameOverlay(RenderGameOverlayEvent.Text event) {
-        if (!Config.feature.dungeons.dungeonsTerminalTracker) {
+        if (!Config.feature.dungeons.terminals.dungeonsTerminalTracker) {
             return;
         }
         if (!DungeonManager.checkEssentialsF7()) return;
@@ -138,9 +138,9 @@ public class TerminalTracker {
         ScaledResolution sr = new ScaledResolution(mc);
         int overlayWidth = 1;
         int overlayHeight = 1;
-        float scale = Config.feature.dungeons.dungeonsTerminalTrackerScale;
-        int x = Config.feature.dungeons.terminalTrackerPos.getAbsX(sr, overlayWidth);
-        int y = Config.feature.dungeons.terminalTrackerPos.getAbsY(sr, overlayHeight);
+        float scale = Config.feature.dungeons.terminals.dungeonsTerminalTrackerScale;
+        int x = Config.feature.dungeons.terminals.terminalTrackerPos.getAbsX(sr, overlayWidth);
+        int y = Config.feature.dungeons.terminals.terminalTrackerPos.getAbsY(sr, overlayHeight);
         int lineHeight = (int) (10 * scale) + 4;
 
         String phaseLine = String.format("Phase %d", currentPhase);
@@ -154,10 +154,10 @@ public class TerminalTracker {
         float scaledX = x / scale;
         float scaledY = y / scale;
 
-        mc.fontRendererObj.drawStringWithShadow(phaseLine, scaledX, scaledY, ColorUtils.getColor(Config.feature.dungeons.dungeonsTerminalTrackerColor).getRGB());
-        mc.fontRendererObj.drawStringWithShadow(terminalLine, scaledX, scaledY + lineHeight / scale, ColorUtils.getColor(Config.feature.dungeons.dungeonsTerminalTrackerColor).getRGB());
-        mc.fontRendererObj.drawStringWithShadow(deviceLine, scaledX, scaledY + 2 * lineHeight / scale, ColorUtils.getColor(Config.feature.dungeons.dungeonsTerminalTrackerColor).getRGB());
-        mc.fontRendererObj.drawStringWithShadow(leverLine, scaledX, scaledY + 3 * lineHeight / scale, ColorUtils.getColor(Config.feature.dungeons.dungeonsTerminalTrackerColor).getRGB());
+        mc.fontRendererObj.drawStringWithShadow(phaseLine, scaledX, scaledY, ColorUtils.getColor(Config.feature.dungeons.terminals.dungeonsTerminalTrackerColor).getRGB());
+        mc.fontRendererObj.drawStringWithShadow(terminalLine, scaledX, scaledY + lineHeight / scale, ColorUtils.getColor(Config.feature.dungeons.terminals.dungeonsTerminalTrackerColor).getRGB());
+        mc.fontRendererObj.drawStringWithShadow(deviceLine, scaledX, scaledY + 2 * lineHeight / scale, ColorUtils.getColor(Config.feature.dungeons.terminals.dungeonsTerminalTrackerColor).getRGB());
+        mc.fontRendererObj.drawStringWithShadow(leverLine, scaledX, scaledY + 3 * lineHeight / scale, ColorUtils.getColor(Config.feature.dungeons.terminals.dungeonsTerminalTrackerColor).getRGB());
 
         GlStateManager.popMatrix();
     }

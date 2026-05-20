@@ -58,7 +58,7 @@ public class CreeperSolver {
         EntityPlayerSP player = mc.thePlayer;
         ticks++;
         if (ticks % 20 == 0) {
-            if (Config.feature.dungeons.dungeonsCreeper && SkyblockData.getCurrentLocation().isDungeon() && world != null && player != null) {
+            if (Config.feature.dungeons.puzzles.dungeonsCreeper && SkyblockData.getCurrentLocation().isDungeon() && world != null && player != null) {
                 double x = player.posX;
                 double y = player.posY;
                 double z = player.posZ;
@@ -141,7 +141,7 @@ public class CreeperSolver {
 
     @SubscribeEvent
     public void onWorldRender(RenderWorldLastEvent event) {
-        if (Config.feature.dungeons.dungeonsCreeper && drawCreeperLines && !creeperLines.isEmpty()) {
+        if (Config.feature.dungeons.puzzles.dungeonsCreeper && drawCreeperLines && !creeperLines.isEmpty()) {
             for (int i = 0; i < creeperLines.size(); i++) {
                 Vec3[] line = creeperLines.get(i);
                 if (line == null || line.length < 2 || line[0] == null || line[1] == null) {

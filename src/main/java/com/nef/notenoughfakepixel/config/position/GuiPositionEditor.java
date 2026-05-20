@@ -1,7 +1,6 @@
-package com.nef.notenoughfakepixel.config.gui.core.config.gui;
+package com.nef.notenoughfakepixel.config.position;
 
-import com.nef.notenoughfakepixel.config.gui.core.config.Position;
-import com.nef.notenoughfakepixel.config.gui.utils.Utils;
+import com.nef.notenoughfakepixel.utils.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
@@ -170,3 +169,4 @@ public class GuiPositionEditor extends GuiScreen {
         }
     }
 }
+

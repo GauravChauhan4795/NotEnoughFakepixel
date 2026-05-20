@@ -25,7 +25,7 @@ public class ShowNotOpenedChestsRed extends HightlightSlot {
 
     @Override
     public boolean getConfigOption() {
-        return Config.feature.dungeons.dungeonsShowOpenedChests;
+        return Config.feature.dungeons.general.dungeonsShowOpenedChests;
     }
 
     @Override
@@ -34,3 +34,4 @@ public class ShowNotOpenedChestsRed extends HightlightSlot {
     }
 
 }
+

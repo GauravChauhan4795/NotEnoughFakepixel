@@ -143,7 +143,7 @@ public abstract class MixinRendererLivingEntity<T extends EntityLivingBase> {
         }
 
         // Blaze Attunements fill
-        if (Config.feature.slayer.slayerBlazeAttunementFill && BlazeAttunements.blazeEntity.containsKey(entity)) {
+        if (Config.feature.slayer.blazeAttunementSettings.slayerBlazeAttunementFill && BlazeAttunements.blazeEntity.containsKey(entity)) {
             return true;
         }
 
@@ -158,7 +158,7 @@ public abstract class MixinRendererLivingEntity<T extends EntityLivingBase> {
 
     private Color getBrightnessColor(T entity) {
         if (notEnoughFakepixel$starredEntities.contains(entity)) {
-            return ColorUtils.getColor(Config.feature.dungeons.dungeonsStarredBoxColor);
+            return ColorUtils.getColor(Config.feature.dungeons.mobs.dungeonsStarredBoxColor);
         }
 
         if (notEnoughFakepixel$inqEntities.contains(entity)) {
@@ -170,15 +170,15 @@ public abstract class MixinRendererLivingEntity<T extends EntityLivingBase> {
         }
 
         if (notEnoughFakepixel$slayerEntities.contains(entity)) {
-            return ColorUtils.getColor(Config.feature.slayer.slayerBossColor);
+            return ColorUtils.getColor(Config.feature.slayer.bossSettings.slayerBossColor);
         }
 
         if (notEnoughFakepixel$slayerMiniEntities.contains(entity)) {
-            return ColorUtils.getColor(Config.feature.slayer.slayerColor);
+            return ColorUtils.getColor(Config.feature.slayer.minibossSettings.slayerColor);
 
         }
 
-        if (Config.feature.slayer.slayerBlazeAttunementFill) {
+        if (Config.feature.slayer.blazeAttunementSettings.slayerBlazeAttunementFill) {
             String blazeAttunement = BlazeAttunements.blazeEntity.get(entity);
             if (blazeAttunement != null) {
                 int colorInt = BlazeAttunements.getColorForAttunement(blazeAttunement);

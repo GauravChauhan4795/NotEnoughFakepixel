@@ -21,7 +21,7 @@ public class CustomBar {
     @SubscribeEvent
     public void onRender(RenderGameOverlayEvent e) {
         if (e.type == RenderGameOverlayEvent.ElementType.HEALTH || e.type == RenderGameOverlayEvent.ElementType.ARMOR || e.type == RenderGameOverlayEvent.ElementType.FOOD) {
-            if (SkyblockData.getCurrentGamemode().isSkyblock() && Config.feature.overlays.statOverlay) {
+            if (SkyblockData.getCurrentGamemode().isSkyblock() && Config.feature.overlays.statBars.statOverlay) {
                 renderCustomHealth(e.resolution);
                 renderCustomMana(e.resolution);
                 e.setCanceled(true);
@@ -49,7 +49,7 @@ public class CustomBar {
                 maxMana = Integer.parseInt(manaValues[1]);
             }
         }
-        if (e.isCancelable() && Config.feature.overlays.statOverlay) {
+        if (e.isCancelable() && Config.feature.overlays.statBars.statOverlay) {
             e.setCanceled(true);
         }
     }
@@ -92,3 +92,4 @@ public class CustomBar {
     }
 
 }
+

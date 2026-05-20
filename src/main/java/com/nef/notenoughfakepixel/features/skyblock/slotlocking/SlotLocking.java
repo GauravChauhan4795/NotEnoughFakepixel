@@ -1,9 +1,9 @@
 package com.nef.notenoughfakepixel.features.skyblock.slotlocking;
 
 import com.nef.notenoughfakepixel.config.gui.Config;
-import com.nef.notenoughfakepixel.config.gui.core.config.KeybindHelper;
-import com.nef.notenoughfakepixel.config.gui.core.util.StringUtils;
-import com.nef.notenoughfakepixel.config.gui.core.util.render.RenderUtils;
+import com.nef.notenoughfakepixel.utils.KeybindHelper;
+import com.nef.notenoughfakepixel.utils.StringUtils;
+import com.nef.notenoughfakepixel.utils.RenderUtils;
 import com.nef.notenoughfakepixel.env.registers.RegisterInstance;
 import com.nef.notenoughfakepixel.events.ReplaceItemEvent;
 import com.nef.notenoughfakepixel.events.SlotClickEvent;

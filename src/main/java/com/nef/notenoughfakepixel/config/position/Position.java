@@ -1,4 +1,4 @@
-package com.nef.notenoughfakepixel.config.gui.core.config;
+package com.nef.notenoughfakepixel.config.position;
 
 import com.google.gson.annotations.Expose;
 import lombok.Getter;
@@ -190,3 +190,4 @@ public class Position {
         return (this.getAbsX(scaledResolution, objWidth) > (scaledResolution.getScaledWidth() / 2));
     }
 }
+

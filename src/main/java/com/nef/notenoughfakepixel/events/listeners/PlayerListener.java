@@ -15,7 +15,7 @@ public class PlayerListener {
     @SubscribeEvent
     public void onLivingUpdate(net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent e) {
         if (!SkyblockData.getCurrentGamemode().isSkyblock()) return;
-        if (!Config.feature.qol.qolHidePlayerNearNpcs) return;
+        if (!Config.feature.qol.visualTweaks.qolHidePlayerNearNpcs) return;
         if (SkyblockData.getCurrentLocation() == Location.PRIVATE_ISLAND || SkyblockData.getCurrentLocation() == Location.DUNGEON) return;
 
         final Entity entity = e.entity;
@@ -27,3 +27,4 @@ public class PlayerListener {
     }
 
 }
+

@@ -104,7 +104,7 @@ public class BoulderSolver {
 
     @SubscribeEvent
     public void onRenderWorld(RenderWorldLastEvent event) {
-        if (!Config.feature.dungeons.dungeonsBoulderSolver) return;
+        if (!Config.feature.dungeons.puzzles.dungeonsBoulderSolver) return;
         if (boulderChest == null) return;
         Entity viewer = Minecraft.getMinecraft().getRenderViewEntity();
         double viewerX = viewer.lastTickPosX + (viewer.posX - viewer.lastTickPosX) * event.partialTicks;
@@ -169,7 +169,7 @@ public class BoulderSolver {
     }
 
     public static void update() {
-        if (!Config.feature.dungeons.dungeonsBoulderSolver) return;
+        if (!Config.feature.dungeons.puzzles.dungeonsBoulderSolver) return;
         EntityPlayerSP player = mc.thePlayer;
         World world = mc.theWorld;
         if (SkyblockData.getCurrentLocation().isDungeon() && world != null && player != null) {

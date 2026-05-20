@@ -140,7 +140,7 @@ public class GoldenEnchants {
         if (!SkyblockData.getCurrentGamemode().isSkyblock()) return;
         if (event.toolTip == null || event.itemStack == null) return;
 
-        if (Config.feature.qol.qolGoldenEnchants) {
+        if (Config.feature.qol.visualTweaks.qolGoldenEnchants) {
             for (int i = 0; i < event.toolTip.size(); i++) {
                 String line = event.toolTip.get(i);
                 if (line != null) {

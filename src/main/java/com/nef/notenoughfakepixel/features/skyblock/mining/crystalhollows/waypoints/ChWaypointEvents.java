@@ -1,7 +1,7 @@
 package com.nef.notenoughfakepixel.features.skyblock.mining.crystalhollows.waypoints;
 
 import com.nef.notenoughfakepixel.config.gui.Config;
-import com.nef.notenoughfakepixel.config.gui.core.util.StringUtils;
+import com.nef.notenoughfakepixel.utils.StringUtils;
 import com.nef.notenoughfakepixel.env.registers.RegisterEvents;
 import com.nef.notenoughfakepixel.serverdata.SkyblockData;
 import com.nef.notenoughfakepixel.utils.ColorUtils;
@@ -50,17 +50,17 @@ public class ChWaypointEvents {
     // Render waypoints
     @SubscribeEvent
     public void onRenderWorldLast(RenderWorldLastEvent event) {
-        if (!SkyblockData.getCurrentLocation().equals(Location.CRYSTAL_HOLLOWS) || !Config.feature.mining.crystalWaypoints) return;
+        if (!SkyblockData.getCurrentLocation().equals(Location.CRYSTAL_HOLLOWS) || !Config.feature.mining.crystalHollows.crystalWaypoints) return;
 
-        if (Config.feature.mining.crystalWaypointsBeacons) {
-            Color color = ColorUtils.getColor(Config.feature.mining.crystalWaypointColor);
+        if (Config.feature.mining.waypointSettings.crystalWaypointsBeacons) {
+            Color color = ColorUtils.getColor(Config.feature.mining.waypointSettings.crystalWaypointColor);
             for (ChWaypoint waypoint : CrystalWaypoints.getInstance().getAll()) {
                 if (Boolean.FALSE.equals(waypoint.toggled)) continue;
                 RenderUtils.renderBeaconBeam(new BlockPos(waypoint.x, waypoint.y, waypoint.z), color.getRGB(), 1, event.partialTicks);
             }
         }
 
-        if (Config.feature.mining.crystalWaypointsNames) {
+        if (Config.feature.mining.waypointSettings.crystalWaypointsNames) {
             for (ChWaypoint waypoint : CrystalWaypoints.getInstance().getAll()) {
                 if (Boolean.FALSE.equals(waypoint.toggled)) continue;
                 RenderUtils.renderWaypointText(waypoint.getName() ,new BlockPos(waypoint.x, waypoint.y + 3, waypoint.z), event.partialTicks);
@@ -106,3 +106,4 @@ public class ChWaypointEvents {
     }
 
 }
+

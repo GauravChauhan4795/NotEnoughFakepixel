@@ -32,17 +32,17 @@ public class DwarvenWaypoints extends IslandWaypoints {
 
     @Override
     public boolean shouldShow() {
-        return Config.feature.waypoints.miningDwarvenWaypoints;
+        return Config.feature.waypoints.dwarvenWaypointsSettings.miningDwarvenWaypoints;
     }
 
     @Override
     public boolean renderBeacon() {
-        return Config.feature.waypoints.miningDwarvenBeacons;
+        return Config.feature.waypoints.dwarvenWaypointsSettings.miningDwarvenBeacons;
     }
 
     @Override
     public Color getWaypointColor() {
-        return ColorUtils.getColor(Config.feature.waypoints.miningDwarvenBeaconsColor);
+        return ColorUtils.getColor(Config.feature.waypoints.dwarvenWaypointsSettings.miningDwarvenBeaconsColor);
     }
 
     @Override
@@ -51,3 +51,4 @@ public class DwarvenWaypoints extends IslandWaypoints {
     }
 
 }
+

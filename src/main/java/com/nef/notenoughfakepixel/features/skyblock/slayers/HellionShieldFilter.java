@@ -11,7 +11,7 @@ public class HellionShieldFilter {
 
     @SubscribeEvent
     public void onChat(ClientChatReceivedEvent event) {
-        if (!Config.feature.slayer.slayerHellionShieldFilter) return;
+        if (!Config.feature.slayer.infernoDemonlord.slayerHellionShieldFilter) return;
         if (!SkyblockData.getCurrentLocation().isCrimson()) return;
 
         String msg = event.message.getUnformattedText();
@@ -21,3 +21,4 @@ public class HellionShieldFilter {
         }
     }
 }
+

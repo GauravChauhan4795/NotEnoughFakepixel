@@ -18,7 +18,7 @@ public class RemoveGhostInvis {
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
         if (event.phase != TickEvent.Phase.START) return;
-        if (!Config.feature.mining.miningShowGhosts) return;
+        if (!Config.feature.mining.dwarvenMines.miningShowGhosts) return;
         if (!SkyblockData.getCurrentGamemode().isSkyblock()) return;
         if (SkyblockData.getCurrentLocation() != Location.DWARVEN) return;
 
@@ -37,7 +37,7 @@ public class RemoveGhostInvis {
     }
 
     public static void resetGhostInvis() {
-        if (Config.feature.mining.miningShowGhosts) return;
+        if (Config.feature.mining.dwarvenMines.miningShowGhosts) return;
         if (Minecraft.getMinecraft().thePlayer == null) return;
 
         List<Entity> entities = Minecraft.getMinecraft().theWorld.loadedEntityList;
@@ -51,3 +51,4 @@ public class RemoveGhostInvis {
 
 
 }
+

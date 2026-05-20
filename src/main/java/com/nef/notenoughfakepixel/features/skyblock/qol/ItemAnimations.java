@@ -34,10 +34,10 @@ public class ItemAnimations {
     private static float lastCustomZ = Float.NaN;
 
     private static void recacheIfNeeded() {
-        final float cSize = Config.feature.qol.customSize;
-        final float cX    = Config.feature.qol.customX;
-        final float cY    = Config.feature.qol.customY;
-        final float cZ    = Config.feature.qol.customZ;
+        final float cSize = Config.feature.qol.itemAnimation.customSize;
+        final float cX    = Config.feature.qol.itemAnimation.customX;
+        final float cY    = Config.feature.qol.itemAnimation.customY;
+        final float cZ    = Config.feature.qol.itemAnimation.customZ;
 
         if (cSize != lastCustomSize) {
             // era: 0.4f * exp(size)
@@ -75,9 +75,9 @@ public class ItemAnimations {
         GlStateManager.translate(0.0f, -0.6f * equipProgress, 0.0f);
 
         // Custom Rotations
-        GlStateManager.rotate(Config.feature.qol.customPitch, 1.0f, 0.0f, 0.0f);
-        GlStateManager.rotate(Config.feature.qol.customYaw,   0.0f, 1.0f, 0.0f);
-        GlStateManager.rotate(Config.feature.qol.customRoll,  0.0f, 0.0f, 1.0f);
+        GlStateManager.rotate(Config.feature.qol.itemAnimation.customPitch, 1.0f, 0.0f, 0.0f);
+        GlStateManager.rotate(Config.feature.qol.itemAnimation.customYaw,   0.0f, 1.0f, 0.0f);
+        GlStateManager.rotate(Config.feature.qol.itemAnimation.customRoll,  0.0f, 0.0f, 1.0f);
 
         // Vanilla-like yaw
         GlStateManager.rotate(45.0f, 0.0f, 1.0f, 0.0f);
@@ -178,18 +178,19 @@ public class ItemAnimations {
     // Flags
 
     public static boolean shouldChange() {
-        return Config.feature.qol.customAnimations;
+        return Config.feature.qol.itemAnimation.customAnimations;
     }
 
     public static boolean shouldChangeScaleSwing() {
-        return shouldChange() && Config.feature.qol.doesScaleSwing;
+        return shouldChange() && Config.feature.qol.itemAnimation.doesScaleSwing;
     }
 
     public static boolean shouldRotationlessDrink() {
-        return shouldChange() && Config.feature.qol.drinkingSelector == 1;
+        return shouldChange() && Config.feature.qol.itemAnimation.drinkingSelector == 1;
     }
 
     public static boolean shouldScaledDrink() {
-        return shouldChange() && Config.feature.qol.drinkingSelector == 2;
+        return shouldChange() && Config.feature.qol.itemAnimation.drinkingSelector == 2;
     }
 }
+

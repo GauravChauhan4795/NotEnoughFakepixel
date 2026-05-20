@@ -1,6 +1,6 @@
 package com.nef.notenoughfakepixel.utils;
 
-import com.nef.notenoughfakepixel.config.gui.core.ChromaColour;
+import com.nef.notenoughfakepixel.utils.ChromaColour;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;

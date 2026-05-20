@@ -38,7 +38,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
  *
  *     @Override
  *     public boolean shouldShow() {
- *         return Config.feature.mining.wormTimerCooldown && Timer.getGoalEpochMs() > 0;
+ *         return Config.feature.mining.crystalHollows.wormTimerCooldown && Timer.getGoalEpochMs() > 0;
  *     }
  *
  *     @Override
@@ -253,3 +253,4 @@ public abstract class Timer {
 
 
 }
+

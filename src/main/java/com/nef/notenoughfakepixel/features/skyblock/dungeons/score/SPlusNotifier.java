@@ -36,7 +36,7 @@ public class SPlusNotifier {
 
     public static void reminderSPlus() {
         if (remindedSPlus) return;
-        if (!Config.feature.dungeons.dungeonsSPlusNotifier && !Config.feature.dungeons.dungeonsSPlusMessage) return;
+        if (!Config.feature.dungeons.scoreSecrets.dungeonsSPlusNotifier && !Config.feature.dungeons.scoreSecrets.dungeonsSPlusMessage) return;
 
         int currentScore = ScoreManager.getSkillScore() + ScoreManager.getExplorationClearScore() + ScoreManager.getSpeedScore() + ScoreManager.getBonusScore();
         int virtualSecretScore = Math.min(40, ScoreManager.getSecretPercentage() * 40 /
@@ -44,12 +44,12 @@ public class SPlusNotifier {
         int virtualTotalScore = currentScore + virtualSecretScore;
 
         if (virtualTotalScore >= 300) {
-            if (Config.feature.dungeons.dungeonsSPlusNotifier) {
+            if (Config.feature.dungeons.scoreSecrets.dungeonsSPlusNotifier) {
                 SoundUtils.playSound(mc.thePlayer.getPosition(), "note.pling", 2.0F, 2.0F);
                 TitleUtils.showTitle(EnumChatFormatting.RED + "300 Score!", 2000);
             }
-            if (Config.feature.dungeons.dungeonsSPlusMessage) {
-                String customMessage = Config.feature.dungeons.dungeonsSPlusCustom.trim();
+            if (Config.feature.dungeons.scoreSecrets.dungeonsSPlusMessage) {
+                String customMessage = Config.feature.dungeons.scoreSecrets.dungeonsSPlusCustom.trim();
                 if (!customMessage.isEmpty()) {
                     Minecraft.getMinecraft().thePlayer.sendChatMessage("/pc " + customMessage);
                 } else {
@@ -62,13 +62,14 @@ public class SPlusNotifier {
 
     public void reminderUnreachable() {
         if (remindedUnreachable) return;
-        if (!Config.feature.dungeons.dungeonsSPlusNotifier && !Config.feature.dungeons.dungeonsSPlusMessage) return;
+        if (!Config.feature.dungeons.scoreSecrets.dungeonsSPlusNotifier && !Config.feature.dungeons.scoreSecrets.dungeonsSPlusMessage) return;
 
         if (ScoreManager.getRequiredSecretNeeded() == -1) {
-            if (Config.feature.dungeons.dungeonsSPlusMessage) {
+            if (Config.feature.dungeons.scoreSecrets.dungeonsSPlusMessage) {
                 Minecraft.getMinecraft().thePlayer.sendChatMessage("/pc [NEF] S+ may not be reached by secrets only, do crypts or restart");
             }
             remindedUnreachable = true;
         }
     }
 }
+

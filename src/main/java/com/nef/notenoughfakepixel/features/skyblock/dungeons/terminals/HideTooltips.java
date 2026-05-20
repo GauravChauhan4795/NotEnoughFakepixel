@@ -17,7 +17,7 @@ public class HideTooltips {
 
     @SubscribeEvent(priority = EventPriority.LOW)
     public void onTooltipLow(ItemTooltipEvent event) {
-        if (!Config.feature.dungeons.dungeonsHideTooltips) return;
+        if (!Config.feature.dungeons.terminals.dungeonsHideTooltips) return;
         if (!DungeonManager.checkEssentialsF7()) return;
         if (event.toolTip == null) return;
 
@@ -38,3 +38,4 @@ public class HideTooltips {
         }
     }
 }
+

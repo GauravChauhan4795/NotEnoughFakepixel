@@ -26,9 +26,9 @@ public class SlayerOverlay extends Overlay {
         if (!SkyblockData.isSkyblock()) return false;
         if (!SkyblockData.isSlayerActive()) return false;
         if (!isValidLocation()) return false;
-        if (!Config.feature.slayer.slayerOverlay) return false;
-        if (Config.feature.slayer.slayerOverlayHideOnTab && Minecraft.getMinecraft().gameSettings.keyBindPlayerList.isKeyDown()) return false;
-        if (Config.feature.slayer.slayerOverlayHideOnChat && Minecraft.getMinecraft().currentScreen instanceof GuiChat) return false;
+        if (!Config.feature.slayer.slayerOverlaySettings.slayerOverlay) return false;
+        if (Config.feature.slayer.slayerOverlaySettings.slayerOverlayHideOnTab && Minecraft.getMinecraft().gameSettings.keyBindPlayerList.isKeyDown()) return false;
+        if (Config.feature.slayer.slayerOverlaySettings.slayerOverlayHideOnChat && Minecraft.getMinecraft().currentScreen instanceof GuiChat) return false;
         return true;
     }
 
@@ -42,17 +42,17 @@ public class SlayerOverlay extends Overlay {
         if (!shouldShow()) return;
         if (getLines().isEmpty()) return;
 
-        float scale = Config.feature.slayer.slayerOverlayScale;
+        float scale = Config.feature.slayer.slayerOverlaySettings.slayerOverlayScale;
         float width = getWidth(scale, getLines());
         float height = getHeight(scale, getLines());
 
-        float x = Config.feature.slayer.slayerOverlayPos.getAbsX(new ScaledResolution(Minecraft.getMinecraft()), (int) width) - width/2;
-        float y = Config.feature.slayer.slayerOverlayPos.getAbsY(new ScaledResolution(Minecraft.getMinecraft()), (int) height ) - height/2;
+        float x = Config.feature.slayer.slayerOverlaySettings.slayerOverlayPos.getAbsX(new ScaledResolution(Minecraft.getMinecraft()), (int) width) - width/2;
+        float y = Config.feature.slayer.slayerOverlaySettings.slayerOverlayPos.getAbsY(new ScaledResolution(Minecraft.getMinecraft()), (int) height ) - height/2;
         draw(
                 x,
                 y,
-                Config.feature.slayer.slayerOverlayScale,
-                Config.feature.slayer.slayerOverlayBackgroundColor
+                Config.feature.slayer.slayerOverlaySettings.slayerOverlayScale,
+                Config.feature.slayer.slayerOverlaySettings.slayerOverlayBackgroundColor
         );
     }
 

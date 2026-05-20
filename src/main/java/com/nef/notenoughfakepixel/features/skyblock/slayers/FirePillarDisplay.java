@@ -21,7 +21,7 @@ public class FirePillarDisplay {
 
     @SubscribeEvent
     public void onRenderLiving(RenderLivingEvent.Pre<EntityLivingBase> event) {
-        if (!Config.feature.slayer.slayerFirePillarDisplay || mc.theWorld == null) return;
+        if (!Config.feature.slayer.infernoDemonlord.slayerFirePillarDisplay || mc.theWorld == null) return;
         if (!SkyblockData.getCurrentGamemode().isSkyblock()) return;
         if (!SkyblockData.getCurrentLocation().isCrimson()) return;
 

@@ -125,7 +125,7 @@ public class SpiritLeapHandler {
                         .getUnformattedText()
                         .trim();
 
-                if (Config.feature.dungeons.dungeonsSpiritLeapGUI && SkyblockData.getCurrentLocation().isDungeon() && "Spirit Leap".equals(displayName)) {
+                if (Config.feature.dungeons.general.dungeonsSpiritLeapGUI && SkyblockData.getCurrentLocation().isDungeon() && "Spirit Leap".equals(displayName)) {
                     playerDataList.clear();
                 }
             }
@@ -142,7 +142,7 @@ public class SpiritLeapHandler {
                         .getUnformattedText()
                         .trim();
 
-                if (Config.feature.dungeons.dungeonsSpiritLeapGUI && SkyblockData.getCurrentLocation().isDungeon() && "Spirit Leap".equals(displayName)) {
+                if (Config.feature.dungeons.general.dungeonsSpiritLeapGUI && SkyblockData.getCurrentLocation().isDungeon() && "Spirit Leap".equals(displayName)) {
                     event.setCanceled(true);
 
                     if (playerDataList.isEmpty()) {
@@ -299,7 +299,7 @@ public class SpiritLeapHandler {
                         .getUnformattedText()
                         .trim();
 
-                if (Config.feature.dungeons.dungeonsSpiritLeapGUI && SkyblockData.getCurrentLocation().isDungeon() && "Spirit Leap".equals(displayName)) {
+                if (Config.feature.dungeons.general.dungeonsSpiritLeapGUI && SkyblockData.getCurrentLocation().isDungeon() && "Spirit Leap".equals(displayName)) {
                     int button = Mouse.getEventButton();
                     boolean pressed = Mouse.getEventButtonState();
 
@@ -318,7 +318,7 @@ public class SpiritLeapHandler {
                                         0,
                                         0,
                                         mc.thePlayer);
-                                if (Config.feature.dungeons.dungeonsLeapAnnounce) {
+                                if (Config.feature.dungeons.general.dungeonsLeapAnnounce) {
                                     String command = String.format("/pc Leaped to %s!", pd.playerName);
                                     mc.thePlayer.sendChatMessage(command);
                                 }

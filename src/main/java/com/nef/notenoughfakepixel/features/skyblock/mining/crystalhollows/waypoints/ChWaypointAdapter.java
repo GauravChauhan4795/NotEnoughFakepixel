@@ -22,7 +22,7 @@ public final class ChWaypointAdapter implements JsonDeserializer<ChWaypoint>, Js
         Boolean temporary = o.has("temporary") ? o.get("temporary").getAsBoolean() : Boolean.FALSE;
         Integer colorRgb = o.has("colorRgb")
                 ? o.get("colorRgb").getAsInt()
-                : ColorUtils.getColor(Config.feature.mining.crystalWaypointColor).getRGB();
+                : ColorUtils.getColor(Config.feature.mining.waypointSettings.crystalWaypointColor).getRGB();
         Boolean toggled = o.has("toggled") ? o.get("toggled").getAsBoolean() : Boolean.TRUE;
 
         return new ChWaypoint(x, y, z, id, name, temporary, colorRgb, toggled);

@@ -1,7 +1,7 @@
 package com.nef.notenoughfakepixel.features.skyblock.slayers;
 
 import com.nef.notenoughfakepixel.config.gui.Config;
-import com.nef.notenoughfakepixel.config.gui.core.config.Position;
+import com.nef.notenoughfakepixel.config.position.Position;
 import com.nef.notenoughfakepixel.env.registers.RegisterEvents;
 import com.nef.notenoughfakepixel.serverdata.SkyblockData;
 import net.minecraft.client.Minecraft;
@@ -32,7 +32,7 @@ public class SlayerHealthDisplay {
     private final List<MinionInfo> minionInfos = new ArrayList<>();
 
     public SlayerHealthDisplay() {
-        this.position = Config.feature.slayer.slayerBossHPPos;
+        this.position = Config.feature.slayer.bossSettings.slayerBossHPPos;
     }
 
     private static class MinionInfo {
@@ -63,7 +63,7 @@ public class SlayerHealthDisplay {
         ticks++;
         if (ticks % 10 != 0) return;
 
-        if (!Config.feature.slayer.slayerBossHP) return;
+        if (!Config.feature.slayer.bossSettings.slayerBossHP) return;
 
         isBoss = SkyblockData.isBossActive();
         if (!isBoss || mc.thePlayer == null) {
@@ -225,3 +225,4 @@ public class SlayerHealthDisplay {
         minionInfos.clear();
     }
 }
+

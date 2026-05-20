@@ -1,7 +1,7 @@
 package com.nef.notenoughfakepixel.features.skyblock.diana;
 
 import com.nef.notenoughfakepixel.config.gui.Config;
-import com.nef.notenoughfakepixel.config.gui.core.config.KeybindHelper;
+import com.nef.notenoughfakepixel.utils.KeybindHelper;
 import com.nef.notenoughfakepixel.env.registers.RegisterEvents;
 import com.nef.notenoughfakepixel.events.PacketReadEvent;
 import com.nef.notenoughfakepixel.serverdata.SkyblockData;
@@ -205,7 +205,7 @@ public class GuessBurrow {
             }
         }
 
-        if (guessPoint != null && Config.feature.diana.dianaWarpHelper
+        if (guessPoint != null && Config.feature.diana.burrowSettings.dianaWarpHelper
                 && SkyblockData.getCurrentLocation().isHub()
                 && mc.theWorld != null
                 && mc.thePlayer != null) {
@@ -218,13 +218,13 @@ public class GuessBurrow {
             for (WarpLocation warp : WARP_LOCATIONS) {
                 boolean isEnabled = true;
                 if (warp.command.equals("/warp da")) {
-                    isEnabled = Config.feature.diana.dianaWarpDa;
+                    isEnabled = Config.feature.diana.burrowSettings.dianaWarpDa;
                 } else if (warp.command.equals("/warp museum")) {
-                    isEnabled = Config.feature.diana.dianaWarpMuseum;
+                    isEnabled = Config.feature.diana.burrowSettings.dianaWarpMuseum;
                 } else if (warp.command.equals("/warp crypts")) {
-                    isEnabled = Config.feature.diana.dianaWarpCrypts;
+                    isEnabled = Config.feature.diana.burrowSettings.dianaWarpCrypts;
                 } else if (warp.command.equals("/warp castle")) {
-                    isEnabled = Config.feature.diana.dianaWarpCastle;
+                    isEnabled = Config.feature.diana.burrowSettings.dianaWarpCastle;
                 }
 
                 if (!isEnabled) continue;
@@ -237,7 +237,7 @@ public class GuessBurrow {
             }
 
             if (bestWarp != null && minWarpDist < playerDist) {
-                String keyName = KeybindHelper.getKeyName(Config.feature.diana.warpKeybind);
+                String keyName = KeybindHelper.getKeyName(Config.feature.diana.burrowSettings.warpKeybind);
                 displayText = "Warp to " + bestWarp.name + " (" + (keyName != null ? keyName : "None") + ")";
                 warpCommand = bestWarp.command;
             } else {
@@ -253,8 +253,8 @@ public class GuessBurrow {
             return;
         }
 
-        if (Config.feature.diana.dianaWarpHelper && warpCommand != null) {
-            boolean keyPressed = KeybindHelper.isKeyDown(Config.feature.diana.warpKeybind);
+        if (Config.feature.diana.burrowSettings.dianaWarpHelper && warpCommand != null) {
+            boolean keyPressed = KeybindHelper.isKeyDown(Config.feature.diana.burrowSettings.warpKeybind);
             if (keyPressed && !wasKeyPressed && System.currentTimeMillis() > cooldownEndTime) {
                 mc.thePlayer.sendChatMessage(warpCommand);
                 cooldownEndTime = System.currentTimeMillis() + 5000;
@@ -323,7 +323,7 @@ public class GuessBurrow {
     @SubscribeEvent
     public void onRenderWorld(RenderWorldLastEvent event) {
         Vec3 guess = guessPoint; // capture once
-        if (guess != null && Config.feature.diana.dianaBurrowGuess) {
+        if (guess != null && Config.feature.diana.burrowSettings.dianaBurrowGuess) {
             BlockPos loc = new BlockPos(guess.xCoord, guess.yCoord + 1, guess.zCoord);
             AxisAlignedBB aabb = new AxisAlignedBB(
                     loc.getX(), loc.getY(), loc.getZ(),
@@ -332,7 +332,7 @@ public class GuessBurrow {
             RenderUtils.renderWaypointText("Burrow Guess", loc, event.partialTicks);
             RenderUtils.drawOutlinedBoundingBox(aabb, Color.GREEN, 2.0f, event.partialTicks);
         }
-        if (guess != null && Config.feature.diana.dianaTracerBurrowGuess) {
+        if (guess != null && Config.feature.diana.burrowSettings.dianaTracerBurrowGuess) {
             drawGuessTracer(guess, event.partialTicks);
         }
     }
@@ -341,7 +341,7 @@ public class GuessBurrow {
         Minecraft mc = Minecraft.getMinecraft();
         if (mc.thePlayer == null) return;
 
-        Color base = ColorUtils.getColor(Config.feature.diana.dianaGuessBurrowTracerColor);
+        Color base = ColorUtils.getColor(Config.feature.diana.burrowSettings.dianaGuessBurrowTracerColor);
         Color color = new Color(base.getRed(), base.getGreen(), base.getBlue(), 255);
 
         RenderUtils.draw3DLine(
@@ -371,13 +371,13 @@ public class GuessBurrow {
         int textWidth = mc.fontRendererObj.getStringWidth(displayText);
         int textHeight = mc.fontRendererObj.FONT_HEIGHT;
 
-        int x = Config.feature.diana.warpHelperPos.getAbsX(sr, textWidth);
-        int y = Config.feature.diana.warpHelperPos.getAbsY(sr, textHeight);
+        int x = Config.feature.diana.burrowSettings.warpHelperPos.getAbsX(sr, textWidth);
+        int y = Config.feature.diana.burrowSettings.warpHelperPos.getAbsY(sr, textHeight);
 
         GL11.glPushMatrix();
         GL11.glTranslatef(x, y, 0);
-        GL11.glScalef(Config.feature.diana.warpHelperScale,
-                Config.feature.diana.warpHelperScale, 1f);
+        GL11.glScalef(Config.feature.diana.burrowSettings.warpHelperScale,
+                Config.feature.diana.burrowSettings.warpHelperScale, 1f);
         mc.fontRendererObj.drawStringWithShadow(displayText, 0, 0, 0xFFFFFF);
         GL11.glPopMatrix();
     }
@@ -400,3 +400,4 @@ public class GuessBurrow {
         }
     }
 }
+

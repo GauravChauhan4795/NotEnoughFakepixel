@@ -60,7 +60,7 @@ public class HidePlayersNearNpcs {
     public void onRenderPlayerPre(net.minecraftforge.client.event.RenderPlayerEvent.Pre e) {
         if (mc.theWorld == null || mc.thePlayer == null) return;
         if (!SkyblockData.getCurrentGamemode().isSkyblock()) return;
-        if (!Config.feature.qol.qolHidePlayerNearNpcs) return;
+        if (!Config.feature.qol.visualTweaks.qolHidePlayerNearNpcs) return;
         if (SkyblockData.getCurrentLocation() == Location.PRIVATE_ISLAND || SkyblockData.getCurrentLocation() == Location.DUNGEON) return;
 
         final Entity entity = e.entity;
@@ -200,3 +200,4 @@ public class HidePlayersNearNpcs {
 
 
 }
+

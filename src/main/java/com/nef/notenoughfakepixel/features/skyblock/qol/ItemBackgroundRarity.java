@@ -84,7 +84,7 @@ public class ItemBackgroundRarity {
         float r = ((rgb >> 16) & 0xFF) / 255f;
         float g = ((rgb >> 8) & 0xFF) / 255f;
         float b = (rgb & 0xFF) / 255f;
-        float a = Math.max(0f, Math.min(1f, Config.feature.qol.qolItemRarityOpacity));
+        float a = Math.max(0f, Math.min(1f, Config.feature.qol.visualTweaks.qolItemRarityOpacity));
         GlStateManager.color(r, g, b, a);
     }
 

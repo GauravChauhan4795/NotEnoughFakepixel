@@ -33,7 +33,7 @@ public abstract class MixinEntityRenderer implements IResourceManagerReloadListe
 
     @Inject(method = "addRainParticles", at = @At("HEAD"), cancellable = true)
     private void disableRainRendering(CallbackInfo ci) {
-        if (Config.feature.qol.qolDisableRain) {
+        if (Config.feature.qol.visualTweaks.qolDisableRain) {
             ci.cancel();
         }
     }
@@ -136,3 +136,4 @@ public abstract class MixinEntityRenderer implements IResourceManagerReloadListe
     }
 
 }
+

@@ -10,7 +10,7 @@ public class WormNotifier extends ChatNotifier {
 
     @Override
     public boolean shouldNotify() {
-        return Config.feature.mining.crystalWormNotifier;
+        return Config.feature.mining.crystalHollows.crystalWormNotifier;
     }
 
     @Override
@@ -33,3 +33,4 @@ public class WormNotifier extends ChatNotifier {
         WormSpawnTimer.setGoalEpochMs(System.currentTimeMillis() + 30000);
     }
 }
+

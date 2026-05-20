@@ -8,12 +8,12 @@ public class EquipmentShortcut extends KeyShortcut{
 
     @Override
     public boolean getConfigOption() {
-        return Config.feature.qol.qolShortcutEq;
+        return Config.feature.qol.shortcuts.qolShortcutEq;
     }
 
     @Override
     public int getKeyBind() {
-        return Config.feature.qol.qolEqKey;
+        return Config.feature.qol.shortcuts.qolEqKey;
     }
 
     @Override
@@ -26,3 +26,4 @@ public class EquipmentShortcut extends KeyShortcut{
         return "Your Equipment";
     }
 }
+

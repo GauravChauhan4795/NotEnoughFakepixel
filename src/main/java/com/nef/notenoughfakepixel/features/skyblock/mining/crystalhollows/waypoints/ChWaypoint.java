@@ -42,10 +42,11 @@ public class ChWaypoint {
     public int getColorRgbOrDefault() {
         Integer c = colorRgb;
         if (c != null) return c;
-        return ColorUtils.getColor(Config.feature.mining.crystalWaypointColor).getRGB();
+        return ColorUtils.getColor(Config.feature.mining.waypointSettings.crystalWaypointColor).getRGB();
     }
 
     public void setColorRgb(int rgb) {
         this.colorRgb = rgb;
     }
 }
+

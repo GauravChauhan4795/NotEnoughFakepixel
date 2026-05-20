@@ -33,7 +33,7 @@ public class PrecursorItemsOverlay extends Overlay {
         if (Minecraft.getMinecraft().gameSettings.showDebugInfo) return false;
         if (Minecraft.getMinecraft().gameSettings.keyBindPlayerList.isKeyDown()) return false;
         if (Config.feature.mining.miningOverlayHideOnChat && mc.currentScreen instanceof GuiChat) return false;
-        return Config.feature.mining.crystalShowAutomaton;
+        return Config.feature.mining.crystalHollows.crystalShowAutomaton;
     }
 
     @Override
@@ -66,16 +66,16 @@ public class PrecursorItemsOverlay extends Overlay {
         if (!shouldShow()) return;
 
         ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft());
-        int width = (int) getWidth(Config.feature.mining.automatonOverlayScale, getLines());
-        int height = (int) getHeight(Config.feature.mining.automatonOverlayScale, getLines());
-        int x = Config.feature.mining.automatonOverlayPos.getAbsX(sr, width);
-        int y = Config.feature.mining.automatonOverlayPos.getAbsY(sr, height);
+        int width = (int) getWidth(Config.feature.mining.automatonOverlaySettings.automatonOverlayScale, getLines());
+        int height = (int) getHeight(Config.feature.mining.automatonOverlaySettings.automatonOverlayScale, getLines());
+        int x = Config.feature.mining.automatonOverlaySettings.automatonOverlayPos.getAbsX(sr, width);
+        int y = Config.feature.mining.automatonOverlaySettings.automatonOverlayPos.getAbsY(sr, height);
 
         draw(
                 x - ((float) width /2),
                 y - ((float) height /2),
-                Config.feature.mining.automatonOverlayScale,
-                Config.feature.mining.miningOverlayBackgroundColor
+                Config.feature.mining.automatonOverlaySettings.automatonOverlayScale,
+                Config.feature.mining.miningOverlaySettings.miningOverlayBackgroundColor
         );
     }
 
@@ -95,3 +95,4 @@ public class PrecursorItemsOverlay extends Overlay {
         }
     }
 }
+

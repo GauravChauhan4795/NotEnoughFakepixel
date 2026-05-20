@@ -28,10 +28,10 @@ public class MiningOverlay extends Overlay {
         if (!shouldShow()) return;
 
         draw(
-                Config.feature.mining.miningOverlayOffsetX,
-                Config.feature.mining.miningOverlayOffsetY,
-                Config.feature.mining.miningOverlayScale,
-                Config.feature.mining.miningOverlayBackgroundColor
+                Config.feature.mining.miningOverlaySettings.miningOverlayOffsetX,
+                Config.feature.mining.miningOverlaySettings.miningOverlayOffsetY,
+                Config.feature.mining.miningOverlaySettings.miningOverlayScale,
+                Config.feature.mining.miningOverlaySettings.miningOverlayBackgroundColor
         );
     }
 
@@ -51,12 +51,12 @@ public class MiningOverlay extends Overlay {
         if (!shouldShow()) return ListUtils.of();
         List<String> lines = new ArrayList<>();
 
-        if (Config.feature.mining.miningAbilityCooldown)
+        if (Config.feature.mining.miningOverlaySettings.miningAbilityCooldown)
             lines.add("\u00a77Ability Cooldown: \u00a7r" + AbilityNotifier.cdSecondsRemaining());
-        if (Config.feature.mining.miningMithrilPowder && SkyblockData.getCurrentLocation().equals(Location.DWARVEN)) lines.add(formatMithrilPowder(SkyblockData.getMithrilPowder()));
-        if (Config.feature.mining.miningGemstonePowder && SkyblockData.getCurrentLocation().equals(Location.CRYSTAL_HOLLOWS)) lines.add(formatGemstonePowder(SkyblockData.getGemstonePowder()));
-        if (Config.feature.mining.miningDrillFuel) lines.add(DrillFuelParsing.getString());
-        if (Config.feature.mining.miningCommissions){
+        if (Config.feature.mining.miningOverlaySettings.miningMithrilPowder && SkyblockData.getCurrentLocation().equals(Location.DWARVEN)) lines.add(formatMithrilPowder(SkyblockData.getMithrilPowder()));
+        if (Config.feature.mining.miningOverlaySettings.miningGemstonePowder && SkyblockData.getCurrentLocation().equals(Location.CRYSTAL_HOLLOWS)) lines.add(formatGemstonePowder(SkyblockData.getGemstonePowder()));
+        if (Config.feature.mining.miningOverlaySettings.miningDrillFuel) lines.add(DrillFuelParsing.getString());
+        if (Config.feature.mining.miningOverlaySettings.miningCommissions){
             for (String commission : TablistParser.commissions) {
                 lines.add(formatCommission(commission));
             }

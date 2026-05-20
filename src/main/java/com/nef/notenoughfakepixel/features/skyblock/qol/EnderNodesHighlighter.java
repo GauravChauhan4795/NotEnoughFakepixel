@@ -56,7 +56,7 @@ public class EnderNodesHighlighter extends BlockHighlighter {
     @Override
     protected boolean isEnabled() {
         return SkyblockData.getCurrentLocation().equals(Location.THE_END)
-                && Config.feature.qol.qolEndNodeHighlighter;
+                && Config.feature.qol.endNodesSettings.qolEndNodeHighlighter;
     }
 
     @Override
@@ -69,7 +69,7 @@ public class EnderNodesHighlighter extends BlockHighlighter {
 
     @Override
     protected Color getColor(BlockPos blockPos) {
-        return ColorUtils.getColor(Config.feature.qol.endNodeColor);
+        return ColorUtils.getColor(Config.feature.qol.endNodesSettings.endNodeColor);
     }
 
 }

@@ -80,7 +80,7 @@ public class LividDisplay {
             World world = mc.theWorld;
             if (world == null) return;
 
-            if (!Config.feature.dungeons.dungeonsLividFinder) return;
+            if (!Config.feature.dungeons.general.dungeonsLividFinder) return;
 
             if (world.getBlockState(pos).getBlock() == Blocks.wool) {
                 int woolColor = world.getBlockState(pos).getBlock().getDamageValue(world, pos);
@@ -110,7 +110,7 @@ public class LividDisplay {
 
     @SubscribeEvent
     public void onRenderEntity(RenderLivingEvent.Pre<EntityLivingBase> event) {
-        if (!Config.feature.dungeons.dungeonsLividFinder || livid == null) return;
+        if (!Config.feature.dungeons.general.dungeonsLividFinder || livid == null) return;
         long currentTime = System.currentTimeMillis();
         if (currentTime - lastUpdateTime > 20) {
             lividEntity.clear();
@@ -123,7 +123,7 @@ public class LividDisplay {
                 event.setCanceled(true);
             }
         }
-        if (Config.feature.dungeons.dungeonsLividFinderRender == 0) return;
+        if (Config.feature.dungeons.general.dungeonsLividFinderRender == 0) return;
         if (entity instanceof EntityArmorStand) {
             EntityArmorStand armorStand = (EntityArmorStand) entity;
             if (entity.isInvisible()) return;
@@ -150,8 +150,8 @@ public class LividDisplay {
 
     @SubscribeEvent(priority = EventPriority.HIGH)
     public void onRenderEntityModel(RenderEntityModelEvent event) {
-        if (Config.feature.dungeons.dungeonsLividFinder && livid != null) {
-            if (Config.feature.dungeons.dungeonsLividFinderRender == 0) return;
+        if (Config.feature.dungeons.general.dungeonsLividFinder && livid != null) {
+            if (Config.feature.dungeons.general.dungeonsLividFinderRender == 0) return;
             final EntityLivingBase entity = event.getEntity();
             if (!lividEntity.contains(entity)) return;
             if (Configuration.isPojav()) {
@@ -164,8 +164,8 @@ public class LividDisplay {
 
     @SubscribeEvent
     public void onWorldRender(RenderWorldLastEvent event) {
-        if (Config.feature.dungeons.dungeonsLividFinder && livid != null) {
-            if (Config.feature.dungeons.dungeonsLividFinderRender == 0) {
+        if (Config.feature.dungeons.general.dungeonsLividFinder && livid != null) {
+            if (Config.feature.dungeons.general.dungeonsLividFinderRender == 0) {
                 AxisAlignedBB aabb = new AxisAlignedBB(livid.posX - 0.5, livid.posY - 2, livid.posZ - 0.5, livid.posX + 0.5, livid.posY, livid.posZ + 0.5);
                 draw3DBox(aabb, LIVID_COLOUR, event.partialTicks);
             }

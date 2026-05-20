@@ -48,7 +48,7 @@ public class ThreeWeirdos {
 
     @SubscribeEvent
     public void onChatReceive(ClientChatReceivedEvent e) {
-        if (!Config.feature.dungeons.dungeonsThreeWeirdos) return;
+        if (!Config.feature.dungeons.puzzles.dungeonsThreeWeirdos) return;
         if (mc.thePlayer == null) return;
         if (!SkyblockData.getCurrentGamemode().isSkyblock()) return;
         if (!SkyblockData.getCurrentLocation().isDungeon()) return;
@@ -108,7 +108,7 @@ public class ThreeWeirdos {
 
     @SubscribeEvent
     public void onRenderLast(RenderWorldLastEvent event) {
-        if (!Config.feature.dungeons.dungeonsThreeWeirdos) return;
+        if (!Config.feature.dungeons.puzzles.dungeonsThreeWeirdos) return;
         if (mc.theWorld == null) return;
         if (!foundResponse) return;
         if (correctName.isEmpty()) return;
@@ -210,3 +210,4 @@ public class ThreeWeirdos {
         GlStateManager.popMatrix();
     }
 }
+

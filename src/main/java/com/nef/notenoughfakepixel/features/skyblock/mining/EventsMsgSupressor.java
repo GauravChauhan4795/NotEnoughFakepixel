@@ -36,7 +36,7 @@ public class EventsMsgSupressor {
     }
 
     private void checkDonEspressoMessage(ClientChatReceivedEvent e) {
-        if (!Config.feature.mining.miningDisableDonEspresso) return;
+        if (!Config.feature.mining.dwarvenMines.miningDisableDonEspresso) return;
         if (!SkyblockData.getCurrentGamemode().isSkyblock()) return;
         if (SkyblockData.getCurrentLocation() != Location.DWARVEN) return;
         if (donEspressoPattern.matcher(e.message.getFormattedText()).find()) {
@@ -46,3 +46,4 @@ public class EventsMsgSupressor {
 
 
 }
+

@@ -1,4 +1,4 @@
-package com.nef.notenoughfakepixel.config.gui.core.config;
+package com.nef.notenoughfakepixel.utils;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -51,3 +51,4 @@ public class KeybindHelper {
         }
     }
 }
+

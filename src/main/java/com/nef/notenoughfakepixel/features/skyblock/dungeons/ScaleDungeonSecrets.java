@@ -15,7 +15,7 @@ import java.util.UUID;
 
 public class ScaleDungeonSecrets {
     public static void scaleItemDrop(EntityItem entity, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
-        if (!Config.feature.dungeons.dungeonsItemSecretsBig) return;
+        if (!Config.feature.dungeons.scoreSecrets.dungeonsItemSecretsBig) return;
         if (!SkyblockData.getCurrentLocation().isDungeon()) return;
 
         ItemStack stack = entity.getEntityItem();
@@ -49,9 +49,9 @@ public class ScaleDungeonSecrets {
         }
 
         if (shouldScale) {
-            float scale = Config.feature.dungeons.dungeonsScaleItemDrop;
+            float scale = Config.feature.dungeons.scoreSecrets.dungeonsScaleItemDrop;
             GlStateManager.scale(scale, scale, scale);
-            GlStateManager.translate(0, (Config.feature.dungeons.dungeonsScaleItemDrop - 1f) * (entity.height / 2f - 1.125f / 16f), 0);
+            GlStateManager.translate(0, (Config.feature.dungeons.scoreSecrets.dungeonsScaleItemDrop - 1f) * (entity.height / 2f - 1.125f / 16f), 0);
         }
     }
 }

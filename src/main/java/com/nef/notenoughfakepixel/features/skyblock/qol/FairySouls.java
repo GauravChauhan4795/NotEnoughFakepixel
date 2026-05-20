@@ -42,7 +42,7 @@ public class FairySouls {
         island = null;
 
         if (SkyblockData.getCurrentGamemode() != Gamemode.SKYBLOCK) return;
-        if (!Config.feature.waypoints.fairySoulWaypoints) return;
+        if (!Config.feature.waypoints.fairySoulWaypointsSettings.fairySoulWaypoints) return;
 
         Location currentIsland = SkyblockData.getCurrentLocation();
         if (locs != null && currentIsland != null) {
@@ -85,7 +85,7 @@ public class FairySouls {
                         z + 0.8 - viewerZ
                 ).expand(0.01f, 0.01f, 0.01f);
 
-                Color base = ColorUtils.getColor(Config.feature.waypoints.fairySoulWaypointsColor);
+                Color base = ColorUtils.getColor(Config.feature.waypoints.fairySoulWaypointsSettings.fairySoulWaypointsColor);
                 Color beam = new Color(base.getRed(), base.getGreen(), base.getBlue(), 102);
 
                 RenderUtils.highlightBlock(new BlockPos(x, y, z), base, true, e.partialTicks);
@@ -223,3 +223,4 @@ public class FairySouls {
     }
 
 }
+

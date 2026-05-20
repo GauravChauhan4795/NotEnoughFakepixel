@@ -51,7 +51,7 @@ public class CorrectPanesSolver {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onDrawScreenPre(GuiScreenEvent.DrawScreenEvent.Pre event) {
-        if (!Config.feature.dungeons.dungeonsTerminalCorrectPanesSolver) return;
+        if (!Config.feature.dungeons.terminals.dungeonsTerminalCorrectPanesSolver) return;
         if (!(event.gui instanceof GuiChest)) return;
         if (!DungeonManager.checkEssentialsF7()) return;
 
@@ -64,14 +64,14 @@ public class CorrectPanesSolver {
                 .getDisplayName()
                 .getUnformattedText()
                 .trim();
-        if (Config.feature.dungeons.dungeonsCustomGuiPanes && displayName.equals("Correct all the panes!")) {
+        if (Config.feature.dungeons.terminals.dungeonsCustomGuiPanes && displayName.equals("Correct all the panes!")) {
             event.setCanceled(true);
         }
     }
 
     @SubscribeEvent(priority = EventPriority.LOW)
     public void onDrawScreenPost(GuiScreenEvent.DrawScreenEvent.Post event) {
-        if (!Config.feature.dungeons.dungeonsTerminalCorrectPanesSolver) return;
+        if (!Config.feature.dungeons.terminals.dungeonsTerminalCorrectPanesSolver) return;
         if (!DungeonManager.checkEssentialsF7()) return;
         if (!(event.gui instanceof GuiChest)) return;
 
@@ -86,7 +86,7 @@ public class CorrectPanesSolver {
         lastCorrectSlots.clear();
         slotPositions.clear();
 
-        if (Config.feature.dungeons.dungeonsCustomGuiPanes) {
+        if (Config.feature.dungeons.terminals.dungeonsCustomGuiPanes) {
             long currentTime = System.currentTimeMillis();
             if (currentTime - lastRecheckTime >= 1000) {
                 clickedSlots.clear();
@@ -119,7 +119,7 @@ public class CorrectPanesSolver {
 
             ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft());
             GlStateManager.pushMatrix();
-            float scale = Config.feature.dungeons.dungeonsTerminalsScale;
+            float scale = Config.feature.dungeons.terminals.dungeonsTerminalsScale;
             int guiWidth = (int) (INNER_COLUMNS * SLOT_SIZE * scale);
             int guiHeight = (int) (INNER_ROWS * SLOT_SIZE * scale);
             int guiLeft = (sr.getScaledWidth() - guiWidth) / 2;
@@ -145,7 +145,7 @@ public class CorrectPanesSolver {
                     if (pos != null) {
                         drawRect(pos.x + 1, pos.y + 1,
                                 pos.x + SLOT_SIZE - 1, pos.y + SLOT_SIZE - 1,
-                                ColorUtils.getColor(Config.feature.dungeons.dungeonsCorrectColor).getRGB());
+                                ColorUtils.getColor(Config.feature.dungeons.terminals.dungeonsCorrectColor).getRGB());
                     }
                 }
             }
@@ -155,8 +155,8 @@ public class CorrectPanesSolver {
 
     @SubscribeEvent
     public void onMouseClick(GuiScreenEvent.MouseInputEvent.Pre event) {
-        if (!Config.feature.dungeons.dungeonsPreventMissclicks) return;
-        if (!Config.feature.dungeons.dungeonsTerminalCorrectPanesSolver) return;
+        if (!Config.feature.dungeons.terminals.dungeonsPreventMissclicks) return;
+        if (!Config.feature.dungeons.terminals.dungeonsTerminalCorrectPanesSolver) return;
         if (!DungeonManager.checkEssentialsF7()) return;
         if (!Mouse.getEventButtonState()) return;
 
@@ -171,9 +171,9 @@ public class CorrectPanesSolver {
         String title = containerChest.getLowerChestInventory().getDisplayName().getUnformattedText();
         if (!title.equals("Correct all the panes!")) return;
 
-        if (Config.feature.dungeons.dungeonsCustomGuiPanes) {
+        if (Config.feature.dungeons.terminals.dungeonsCustomGuiPanes) {
             ScaledResolution sr = new ScaledResolution(mc);
-            float scale = Config.feature.dungeons.dungeonsTerminalsScale;
+            float scale = Config.feature.dungeons.terminals.dungeonsTerminalsScale;
 
             int mouseX = (Mouse.getEventX() * sr.getScaledWidth()) / mc.displayWidth;
             int mouseY = sr.getScaledHeight() - (Mouse.getEventY() * sr.getScaledHeight()) / mc.displayHeight - 1;

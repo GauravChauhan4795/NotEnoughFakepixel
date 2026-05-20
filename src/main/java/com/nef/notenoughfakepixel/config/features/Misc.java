@@ -1,10 +1,10 @@
 package com.nef.notenoughfakepixel.config.features;
 
 import com.google.gson.annotations.Expose;
-import com.nef.notenoughfakepixel.config.gui.core.config.annotations.ConfigEditorBoolean;
-import com.nef.notenoughfakepixel.config.gui.core.config.annotations.ConfigEditorButton;
-import com.nef.notenoughfakepixel.config.gui.core.config.annotations.ConfigEditorDropdown;
-import com.nef.notenoughfakepixel.config.gui.core.config.annotations.ConfigOption;
+import io.github.notenoughupdates.moulconfig.annotations.ConfigEditorBoolean;
+import io.github.notenoughupdates.moulconfig.annotations.ConfigEditorButton;
+import io.github.notenoughupdates.moulconfig.annotations.ConfigEditorDropdown;
+import io.github.notenoughupdates.moulconfig.annotations.ConfigOption;
 
 public class Misc {
 
@@ -41,7 +41,8 @@ public class Misc {
 
     @Expose
     @ConfigOption(name = "Termsim", desc = "Termsim")
-    @ConfigEditorButton(runnableId = "termSim", buttonText = "Open")
+    @ConfigEditorButton(runnableId = 11, buttonText = "Open")
     public String termSim = "";
 
 }
+

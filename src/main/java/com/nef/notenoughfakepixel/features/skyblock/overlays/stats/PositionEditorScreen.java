@@ -1,7 +1,7 @@
 package com.nef.notenoughfakepixel.features.skyblock.overlays.stats;
 
 import com.nef.notenoughfakepixel.config.gui.Config;
-import com.nef.notenoughfakepixel.config.gui.core.config.Position;
+import com.nef.notenoughfakepixel.config.position.Position;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
@@ -18,11 +18,11 @@ public class PositionEditorScreen extends GuiScreen {
 
     @Override
     public void initGui() {
-        editingPositions.put(StatBars.BarType.HEALTH, Config.feature.overlays.posHealth);
-        editingPositions.put(StatBars.BarType.MANA, Config.feature.overlays.posMana);
-        editingPositions.put(StatBars.BarType.EXP, Config.feature.overlays.posExp);
-        editingPositions.put(StatBars.BarType.SPEED, Config.feature.overlays.posSpeed);
-        editingPositions.put(StatBars.BarType.DEFENCE, Config.feature.overlays.posDefense);
+        editingPositions.put(StatBars.BarType.HEALTH, Config.feature.overlays.healthBarSettings.posHealth);
+        editingPositions.put(StatBars.BarType.MANA, Config.feature.overlays.manaBarSettings.posMana);
+        editingPositions.put(StatBars.BarType.EXP, Config.feature.overlays.expBarSettings.posExp);
+        editingPositions.put(StatBars.BarType.SPEED, Config.feature.overlays.speedBarSettings.posSpeed);
+        editingPositions.put(StatBars.BarType.DEFENCE, Config.feature.overlays.defenceBarSettings.posDefense);
     }
 
     @Override
@@ -119,3 +119,4 @@ public class PositionEditorScreen extends GuiScreen {
         return false;
     }
 }
+

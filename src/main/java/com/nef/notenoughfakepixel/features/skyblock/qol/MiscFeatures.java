@@ -119,7 +119,7 @@ public class MiscFeatures {
         if (event.packet instanceof S0EPacketSpawnObject) {
             S0EPacketSpawnObject spawnPacket = (S0EPacketSpawnObject) event.packet;
 
-            if (spawnPacket.getType() == 70 && Config.feature.qol.qolHideFallingBlocks) {
+            if (spawnPacket.getType() == 70 && Config.feature.qol.visualTweaks.qolHideFallingBlocks) {
                 event.setCanceled(true);
             }
         }
@@ -159,7 +159,7 @@ public class MiscFeatures {
     }
 
     private String getConfiguredSound() {
-        switch (Config.feature.qol.qolEtherwarpSound) {
+        switch (Config.feature.qol.etherwarpSettings.qolEtherwarpSound) {
             case 1:
                 return "mob.blaze.hit";
             case 2:
@@ -209,7 +209,7 @@ public class MiscFeatures {
             }
         }
 
-        if (Config.feature.qol.qolHidePlayerArmor) {
+        if (Config.feature.qol.visualTweaks.qolHidePlayerArmor) {
             if (event.entity instanceof EntityPlayer) {
                 EntityPlayer player = (EntityPlayer) event.entity;
 
@@ -280,7 +280,7 @@ public class MiscFeatures {
 
     @SubscribeEvent
     public void onRenderLivingPost(RenderLivingEvent.Post<EntityLivingBase> event) {
-        if (Config.feature.qol.qolHidePlayerArmor && SkyblockData.getCurrentGamemode().isSkyblock()) {
+        if (Config.feature.qol.visualTweaks.qolHidePlayerArmor && SkyblockData.getCurrentGamemode().isSkyblock()) {
             if (event.entity instanceof EntityPlayer) {
                 EntityPlayer player = (EntityPlayer) event.entity;
 

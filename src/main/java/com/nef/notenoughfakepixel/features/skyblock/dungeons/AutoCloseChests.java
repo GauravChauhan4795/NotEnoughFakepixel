@@ -16,7 +16,7 @@ public class AutoCloseChests {
 
     @SubscribeEvent
     public void onGuiBackgroundRender(GuiScreenEvent.BackgroundDrawnEvent event) {
-        if (!Config.feature.dungeons.dungeonsAutoCloseChests) return; // Check if the feature is enabled
+        if (!Config.feature.dungeons.general.dungeonsAutoCloseChests) return; // Check if the feature is enabled
         if (!SkyblockData.getCurrentLocation().isDungeon()) return; // Check if the player is in a dungeon
         if (event.gui == null) return;
 
@@ -34,3 +34,4 @@ public class AutoCloseChests {
     }
 
 }
+

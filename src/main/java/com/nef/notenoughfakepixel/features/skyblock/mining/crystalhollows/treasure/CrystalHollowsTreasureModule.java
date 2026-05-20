@@ -42,7 +42,7 @@ public class CrystalHollowsTreasureModule {
 
     @SubscribeEvent
     public void onPacketRead(PacketReadEvent event) {
-        if (!Config.feature.mining.crystalMetalDetector) return;
+        if (!Config.feature.mining.crystalHollows.crystalMetalDetector) return;
         if (SkyblockData.getCurrentArea() != Area.CH_MINES_OF_DIVAN) return;
 
         Minecraft mc = Minecraft.getMinecraft();
@@ -118,7 +118,7 @@ public class CrystalHollowsTreasureModule {
             lastSeenDist = -1.0;
         }
 
-        if (!Config.feature.mining.crystalMetalDetector) return;
+        if (!Config.feature.mining.crystalHollows.crystalMetalDetector) return;
         if (SkyblockData.getCurrentArea() != Area.CH_MINES_OF_DIVAN) return;
         if (!msg.contains("TREASURE: ")) return;
 
@@ -178,7 +178,7 @@ public class CrystalHollowsTreasureModule {
 
     @SubscribeEvent
     public void onRightClick(PlayerInteractEvent e) {
-        if (!Config.feature.mining.crystalMetalDetector) return;
+        if (!Config.feature.mining.crystalHollows.crystalMetalDetector) return;
         if (!SkyblockData.getCurrentLocation().equals(Location.CRYSTAL_HOLLOWS)) return;
         if (e.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK &&
                 e.world.getBlockState(e.pos).getBlock() instanceof BlockChest) {
@@ -190,12 +190,12 @@ public class CrystalHollowsTreasureModule {
 
     @SubscribeEvent
     public void onRenderWorldLast(RenderWorldLastEvent event) {
-        if (!Config.feature.mining.crystalMetalDetector) return;
+        if (!Config.feature.mining.crystalHollows.crystalMetalDetector) return;
         if (SkyblockData.getCurrentArea() != Area.CH_MINES_OF_DIVAN) return;
         Minecraft mc = Minecraft.getMinecraft();
         if (mc.thePlayer == null || mc.theWorld == null) return;
 
-        Color waypointColor = ColorUtils.getColor(Config.feature.mining.crystalDivanWaypointColor);
+        Color waypointColor = ColorUtils.getColor(Config.feature.mining.metalDetector.crystalDivanWaypointColor);
         int playerY = (int) mc.thePlayer.posY;
 
         if (confirmedChest != null) {
@@ -265,3 +265,4 @@ public class CrystalHollowsTreasureModule {
         smoothX0 = smoothZ0 = smoothX1 = smoothZ1 = Double.NaN;
     }
 }
+

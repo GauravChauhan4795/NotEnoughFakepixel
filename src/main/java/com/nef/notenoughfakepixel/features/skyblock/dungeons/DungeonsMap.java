@@ -41,7 +41,7 @@ public class DungeonsMap {
     @SubscribeEvent
     public void onRender(RenderGameOverlayEvent.Post event) {
         if (event.type != RenderGameOverlayEvent.ElementType.ALL) return;
-        if (!Config.feature.dungeons.dungeonsMap) return;
+        if (!Config.feature.dungeons.map.dungeonsMap) return;
         if (!DungeonManager.checkEssentials()) return;
 
         ItemStack map = mc.thePlayer.inventory.getStackInSlot(8);
@@ -81,16 +81,16 @@ public class DungeonsMap {
     public void drawMap(MapData data) {
         GlStateManager.pushMatrix();
         ScaledResolution sr = new ScaledResolution(mc);
-        int mapWidth = (int) (128 * Config.feature.dungeons.dungeonsMapScale);
-        int mapHeight = (int) (128 * Config.feature.dungeons.dungeonsMapScale);
-        float x = Config.feature.dungeons.dungeonsMapPos.getAbsX(sr, mapWidth);
-        float y = Config.feature.dungeons.dungeonsMapPos.getAbsY(sr, mapHeight);
+        int mapWidth = (int) (128 * Config.feature.dungeons.map.dungeonsMapScale);
+        int mapHeight = (int) (128 * Config.feature.dungeons.map.dungeonsMapScale);
+        float x = Config.feature.dungeons.map.dungeonsMapPos.getAbsX(sr, mapWidth);
+        float y = Config.feature.dungeons.map.dungeonsMapPos.getAbsY(sr, mapHeight);
 
         // Adjust for centering if centerX or centerY is true
-        if (Config.feature.dungeons.dungeonsMapPos.isCenterX()) {
+        if (Config.feature.dungeons.map.dungeonsMapPos.isCenterX()) {
             x -= mapWidth / 2;
         }
-        if (Config.feature.dungeons.dungeonsMapPos.isCenterY()) {
+        if (Config.feature.dungeons.map.dungeonsMapPos.isCenterY()) {
             y -= mapHeight / 2;
         }
 
@@ -109,7 +109,7 @@ public class DungeonsMap {
         GL11.glScissor(scissorX, mc.displayHeight - (scissorY + scissorHeight), scissorWidth, scissorHeight);
 
         GlStateManager.translate(x, y, 0);
-        GlStateManager.scale(Config.feature.dungeons.dungeonsMapScale, Config.feature.dungeons.dungeonsMapScale, Config.feature.dungeons.dungeonsMapScale);
+        GlStateManager.scale(Config.feature.dungeons.map.dungeonsMapScale, Config.feature.dungeons.map.dungeonsMapScale, Config.feature.dungeons.map.dungeonsMapScale);
 
         if (data == null) {
             GlStateManager.color(0.5f, 0.5f, 0.5f, 1.0f);
@@ -121,7 +121,7 @@ public class DungeonsMap {
             tessellator.draw();
             GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
         } else {
-            if (Config.feature.dungeons.dungeonsRotateMap && !finalScreen) {
+            if (Config.feature.dungeons.map.dungeonsRotateMap && !finalScreen) {
                 float angle = -MathHelper.wrapAngleTo180_float(mc.thePlayer.rotationYaw);
                 GlStateManager.translate(64, 64, 0);
                 GlStateManager.rotate(angle + 180, 0, 0, 1);
@@ -140,21 +140,21 @@ public class DungeonsMap {
     private void drawBorderMap() {
         GlStateManager.pushMatrix();
         ScaledResolution sr = new ScaledResolution(mc);
-        int mapWidth = (int) (128 * Config.feature.dungeons.dungeonsMapScale);
-        int mapHeight = (int) (128 * Config.feature.dungeons.dungeonsMapScale);
-        float x = Config.feature.dungeons.dungeonsMapPos.getAbsX(sr, mapWidth);
-        float y = Config.feature.dungeons.dungeonsMapPos.getAbsY(sr, mapHeight);
+        int mapWidth = (int) (128 * Config.feature.dungeons.map.dungeonsMapScale);
+        int mapHeight = (int) (128 * Config.feature.dungeons.map.dungeonsMapScale);
+        float x = Config.feature.dungeons.map.dungeonsMapPos.getAbsX(sr, mapWidth);
+        float y = Config.feature.dungeons.map.dungeonsMapPos.getAbsY(sr, mapHeight);
 
         // Adjust for centering
-        if (Config.feature.dungeons.dungeonsMapPos.isCenterX()) {
+        if (Config.feature.dungeons.map.dungeonsMapPos.isCenterX()) {
             x -= (float) mapWidth / 2;
         }
-        if (Config.feature.dungeons.dungeonsMapPos.isCenterY()) {
+        if (Config.feature.dungeons.map.dungeonsMapPos.isCenterY()) {
             y -= (float) mapHeight / 2;
         }
 
         GlStateManager.disableTexture2D();
-        String[] colorParts = Config.feature.dungeons.dungeonsMapBorderColor.split(":");
+        String[] colorParts = Config.feature.dungeons.map.dungeonsMapBorderColor.split(":");
         float alpha = Float.parseFloat(colorParts[1]) / 255f;
         float red = Float.parseFloat(colorParts[2]) / 255f;
         float green = Float.parseFloat(colorParts[3]) / 255f;
@@ -182,16 +182,16 @@ public class DungeonsMap {
     private void drawMarkers(Map<String, Vec4b> mapDecorations) {
         ScaledResolution sr = new ScaledResolution(mc);
         int scaleFactor = sr.getScaleFactor();
-        int mapWidth = (int) (128 * Config.feature.dungeons.dungeonsMapScale);
-        int mapHeight = (int) (128 * Config.feature.dungeons.dungeonsMapScale);
-        float x = Config.feature.dungeons.dungeonsMapPos.getAbsX(sr, mapWidth);
-        float y = Config.feature.dungeons.dungeonsMapPos.getAbsY(sr, mapHeight);
+        int mapWidth = (int) (128 * Config.feature.dungeons.map.dungeonsMapScale);
+        int mapHeight = (int) (128 * Config.feature.dungeons.map.dungeonsMapScale);
+        float x = Config.feature.dungeons.map.dungeonsMapPos.getAbsX(sr, mapWidth);
+        float y = Config.feature.dungeons.map.dungeonsMapPos.getAbsY(sr, mapHeight);
 
         // Adjust for centering
-        if (Config.feature.dungeons.dungeonsMapPos.isCenterX()) {
+        if (Config.feature.dungeons.map.dungeonsMapPos.isCenterX()) {
             x -= (float) mapWidth / 2;
         }
-        if (Config.feature.dungeons.dungeonsMapPos.isCenterY()) {
+        if (Config.feature.dungeons.map.dungeonsMapPos.isCenterY()) {
             y -= (float) mapHeight / 2;
         }
 
@@ -223,12 +223,12 @@ public class DungeonsMap {
                 playerPositionY = markerY;
             }
 
-            if (!Config.feature.dungeons.dungeonsRotateMap || finalScreen) {
-                GlStateManager.translate((x + markerX * Config.feature.dungeons.dungeonsMapScale),
-                        (y + markerY * Config.feature.dungeons.dungeonsMapScale), 0.0);
+            if (!Config.feature.dungeons.map.dungeonsRotateMap || finalScreen) {
+                GlStateManager.translate((x + markerX * Config.feature.dungeons.map.dungeonsMapScale),
+                        (y + markerY * Config.feature.dungeons.map.dungeonsMapScale), 0.0);
             } else if (iconType == 1) {
-                GlStateManager.translate((x + 64.0F * Config.feature.dungeons.dungeonsMapScale),
-                        (y + 64.0F * Config.feature.dungeons.dungeonsMapScale), 0.0);
+                GlStateManager.translate((x + 64.0F * Config.feature.dungeons.map.dungeonsMapScale),
+                        (y + 64.0F * Config.feature.dungeons.map.dungeonsMapScale), 0.0);
             } else if (iconType == 0) {
                 float relativeX = (float) (markerX - 64);
                 float relativeY = (float) (markerY - 64);
@@ -238,21 +238,21 @@ public class DungeonsMap {
                 float rotatedX = (float) (relativeX * Math.cos(angleRad) - relativeY * Math.sin(angleRad));
                 float rotatedY = (float) (relativeX * Math.sin(angleRad) + relativeY * Math.cos(angleRad));
 
-                GlStateManager.translate((x + (64.0F - rotatedX) * Config.feature.dungeons.dungeonsMapScale),
-                        (y + (64.0F - rotatedY) * Config.feature.dungeons.dungeonsMapScale), 0.0);
+                GlStateManager.translate((x + (64.0F - rotatedX) * Config.feature.dungeons.map.dungeonsMapScale),
+                        (y + (64.0F - rotatedY) * Config.feature.dungeons.map.dungeonsMapScale), 0.0);
             }
 
             float angle = 180F;
-            if ((!Config.feature.dungeons.dungeonsRotateMap || finalScreen) && iconType == 1) angle = playerAngle;
+            if ((!Config.feature.dungeons.map.dungeonsRotateMap || finalScreen) && iconType == 1) angle = playerAngle;
             if (iconType == 0) angle = (float) (entry.getValue().func_176111_d() * 360) / 16.0F;
-            if (Config.feature.dungeons.dungeonsRotateMap && !finalScreen && iconType == 0)
+            if (Config.feature.dungeons.map.dungeonsRotateMap && !finalScreen && iconType == 0)
                 angle = angle + 180 - playerAngle;
 
             GlStateManager.rotate(angle, 0.0F, 0.0F, 1.0F);
-            if (iconType == 1) GlStateManager.scale(Config.feature.dungeons.dungeonsMapScale * 4 * playerMarkerScale,
-                    Config.feature.dungeons.dungeonsMapScale * 4 * playerMarkerScale, 3.0F * playerMarkerScale);
-            if (iconType == 0) GlStateManager.scale(Config.feature.dungeons.dungeonsMapScale * 4 * othersMarkerScale,
-                    Config.feature.dungeons.dungeonsMapScale * 4 * othersMarkerScale, 3.0F * othersMarkerScale);
+            if (iconType == 1) GlStateManager.scale(Config.feature.dungeons.map.dungeonsMapScale * 4 * playerMarkerScale,
+                    Config.feature.dungeons.map.dungeonsMapScale * 4 * playerMarkerScale, 3.0F * playerMarkerScale);
+            if (iconType == 0) GlStateManager.scale(Config.feature.dungeons.map.dungeonsMapScale * 4 * othersMarkerScale,
+                    Config.feature.dungeons.map.dungeonsMapScale * 4 * othersMarkerScale, 3.0F * othersMarkerScale);
 
             float g = (float) (iconType % 4) / 4.0F;
             float h = (float) (iconType / 4) / 4.0F;

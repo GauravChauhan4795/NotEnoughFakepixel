@@ -24,7 +24,7 @@ public class MidasStaff {
 
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
-        if (!Config.feature.qol.qolDisableMidaStaffAnimation) return;
+        if (!Config.feature.qol.soundTweaks.qolDisableMidaStaffAnimation) return;
         if (!SkyblockData.getCurrentGamemode().isSkyblock()) return;
         if (InventoryUtils.getSlot("Midas Staff") == -1) return;
         AxisAlignedBB bb = Minecraft.getMinecraft().thePlayer.getEntityBoundingBox().expand(20, 20, 20);
@@ -38,7 +38,7 @@ public class MidasStaff {
 
     @SubscribeEvent
     public void onParticlePacketReceive(PacketReadEvent event) {
-        if (!Config.feature.qol.qolDisableMidaStaffAnimation) return;
+        if (!Config.feature.qol.soundTweaks.qolDisableMidaStaffAnimation) return;
         if (!SkyblockData.getCurrentGamemode().isSkyblock()) return;
         if (InventoryUtils.getSlot("Midas Staff") == -1) return;
         Packet packet = event.packet;
@@ -52,7 +52,7 @@ public class MidasStaff {
 
     @SubscribeEvent
     public void onSoundPacketReceive(PacketReadEvent event) {
-        if (!Config.feature.qol.qolDisableMidaStaffAnimation) return;
+        if (!Config.feature.qol.soundTweaks.qolDisableMidaStaffAnimation) return;
         if (!SkyblockData.getCurrentGamemode().isSkyblock()) return;
         if (InventoryUtils.getSlot("Midas Staff") == -1) return;
         Packet packet = event.packet;
@@ -70,7 +70,7 @@ public class MidasStaff {
 
     @SubscribeEvent
     public void handleClick(PlayerInteractEvent event) {
-        if (!Config.feature.qol.qolDisableMidaStaffAnimation) return;
+        if (!Config.feature.qol.soundTweaks.qolDisableMidaStaffAnimation) return;
         if (!SkyblockData.getCurrentGamemode().isSkyblock()) return;
         if (InventoryUtils.getSlot("Midas Staff") != -1) {
             if (!(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_AIR || event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK))
@@ -80,3 +80,4 @@ public class MidasStaff {
     }
 
 }
+

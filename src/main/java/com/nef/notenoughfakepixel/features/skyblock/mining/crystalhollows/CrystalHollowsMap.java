@@ -45,7 +45,7 @@ public class CrystalHollowsMap extends Gui {
 
     @SubscribeEvent
     public void onRenderOverlay(RenderGameOverlayEvent event) {
-        if (!Config.feature.mining.miningCrystalMap) return;
+        if (!Config.feature.mining.crystalHollows.miningCrystalMap) return;
         // only render after elements have been drawn
         if (!(event instanceof RenderGameOverlayEvent.Post)) return;
         if (event.type != RenderGameOverlayEvent.ElementType.ALL) return;
@@ -55,9 +55,9 @@ public class CrystalHollowsMap extends Gui {
 
         ScaledResolution sr = new ScaledResolution(mc);
 
-        final int x = (Config.feature.mining.crystalMapPos.getAbsX(sr, (Config.feature.mining.miningCrystalMapWidth))) + 6;
-        final int y = (Config.feature.mining.crystalMapPos.getAbsY(sr, (Config.feature.mining.miningCrystalMapWidth))) + 6;
-        final int w = Config.feature.mining.miningCrystalMapWidth;
+        final int x = (Config.feature.mining.crystalHollowsMap.crystalMapPos.getAbsX(sr, (Config.feature.mining.crystalHollowsMap.miningCrystalMapWidth))) + 6;
+        final int y = (Config.feature.mining.crystalHollowsMap.crystalMapPos.getAbsY(sr, (Config.feature.mining.crystalHollowsMap.miningCrystalMapWidth))) + 6;
+        final int w = Config.feature.mining.crystalHollowsMap.miningCrystalMapWidth;
 
         drawMap(x, y, w);
         drawPlayer(x, y, w);
@@ -68,7 +68,7 @@ public class CrystalHollowsMap extends Gui {
     }
 
     private void drawMap(int x, int y, int w) {
-        ResourceLocation mapTex = Objects.equals(Config.feature.mining.miningCrystalMapType, "Gemstones")
+        ResourceLocation mapTex = Objects.equals(Config.feature.mining.crystalHollowsMap.miningCrystalMapType, "Gemstones")
                 ? MAP_GEMS_TEX
                 : MAP_ZONES_TEX;
 

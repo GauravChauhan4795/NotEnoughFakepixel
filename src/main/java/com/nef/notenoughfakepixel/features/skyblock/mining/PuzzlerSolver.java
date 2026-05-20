@@ -27,7 +27,7 @@ public class PuzzlerSolver {
 
     @SubscribeEvent
     public void onChatReceived(ClientChatReceivedEvent event) {
-        if (!Config.feature.mining.miningPuzzlerSolver) {
+        if (!Config.feature.mining.dwarvenMines.miningPuzzlerSolver) {
             overlayLoc = null;
             return;
         }
@@ -95,3 +95,4 @@ public class PuzzlerSolver {
     }
 
 }
+

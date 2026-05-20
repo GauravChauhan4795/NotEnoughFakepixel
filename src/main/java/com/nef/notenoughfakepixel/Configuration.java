@@ -5,55 +5,30 @@ import com.nef.notenoughfakepixel.alerts.AlertManagementGui;
 import com.nef.notenoughfakepixel.config.ConfigRunnables;
 import com.nef.notenoughfakepixel.config.features.*;
 import com.nef.notenoughfakepixel.config.gui.Config;
-import com.nef.notenoughfakepixel.config.gui.config.ConfigEditor;
-import com.nef.notenoughfakepixel.config.gui.core.GuiElement;
-import com.nef.notenoughfakepixel.config.gui.core.GuiScreenElementWrapper;
-import com.nef.notenoughfakepixel.config.gui.core.config.Position;
-import com.nef.notenoughfakepixel.config.gui.core.config.annotations.Category;
-import com.nef.notenoughfakepixel.config.gui.core.config.gui.GuiPositionEditor;
-import com.nef.notenoughfakepixel.events.handlers.RepoHandler;
+import com.nef.notenoughfakepixel.config.position.Position;
+import com.nef.notenoughfakepixel.config.position.GuiPositionEditor;
 import com.nef.notenoughfakepixel.features.capes.gui.CapeGui;
-import com.nef.notenoughfakepixel.features.duels.Duels;
-import com.nef.notenoughfakepixel.features.duels.KDCounter;
 import com.nef.notenoughfakepixel.features.skyblock.dungeons.terminals.TerminalSimulator;
 import com.nef.notenoughfakepixel.features.skyblock.mining.crystalhollows.CrystalHollowsMap;
 import com.nef.notenoughfakepixel.features.skyblock.mining.crystalhollows.PrecursorItemsOverlay;
 import com.nef.notenoughfakepixel.features.skyblock.mining.crystalhollows.ScavengedToolsOverlay;
-import com.nef.notenoughfakepixel.features.skyblock.mining.crystalhollows.WormSpawnTimer;
 import com.nef.notenoughfakepixel.features.skyblock.overlays.stats.PositionEditorScreen;
 import com.nef.notenoughfakepixel.features.skyblock.qol.customaliases.AliasManagementGui;
 import com.nef.notenoughfakepixel.features.skyblock.slayers.SlayerOverlay;
-import com.nef.notenoughfakepixel.serverdata.SkyblockData;
-import com.nef.notenoughfakepixel.utils.ItemUtils;
-import com.nef.notenoughfakepixel.utils.Logger;
-import com.nef.notenoughfakepixel.utils.ScoreboardUtils;
+import io.github.notenoughupdates.moulconfig.annotations.Category;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.item.ItemStack;
-
 import java.awt.*;
-import java.awt.datatransfer.Clipboard;
 
 public class Configuration extends io.github.notenoughupdates.moulconfig.Config {
 
     private void editOverlay(String activeConfig, int width, int height, Position position) {
         Minecraft.getMinecraft().displayGuiScreen(new GuiPositionEditor(position, width, height, () -> {
         }, () -> {
-        }, () -> Config.screenToOpen = new GuiScreenElementWrapper(new ConfigEditor(Config.feature, activeConfig))));
+        }, () -> Config.screenToOpen = Config.createMoulConfigScreen(activeConfig)));
     }
 
     public void executeRunnable(String runnableId) {
-
-
         String activeConfigCategory = null;
-        if (Minecraft.getMinecraft().currentScreen instanceof GuiScreenElementWrapper) {
-            GuiScreenElementWrapper wrapper = (GuiScreenElementWrapper) Minecraft.getMinecraft().currentScreen;
-            GuiElement element = wrapper.element;
-            if (element instanceof ConfigEditor) {
-                activeConfigCategory = ((ConfigEditor) element).getSelectedCategoryName();
-            }
-        }
 
         if (runnableId.startsWith("debug_")) {
             ConfigRunnables.runDebugRunnable(runnableId);
@@ -64,37 +39,19 @@ public class Configuration extends io.github.notenoughupdates.moulconfig.Config 
         }
 
         if ("editAshfangPosition".equals(runnableId)) {
-            editOverlay(activeConfigCategory, 100, 20, Config.feature.crimson.ashfangOverlayPos);
+            editOverlay(activeConfigCategory, 100, 20, Config.feature.crimson.ashfangSettings.ashfangOverlayPos);
         }
         if ("editDungeonsMapPosition".equals(runnableId)) {
-            editOverlay(activeConfigCategory, 128, 128, Config.feature.dungeons.dungeonsMapPos);
-        }
-        if ("editKdCounterPosition".equals(runnableId)) {
-            Position tempPosition = new Position((int) Config.feature.duels.kdCounterOffsetX, (int) Config.feature.duels.kdCounterOffsetY);
-            KDCounter kdCounter = new KDCounter();
-            Minecraft.getMinecraft().displayGuiScreen(
-                    new GuiPositionEditor(
-                            tempPosition,
-                            (int) kdCounter.getWidth(), (int) kdCounter.getHeight(),
-                            kdCounter::renderDummy,
-                            () -> {
-                                ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft());
-                                Config.feature.duels.kdCounterOffsetX = tempPosition.getAbsX(sr, (int) kdCounter.getWidth());
-                                Config.feature.duels.kdCounterOffsetY = tempPosition.getAbsY(sr, (int) kdCounter.getHeight());
-                            },
-                            () -> {
-                            }
-                    )
-            );
+            editOverlay(activeConfigCategory, 128, 128, Config.feature.dungeons.map.dungeonsMapPos);
         }
         if ("editScoreOverlayPosition".equals(runnableId)) {
-            editOverlay(activeConfigCategory, 150, 115, Config.feature.dungeons.scoreOverlayPos);
+            editOverlay(activeConfigCategory, 150, 115, Config.feature.dungeons.scoreSecrets.scoreOverlayPos);
         }
         if ("resetItemValues".equals(runnableId)) {
             Config.feature.qol.resetItemValues();
         }
         if ("editSlayerOverlayPosition".equals(runnableId)) {
-            editOverlay(activeConfigCategory, 100, 20, Config.feature.slayer.slayerBossHPPos);
+            editOverlay(activeConfigCategory, 100, 20, Config.feature.slayer.bossSettings.slayerBossHPPos);
         }
         if ("nefAlerts".equals(runnableId)) {
             Minecraft.getMinecraft().displayGuiScreen(new AlertManagementGui());
@@ -112,44 +69,78 @@ public class Configuration extends io.github.notenoughupdates.moulconfig.Config 
             Minecraft.getMinecraft().displayGuiScreen(new CapeGui());
         }
         if ("editTerminalTrackerPosition".equals(runnableId)) {
-            editOverlay(activeConfigCategory, 150, 60, Config.feature.dungeons.terminalTrackerPos);
+            editOverlay(activeConfigCategory, 150, 60, Config.feature.dungeons.terminals.terminalTrackerPos);
         }
         if ("editWarpHelperPosition".equals(runnableId)) {
-            editOverlay(activeConfigCategory, 100, 30, Config.feature.diana.warpHelperPos);
+            editOverlay(activeConfigCategory, 100, 30, Config.feature.diana.burrowSettings.warpHelperPos);
         }
         if("nefButtons".equals(runnableId)){
             //Minecraft.getMinecraft().displayGuiScreen(new InventoryEditor());
         }
         if ("editCrystalHollowsMapPos".equals(runnableId)) {
-            int width = Config.feature.mining.miningCrystalMapWidth + ((CrystalHollowsMap.getMARGIN_PX()*2));
-            editOverlay(activeConfigCategory, width, width , Config.feature.mining.crystalMapPos);
+            int width = Config.feature.mining.crystalHollowsMap.miningCrystalMapWidth + ((CrystalHollowsMap.getMARGIN_PX()*2));
+            editOverlay(activeConfigCategory, width, width , Config.feature.mining.crystalHollowsMap.crystalMapPos);
         }
         if ("editScavengedOverlayPos".equals(runnableId)) {
-            int width = (int)Math.abs((ScavengedToolsOverlay.MINIMUM_WIDTH + (25*6)) * Config.feature.mining.scavengedOverlayScale);
-            int height = (int)Math.abs((ScavengedToolsOverlay.LINE_HEIGHT * 4) * Config.feature.mining.scavengedOverlayScale);
-            editOverlay(activeConfigCategory, width, height, Config.feature.mining.scavengedOverlayPos);
+            int width = (int)Math.abs((ScavengedToolsOverlay.MINIMUM_WIDTH + (25*6)) * Config.feature.mining.scavengedOverlaySettings.scavengedOverlayScale);
+            int height = (int)Math.abs((ScavengedToolsOverlay.LINE_HEIGHT * 4) * Config.feature.mining.scavengedOverlaySettings.scavengedOverlayScale);
+            editOverlay(activeConfigCategory, width, height, Config.feature.mining.scavengedOverlaySettings.scavengedOverlayPos);
         }
         if ("editAutomatonOverlayPos".equals(runnableId)) {
-            int width = (int)Math.abs((PrecursorItemsOverlay.MINIMUM_WIDTH + (25*6)) * Config.feature.mining.automatonOverlayScale);
-            int height = (int)Math.abs((PrecursorItemsOverlay.LINE_HEIGHT * 6) * Config.feature.mining.automatonOverlayScale);
-            editOverlay(activeConfigCategory, width, height, Config.feature.mining.automatonOverlayPos);
+            int width = (int)Math.abs((PrecursorItemsOverlay.MINIMUM_WIDTH + (25*6)) * Config.feature.mining.automatonOverlaySettings.automatonOverlayScale);
+            int height = (int)Math.abs((PrecursorItemsOverlay.LINE_HEIGHT * 6) * Config.feature.mining.automatonOverlaySettings.automatonOverlayScale);
+            editOverlay(activeConfigCategory, width, height, Config.feature.mining.automatonOverlaySettings.automatonOverlayPos);
         }
         if ("editWormTimerPos".equals(runnableId)) {
-            editOverlay(activeConfigCategory, (int) Math.abs(38 * Config.feature.mining.wormTimerScale), (int) Math.abs(9 * Config.feature.mining.wormTimerScale), Config.feature.mining.wormTimerPos);
+            editOverlay(activeConfigCategory, (int) Math.abs(38 * Config.feature.mining.wormTimerSettings.wormTimerScale), (int) Math.abs(9 * Config.feature.mining.wormTimerSettings.wormTimerScale), Config.feature.mining.wormTimerSettings.wormTimerPos);
         }
         if ("editEggTimerPos".equals(runnableId)) {
             editOverlay(activeConfigCategory, (int) Math.abs(38 * Config.feature.chocolateFactory.eggTimerScale), (int) Math.abs(9 * Config.feature.chocolateFactory.eggTimerScale), Config.feature.chocolateFactory.eggTimerPos);
         }
         if ("editDarkAHTimerPos".equals(runnableId)) {
-            editOverlay(activeConfigCategory, (int) Math.abs(38 * Config.feature.qol.darkAHTimerScale), (int) Math.abs(9 * Config.feature.qol.darkAHTimerScale), Config.feature.qol.darkAhTimerPos);
+            editOverlay(activeConfigCategory, (int) Math.abs(38 * Config.feature.qol.darkAuctionTimerSettings.darkAHTimerScale), (int) Math.abs(9 * Config.feature.qol.darkAuctionTimerSettings.darkAHTimerScale), Config.feature.qol.darkAuctionTimerSettings.darkAhTimerPos);
         }
         if ("editSlayerOverlayPos".equals(runnableId)) {
-            int width = (int)Math.abs((SlayerOverlay.MINIMUM_WIDTH + (15*8)) * Config.feature.slayer.slayerOverlayScale);
-            int height = (int)Math.abs((SlayerOverlay.LINE_HEIGHT * 6) * Config.feature.slayer.slayerOverlayScale);
-            editOverlay(activeConfigCategory, width, height, Config.feature.slayer.slayerOverlayPos);
+            int width = (int)Math.abs((SlayerOverlay.MINIMUM_WIDTH + (15*8)) * Config.feature.slayer.slayerOverlaySettings.slayerOverlayScale);
+            int height = (int)Math.abs((SlayerOverlay.LINE_HEIGHT * 6) * Config.feature.slayer.slayerOverlaySettings.slayerOverlayScale);
+            editOverlay(activeConfigCategory, width, height, Config.feature.slayer.slayerOverlaySettings.slayerOverlayPos);
         }
         if("statEditor".equals(runnableId)){
             Minecraft.getMinecraft().displayGuiScreen(new PositionEditorScreen());
+        }
+    }
+
+    @Override
+    public void executeRunnable(int runnableId) {
+        switch (runnableId) {
+            case 1: executeRunnable("editDungeonsMapPosition"); break;
+            case 2: executeRunnable("editScoreOverlayPosition"); break;
+            case 3: executeRunnable("editTerminalTrackerPosition"); break;
+            case 4: executeRunnable("exec_fairySoulsReset"); break;
+            case 5: executeRunnable("slotReset"); break;
+            case 6: executeRunnable("editAshfangPosition"); break;
+            case 7: executeRunnable("editSlayerOverlayPos"); break;
+            case 8: executeRunnable("editSlayerOverlayPosition"); break;
+            case 9: executeRunnable("statEditor"); break;
+            case 10: executeRunnable("editEggTimerPos"); break;
+            case 11: executeRunnable("termSim"); break;
+            case 12: executeRunnable("debug_logLocation"); break;
+            case 13: executeRunnable("debug_logIsInSkyblock"); break;
+            case 14: executeRunnable("debug_logScoreboard"); break;
+            case 15: executeRunnable("debug_showAPI"); break;
+            case 16: executeRunnable("debug_showSBID"); break;
+            case 17: executeRunnable("debug_triggerTimers"); break;
+            case 18: executeRunnable("debug_logSbData"); break;
+            case 19: executeRunnable("editWarpHelperPosition"); break;
+            case 20: executeRunnable("editCrystalHollowsMapPos"); break;
+            case 21: executeRunnable("editScavengedOverlayPos"); break;
+            case 22: executeRunnable("editAutomatonOverlayPos"); break;
+            case 23: executeRunnable("editWormTimerPos"); break;
+            case 24: executeRunnable("nefAlerts"); break;
+            case 25: executeRunnable("nefAlias"); break;
+            case 26: executeRunnable("resetItemValues"); break;
+            case 27: executeRunnable("editDarkAHTimerPos"); break;
+            default: break;
         }
     }
 
@@ -187,16 +178,11 @@ public class Configuration extends io.github.notenoughupdates.moulconfig.Config 
 
     @Expose
     @Category(name = "Fishing", desc = "Fishing settings.")
-    @io.github.notenoughupdates.moulconfig.annotations.Category(name = "Fishing", desc = "Fishing settings.")
     public Fishing fishing = new Fishing();
 
     @Expose
     @Category(name = "Slot Locking", desc = "Slot Locking Settings")
     public SlotLocking sl = new SlotLocking();
-
-    @Expose
-    @Category(name = "Duels", desc = "Duels settings.")
-    public Duels duels = new Duels();
 
     @Expose
     @Category(name = "Misc", desc = "Misc features.")
@@ -232,3 +218,4 @@ public class Configuration extends io.github.notenoughupdates.moulconfig.Config 
         Config.saveConfig();
     }
 }
+

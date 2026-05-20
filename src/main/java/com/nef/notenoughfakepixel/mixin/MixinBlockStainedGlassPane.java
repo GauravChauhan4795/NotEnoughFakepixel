@@ -16,7 +16,7 @@ public abstract class MixinBlockStainedGlassPane extends BlockPane {
     }
 
     public void setBlockBoundsBasedOnState(IBlockAccess worldIn, BlockPos pos) {
-        if (Config.feature.mining.crystalFullBlockPane) {
+        if (Config.feature.mining.crystalHollows.crystalFullBlockPane) {
             this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
         } else {
             super.setBlockBoundsBasedOnState(worldIn, pos);
@@ -24,3 +24,4 @@ public abstract class MixinBlockStainedGlassPane extends BlockPane {
     }
 
 }
+
