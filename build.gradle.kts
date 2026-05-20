@@ -3,7 +3,7 @@ import org.apache.commons.lang3.SystemUtils
 plugins {
     idea
     java
-    kotlin("jvm") version "1.8.21"
+    kotlin("jvm") version "2.3.0"
     id("gg.essential.loom") version "0.10.0.5"
     id("dev.architectury.architectury-pack200") version "0.1.3"
     id("com.github.johnrengelman.shadow") version "8.1.1"
@@ -39,6 +39,7 @@ loom {
             // If you don't want mixins, remove these lines
             property("mixin.debug", "true")
             arg("--tweakClass", "org.spongepowered.asm.launch.MixinTweaker")
+            arg("--tweakClass", "io.github.notenoughupdates.moulconfig.tweaker.DevelopmentResourceTweaker")
         }
     }
     runConfigs {
@@ -73,12 +74,17 @@ repositories {
     maven("https://repo.spongepowered.org/maven/")
     maven("https://mvnrepository.com/repos/central")
     maven("https://maven.architectury.dev/")
+    maven("https://maven.notenoughupdates.org/releases/")
     // If you don't want to log in with your real minecraft account, remove this line
     maven("https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1")
 }
 
 val shadowImpl: Configuration by configurations.creating {
     configurations.implementation.get().extendsFrom(this)
+}
+
+val shadowModImpl: Configuration by configurations.creating {
+    configurations.modImplementation.get().extendsFrom(this)
 }
 
 dependencies {
@@ -93,6 +99,7 @@ dependencies {
     shadowImpl("org.spongepowered:mixin:0.7.11-SNAPSHOT") {
         isTransitive = false
     }
+    shadowModImpl("org.notenoughupdates.moulconfig:legacy:4.6.0")
     compileOnly("org.projectlombok:lombok:1.18.24")
     annotationProcessor("org.projectlombok:lombok:1.18.24")
     annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT")
@@ -155,9 +162,10 @@ tasks.jar {
 tasks.shadowJar {
     destinationDirectory.set(layout.buildDirectory.dir("intermediates"))
     archiveClassifier.set("non-obfuscated-with-deps")
-    configurations = listOf(shadowImpl)
+    configurations = listOf(shadowImpl, shadowModImpl)
 
     relocate("org.reflections", "$baseGroup.deps.org.reflections")
+    relocate("io.github.notenoughupdates.moulconfig", "$baseGroup.deps.moulconfig")
 
     doLast {
         configurations.forEach {
@@ -170,4 +178,5 @@ tasks.shadowJar {
 }
 
 tasks.assemble.get().dependsOn(tasks.remapJar)
+
 

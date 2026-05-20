@@ -35,7 +35,7 @@ import net.minecraft.item.ItemStack;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 
-public class Configuration {
+public class Configuration extends io.github.notenoughupdates.moulconfig.Config {
 
     private void editOverlay(String activeConfig, int width, int height, Position position) {
         Minecraft.getMinecraft().displayGuiScreen(new GuiPositionEditor(position, width, height, () -> {
@@ -187,6 +187,7 @@ public class Configuration {
 
     @Expose
     @Category(name = "Fishing", desc = "Fishing settings.")
+    @io.github.notenoughupdates.moulconfig.annotations.Category(name = "Fishing", desc = "Fishing settings.")
     public Fishing fishing = new Fishing();
 
     @Expose
@@ -219,5 +220,15 @@ public class Configuration {
 
     public static boolean isPojav() {
         return Config.feature.debug.forcePojav || (System.getProperty("os.name").contains("Android") || System.getProperty("os.name").contains("Linux"));
+    }
+
+    @Override
+    public io.github.notenoughupdates.moulconfig.common.text.StructuredText getTitle() {
+        return io.github.notenoughupdates.moulconfig.common.text.StructuredText.of("NotEnoughFakepixel");
+    }
+
+    @Override
+    public void saveNow() {
+        Config.saveConfig();
     }
 }
