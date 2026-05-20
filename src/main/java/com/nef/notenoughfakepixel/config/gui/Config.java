@@ -44,6 +44,7 @@ public class Config {
             feature = new Configuration();
             saveConfig();
         }
+        feature.fishing.migrateLegacyOptions();
     }
 
     public static void saveConfig() {

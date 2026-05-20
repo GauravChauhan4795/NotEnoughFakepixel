@@ -12,7 +12,7 @@ public class TrophyFishNotifier {
     @SubscribeEvent
     public void onChatRecieve(ClientChatReceivedEvent e) {
         if (e.type != 1) return;
-        if (!Config.feature.fishing.fishingTrophyFish) return;
+        if (!Config.feature.fishing.notifications.trophyFish) return;
 
         Area area = SkyblockData.getCurrentArea();
 

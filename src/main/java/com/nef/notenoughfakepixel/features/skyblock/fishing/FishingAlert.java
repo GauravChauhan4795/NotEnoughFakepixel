@@ -108,7 +108,7 @@ public class FishingAlert {
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
         if (event.phase != TickEvent.Phase.END || mc.thePlayer == null) return;
-        if (!Config.feature.fishing.fishingCountdown) return;
+        if (!Config.feature.fishing.alert.enabled) return;
 
         if (buildupSoundDelay > 0) buildupSoundDelay--;
 
@@ -118,7 +118,7 @@ public class FishingAlert {
         }
 
         // Slug mode: track whether the bobber is sitting in lava
-        if (Config.feature.fishing.fishingSlugMode && mc.thePlayer.fishEntity != null && mc.theWorld != null) {
+        if (Config.feature.fishing.alert.slugMode && mc.thePlayer.fishEntity != null && mc.theWorld != null) {
             BlockPos bobberPos = new BlockPos(
                     mc.thePlayer.fishEntity.posX,
                     mc.thePlayer.fishEntity.posY,
@@ -182,7 +182,7 @@ public class FishingAlert {
 
     @SubscribeEvent
     public void onParticlePacket(ParticlePacketEvent event) {
-        if (!Config.feature.fishing.fishingCountdown) return;
+        if (!Config.feature.fishing.alert.enabled) return;
         if (!SkyblockData.getCurrentGamemode().isSkyblock()) return;
         if (hookEntities.isEmpty()) return;
 
@@ -334,7 +334,7 @@ public class FishingAlert {
     public void onRenderOverlay(RenderGameOverlayEvent.Post event) {
         if (event.type != RenderGameOverlayEvent.ElementType.TEXT) return;
         if (!SkyblockData.getCurrentGamemode().isSkyblock()) return;
-        if (!Config.feature.fishing.fishingCountdown) return;
+        if (!Config.feature.fishing.alert.enabled) return;
         if (warningState == WarningState.NOTHING) return;
         if (isSlugWaiting()) return;
 
@@ -346,9 +346,9 @@ public class FishingAlert {
             // INCOMING state: ETA takes priority if enabled and valid, else fall back to text
             long remaining = countdownEtaMs - System.currentTimeMillis();
             boolean etaValid = remaining > 100 && remaining < 10_000;
-            if (Config.feature.fishing.fishingBiteEta && etaValid) {
+            if (Config.feature.fishing.alert.biteEta && etaValid) {
                 text = "§e§l" + String.format("%.1f", remaining / 1000.0) + "s";
-            } else if (Config.feature.fishing.fishingIncomingMessage) {
+            } else if (Config.feature.fishing.alert.incomingMessage) {
                 text = "§e§lINCOMING";
             } else {
                 return; // neither sub-option is enabled, nothing to show
@@ -384,7 +384,7 @@ public class FishingAlert {
     // ── Helpers ──────────────────────────────────────────────────────────────
 
     private boolean isSlugWaiting() {
-        return Config.feature.fishing.fishingSlugMode
+        return Config.feature.fishing.alert.slugMode
                 && slugLavaEntryMs > 0
                 && System.currentTimeMillis() - slugLavaEntryMs < SLUG_DELAY_MS;
     }
