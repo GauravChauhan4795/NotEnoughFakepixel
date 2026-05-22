@@ -68,16 +68,6 @@ public class QualityOfLife {
     public boolean qolBlockPlacingItems = true;
 
     @Expose
-    @ConfigOption(name = "Show Pet Equipped", desc = "Show equipped pet.")
-    @ConfigEditorBoolean
-    public boolean qolShowPetEquipped = true;
-
-    @Expose
-    @ConfigOption(name = "Pet Equipped Color", desc = "Color of equipped pet indicator.")
-    @ConfigEditorColour
-    public String qolPetEquippedColor = "0:190:0:255:0";
-
-    @Expose
     @ConfigOption(name = "Show Unclaimed Contests", desc = "Show unclaimed Jacob rewards.")
     @ConfigEditorBoolean
     public boolean qolShowJacobRewards = true;
@@ -340,16 +330,6 @@ public class QualityOfLife {
             @ConfigOption(name = "Wardrobe Slot 9 Key", desc = "Keybind for wardrobe slot 9.")
             @ConfigEditorKeybind(defaultKey = Keyboard.KEY_9)
             public int qolWardrobeKey9 = Keyboard.KEY_9;
-
-            @Expose
-            @ConfigOption(name = "Pets Shortcut", desc = "Enable pets shortcut.")
-            @ConfigEditorBoolean
-            public boolean qolShortcutPets = false;
-
-            @Expose
-            @ConfigOption(name = "Pets Shortcut Key", desc = "Keybind for pets shortcut.")
-            @ConfigEditorKeybind(defaultKey = Keyboard.KEY_P)
-            public int qolPetsKey = Keyboard.KEY_P;
 
             @Expose
             @ConfigOption(name = "Equipment Shortcut", desc = "Enable Equipment shortcut.")

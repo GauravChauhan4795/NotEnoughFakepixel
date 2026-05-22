@@ -288,6 +288,28 @@ public class Config {
                 moveOptions(darkAuction, "darkAuctionTimerSettings", "darkAHTimerScale", "editDarkAHTimerPos", "darkAhTimerPos");
                 promoteCategory(darkAuction, qol, "darkAuctionTimerSettings");
             }
+
+            // Migrate pet-related options out of qol / qol.shortcuts into the new top-level "pets" category.
+            JsonObject pets = getObject(config, "pets");
+            if (pets == null) {
+                pets = new JsonObject();
+                config.add("pets", pets);
+            }
+            moveAcross(qol, pets, "qolShowPetEquipped", "qolPetEquippedColor", "qolShortcutPets", "qolPetsKey");
+            JsonObject shortcuts = getObject(qol, "shortcuts");
+            if (shortcuts != null) {
+                moveAcross(shortcuts, pets, "qolShortcutPets", "qolPetsKey");
+            }
+        }
+    }
+
+    private static void moveAcross(JsonObject from, JsonObject to, String... optionNames) {
+        for (String optionName : optionNames) {
+            if (from.has(optionName) && !to.has(optionName)) {
+                to.add(optionName, from.remove(optionName));
+            } else if (from.has(optionName)) {
+                from.remove(optionName);
+            }
         }
     }
 

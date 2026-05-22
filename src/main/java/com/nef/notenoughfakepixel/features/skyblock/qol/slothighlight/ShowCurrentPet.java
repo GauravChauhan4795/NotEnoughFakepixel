@@ -26,12 +26,12 @@ public class ShowCurrentPet extends HightlightSlot {
 
     @Override
     public boolean getConfigOption() {
-        return Config.feature.qol.qolShowPetEquipped;
+        return Config.feature.pets.qolShowPetEquipped;
     }
 
     @Override
     public Color getHighlightColor() {
-        return ColorUtils.getColor(Config.feature.qol.qolPetEquippedColor);
+        return ColorUtils.getColor(Config.feature.pets.qolPetEquippedColor);
     }
 
     @Override

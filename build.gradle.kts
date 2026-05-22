@@ -95,7 +95,7 @@ dependencies {
     // If you don't want mixins, remove these lines
     implementation("org.slick2d:slick2d-core:1.0.1")
     shadowImpl("org.reflections:reflections:0.9.12")
-    implementation(kotlin("stdlib"))
+    shadowImpl(kotlin("stdlib"))
     shadowImpl("org.spongepowered:mixin:0.7.11-SNAPSHOT") {
         isTransitive = false
     }
@@ -167,6 +167,9 @@ tasks.shadowJar {
 
     relocate("org.reflections", "$baseGroup.deps.org.reflections")
     relocate("io.github.notenoughupdates.moulconfig", "$baseGroup.deps.moulconfig")
+    relocate("kotlin", "$baseGroup.deps.kotlin")
+    relocate("org.jetbrains.annotations", "$baseGroup.deps.org.jetbrains.annotations")
+    relocate("org.intellij.lang.annotations", "$baseGroup.deps.org.intellij.lang.annotations")
 
     doLast {
         configurations.forEach {

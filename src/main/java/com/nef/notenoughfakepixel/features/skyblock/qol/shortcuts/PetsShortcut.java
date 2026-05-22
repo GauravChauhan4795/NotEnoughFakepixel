@@ -8,12 +8,12 @@ public class PetsShortcut extends KeyShortcut {
 
     @Override
     public boolean getConfigOption() {
-        return Config.feature.qol.shortcuts.qolShortcutPets;
+        return Config.feature.pets.qolShortcutPets;
     }
 
     @Override
     public int getKeyBind() {
-        return Config.feature.qol.shortcuts.qolPetsKey;
+        return Config.feature.pets.qolPetsKey;
     }
 
     @Override

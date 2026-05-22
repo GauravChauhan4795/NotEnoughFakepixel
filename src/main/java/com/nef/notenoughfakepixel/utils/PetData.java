@@ -49,7 +49,7 @@ public class PetData {
         put("Jerry", "LEGENDARY");
         put("Lion", "LEGENDARY");
         put("Megalodon", "LEGENDARY");
-        put("Mithril Golem", "LEGENDARY");
+        put("Mithril Golem", "MYTHIC");
         put("Monkey", "LEGENDARY");
         put("Mooshroom Cow", "LEGENDARY");
         put("Ocelot", "LEGENDARY");

@@ -201,6 +201,10 @@ public class Configuration extends io.github.notenoughupdates.moulconfig.Config 
     public Accessories accessories = new Accessories();
 
     @Expose
+    @Category(name = "Pets", desc = "Pets settings.")
+    public Pets pets = new Pets();
+
+    @Expose
     @Category(name = "Debug", desc = "Debug settings.")
     public Debug debug = new Debug();
 
