@@ -131,7 +131,7 @@ public class EquipmentOverlay {
     protected void drawHoveringText(List<String> textLines, int x, int y, FontRenderer font, GuiScreen screen) {
         try {
             GuiUtils.drawHoveringText(textLines, x, y, screen.width, screen.height, -1, font);
-        } catch (Exception ignored) {}
+         } catch (Throwable ignored) {}
     }
 
     public static void saveData() {

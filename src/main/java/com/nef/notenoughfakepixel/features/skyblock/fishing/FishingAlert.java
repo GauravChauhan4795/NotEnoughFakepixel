@@ -25,55 +25,35 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @RegisterEvents
 public class FishingAlert {
 
+    private static final long SLUG_DELAY_MS = 20_000;
+    private static final long SPLASH_WINDOW_MS = 500;
+    private static final long BITE_ALERT_DELAY_MS = 50;
+    private static final float ZERO_PITCH = 1.0f, MAX_PITCH = 0.1f, MAX_DIST = 5f;
     private final Minecraft mc = Minecraft.getMinecraft();
-
-    private final HashMap<Integer, EntityFishHook> hookEntities = new HashMap<>();
-    private final HashMap<WakeChain, List<Integer>> chains = new HashMap<>();
-
+    private final Map<Integer, EntityFishHook> hookEntities = new ConcurrentHashMap<>();
+    private final Map<WakeChain, List<Integer>> chains = new ConcurrentHashMap<>();
+    private final List<Integer> pingDelayList = new ArrayList<>();
     private long lastCastRodMillis = 0;
     private int pingDelayTicks = 0;
-    private final List<Integer> pingDelayList = new ArrayList<>();
     private int buildupSoundDelay = 0;
     private int hookedStateTicks = 0;
     private int tickCounter = 0;
-
     // Used to deduplicate the double-fire from MixinNetHandlerPlayClient
     private S2APacketParticles lastProcessedPacket = null;
-
     // Absolute timestamp (ms) when the wake chain is predicted to reach the bobber
     private long countdownEtaMs = 0;
-
     // Slug mode: timestamp when the bobber first entered lava (0 = not in lava)
     private long slugLavaEntryMs = 0;
-    private static final long SLUG_DELAY_MS = 20_000;
-
     // Splash confirmation: non-zero while waiting for a bite splash near the bobber
     private long awaitingSplashUntilMs = 0;
     private long splashConfirmedMs = 0;
     private boolean biteAlertFired = false;
-    private static final long SPLASH_WINDOW_MS = 500;
-    private static final long BITE_ALERT_DELAY_MS = 50;
-
-    public enum WarningState { NOTHING, INCOMING, HOOKED }
     private WarningState warningState = WarningState.NOTHING;
-
-    private static class WakeChain {
-        int particleNum = 0;
-        long lastUpdate;
-        double currentAngle;
-        final HashMap<Integer, Double> distances = new HashMap<>();
-
-        WakeChain(long lastUpdate, double angle) {
-            this.lastUpdate = lastUpdate;
-            this.currentAngle = angle;
-        }
-    }
-
-    // ── Entity tracking ──────────────────────────────────────────────────────
 
     @SubscribeEvent
     public void onEntityJoin(EntityJoinWorldEvent event) {
@@ -103,8 +83,6 @@ public class FishingAlert {
         if (now - lastCastRodMillis > 500) lastCastRodMillis = now;
     }
 
-    // ── Tick: warning state + cleanup ────────────────────────────────────────
-
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
         if (event.phase != TickEvent.Phase.END || mc.thePlayer == null) return;
@@ -119,10 +97,7 @@ public class FishingAlert {
 
         // Slug mode: track whether the bobber is sitting in lava
         if (Config.feature.fishing.alert.slugMode && mc.thePlayer.fishEntity != null && mc.theWorld != null) {
-            BlockPos bobberPos = new BlockPos(
-                    mc.thePlayer.fishEntity.posX,
-                    mc.thePlayer.fishEntity.posY,
-                    mc.thePlayer.fishEntity.posZ);
+            BlockPos bobberPos = new BlockPos(mc.thePlayer.fishEntity.posX, mc.thePlayer.fishEntity.posY, mc.thePlayer.fishEntity.posZ);
             net.minecraft.block.Block block = mc.theWorld.getBlockState(bobberPos).getBlock();
             boolean inLava = block == Blocks.lava || block == Blocks.flowing_lava;
             if (inLava) {
@@ -170,15 +145,9 @@ public class FishingAlert {
             tickCounter = 0;
             long now = System.currentTimeMillis();
             hookEntities.entrySet().removeIf(e -> e.getValue().isDead);
-            chains.entrySet().removeIf(entry ->
-                now - entry.getKey().lastUpdate > 200 ||
-                entry.getValue().isEmpty() ||
-                Collections.disjoint(entry.getValue(), hookEntities.keySet())
-            );
+            chains.entrySet().removeIf(entry -> now - entry.getKey().lastUpdate > 200 || entry.getValue().isEmpty() || Collections.disjoint(entry.getValue(), hookEntities.keySet()));
         }
     }
-
-    // ── Particle detection ───────────────────────────────────────────────────
 
     @SubscribeEvent
     public void onParticlePacket(ParticlePacketEvent event) {
@@ -195,9 +164,7 @@ public class FishingAlert {
 
         // Splash confirmation: after the approach condition fires, wait for a bite splash near our bobber.
         // Water bite: WATER_BUBBLE. Lava bite: LAVA only (FLAME is also an approach particle and fires too early).
-        if (awaitingSplashUntilMs > 0 && !biteAlertFired
-                && (type == EnumParticleTypes.WATER_BUBBLE || type == EnumParticleTypes.LAVA)
-                && mc.thePlayer != null && mc.thePlayer.fishEntity != null) {
+        if (awaitingSplashUntilMs > 0 && !biteAlertFired && (type == EnumParticleTypes.WATER_BUBBLE || type == EnumParticleTypes.LAVA) && mc.thePlayer != null && mc.thePlayer.fishEntity != null) {
             if (System.currentTimeMillis() <= awaitingSplashUntilMs) {
                 double dx = p.getXCoordinate() - mc.thePlayer.fishEntity.posX;
                 double dy = p.getYCoordinate() - mc.thePlayer.fishEntity.posY;
@@ -210,9 +177,8 @@ public class FishingAlert {
                 awaitingSplashUntilMs = 0;
             }
         }
-        if (type != EnumParticleTypes.WATER_WAKE
-                && type != EnumParticleTypes.SMOKE_NORMAL
-                && type != EnumParticleTypes.FLAME) return;
+        if (type != EnumParticleTypes.WATER_WAKE && type != EnumParticleTypes.SMOKE_NORMAL && type != EnumParticleTypes.FLAME)
+            return;
         if (Math.abs(p.getYOffset() - 0.01f) > 0.001f) return;
 
         double x = p.getXCoordinate(), y = p.getYCoordinate(), z = p.getZCoordinate();
@@ -228,13 +194,18 @@ public class FishingAlert {
             if (hook.isDead) continue;
             HookResult ret = classifyHook(hook, x, y, z, angle1, angle2);
             switch (ret) {
-                case ANGLE1: possible1.add(hook.getEntityId()); break;
-                case ANGLE2: possible2.add(hook.getEntityId()); break;
+                case ANGLE1:
+                    possible1.add(hook.getEntityId());
+                    break;
+                case ANGLE2:
+                    possible2.add(hook.getEntityId());
+                    break;
                 case EITHER:
                     possible1.add(hook.getEntityId());
                     possible2.add(hook.getEntityId());
                     break;
-                default: break;
+                default:
+                    break;
             }
         }
 
@@ -250,9 +221,11 @@ public class FishingAlert {
             List<Integer> possible;
             double updateAngle;
             if (angleWithinRange(chain.currentAngle, angle1, 16)) {
-                possible = possible1; updateAngle = angle1;
+                possible = possible1;
+                updateAngle = angle1;
             } else if (angleWithinRange(chain.currentAngle, angle2, 16)) {
-                possible = possible2; updateAngle = angle2;
+                possible = possible2;
+                updateAngle = angle2;
             } else continue;
 
             if (Collections.disjoint(entry.getValue(), possible)) continue;
@@ -271,9 +244,7 @@ public class FishingAlert {
                 if (newDist >= 0.2 && (delta <= -0.1 || delta >= 0.3)) continue;
 
                 // Sound + state for the player's own hook
-                if (mc.thePlayer.fishEntity != null
-                        && mc.thePlayer.fishEntity.getEntityId() == hookId
-                        && chain.particleNum > 3) {
+                if (mc.thePlayer.fishEntity != null && mc.thePlayer.fishEntity.getEntityId() == hookId && chain.particleNum > 3) {
                     float lavaOff = (type == EnumParticleTypes.SMOKE_NORMAL) ? 0.03f : 0.1f;
                     if (newDist <= 0.2f + lavaOff * pingDelayTicks) {
                         if (hookedStateTicks <= 0 && !isSlugWaiting()) {
@@ -324,11 +295,9 @@ public class FishingAlert {
                 double dx = hook.posX - x, dz = hook.posZ - z;
                 chain.distances.put(hookId, Math.sqrt(dx * dx + dz * dz));
             }
-            chains.put(chain, toUse);
+            chains.put(chain, new java.util.concurrent.CopyOnWriteArrayList<>(toUse));
         }
     }
-
-    // ── Rendering ────────────────────────────────────────────────────────────
 
     @SubscribeEvent
     public void onRenderOverlay(RenderGameOverlayEvent.Post event) {
@@ -365,8 +334,6 @@ public class FishingAlert {
         GlStateManager.popMatrix();
     }
 
-    // ── World unload ─────────────────────────────────────────────────────────
-
     @SubscribeEvent
     public void onWorldUnload(WorldEvent.Unload event) {
         hookEntities.clear();
@@ -381,12 +348,8 @@ public class FishingAlert {
         lastProcessedPacket = null;
     }
 
-    // ── Helpers ──────────────────────────────────────────────────────────────
-
     private boolean isSlugWaiting() {
-        return Config.feature.fishing.alert.slugMode
-                && slugLavaEntryMs > 0
-                && System.currentTimeMillis() - slugLavaEntryMs < SLUG_DELAY_MS;
+        return Config.feature.fishing.alert.slugMode && slugLavaEntryMs > 0 && System.currentTimeMillis() - slugLavaEntryMs < SLUG_DELAY_MS;
     }
 
     private double calcAngle(double xOff, double zOff) {
@@ -407,8 +370,6 @@ public class FishingAlert {
         if (d > 180) d = 360 - d;
         return d <= range;
     }
-
-    private enum HookResult { NOT_POSSIBLE, EITHER, ANGLE1, ANGLE2 }
 
     private HookResult classifyHook(EntityFishHook hook, double px, double py, double pz, double a1, double a2) {
         double dY = py - hook.posY;
@@ -437,10 +398,24 @@ public class FishingAlert {
         return HookResult.NOT_POSSIBLE;
     }
 
-    private static final float ZERO_PITCH = 1.0f, MAX_PITCH = 0.1f, MAX_DIST = 5f;
-
     private float calcPitch(float d) {
         d = Math.max(0.1f, Math.min(d, MAX_DIST));
         return 1f / (d + (1f / (ZERO_PITCH - MAX_PITCH))) * (1f - d / MAX_DIST) + MAX_PITCH;
+    }
+
+    public enum WarningState {NOTHING, INCOMING, HOOKED}
+
+    private enum HookResult {NOT_POSSIBLE, EITHER, ANGLE1, ANGLE2}
+
+    private static class WakeChain {
+        final HashMap<Integer, Double> distances = new HashMap<>();
+        int particleNum = 0;
+        long lastUpdate;
+        double currentAngle;
+
+        WakeChain(long lastUpdate, double angle) {
+            this.lastUpdate = lastUpdate;
+            this.currentAngle = angle;
+        }
     }
 }
