@@ -25,56 +25,62 @@ import java.awt.*;
 @RegisterEvents
 public class MiscDungFeatures {
 
-    private final Minecraft mc = Minecraft.getMinecraft();
+    private static final Minecraft MC = Minecraft.getMinecraft();
+    private static final Color SPIRIT_BOW_COLOR = Color.RED;
+    private static final String BLOOD_READY_MESSAGE = "[BOSS] The Watcher: That will be enough for now.";
+    private static final String SPIRIT_BEAR_MESSAGE = "A Spirit Bear has appeared!";
+    private static final String SPIRIT_BOW_NAME = "Spirit Bow";
 
     @SubscribeEvent(receiveCanceled = true)
     public void onChat(ClientChatReceivedEvent event) {
         String message = StringUtils.stripControlCodes(event.message.getUnformattedText());
 
         if (!SkyblockData.getCurrentLocation().isDungeon()) return;
+        if (MC.thePlayer == null) return;
 
-        if (message.startsWith("[BOSS] The Watcher: That will be enough for now.")) {
+        if (message.startsWith(BLOOD_READY_MESSAGE)) {
             if (Config.feature.dungeons.general.dungeonsBloodReady) {
                 TitleUtils.showTitle(EnumChatFormatting.RED + "BLOOD READY!", 2000);
-                if (mc.theWorld != null) {
-                    SoundUtils.playSound(mc.thePlayer.getPosition(), "note.pling", 2.0F, 1.0F);
-                    Minecraft.getMinecraft().thePlayer.sendChatMessage("/pc Blood Ready!");
+                if (MC.theWorld != null) {
+                    SoundUtils.playSound(MC.thePlayer.getPosition(), "note.pling", 2.0F, 1.0F);
+                    MC.thePlayer.sendChatMessage("/pc Blood Ready!");
                 }
             }
         }
-        if (message.startsWith("A Spirit Bear has appeared!")) {
-            if (mc.theWorld != null && Config.feature.dungeons.general.dungeonsSpiritBow) {
-                SoundUtils.playSound(mc.thePlayer.getPosition(), "mob.enderdragon.growl", 2.0F, 1.0F);
+        if (message.startsWith(SPIRIT_BEAR_MESSAGE)) {
+            if (MC.theWorld != null && Config.feature.dungeons.general.dungeonsSpiritBow) {
+                SoundUtils.playSound(MC.thePlayer.getPosition(), "mob.enderdragon.growl", 2.0F, 1.0F);
             }
         }
     }
 
     @SubscribeEvent
     public void onRenderWorldLast(RenderWorldLastEvent event) {
-        WorldClient world = Minecraft.getMinecraft().theWorld;
-
         if (!SkyblockData.getCurrentLocation().isDungeon()) return;
+        if (!Config.feature.dungeons.general.dungeonsSpiritBow) return;
+        if (MC.theWorld == null || MC.thePlayer == null) return;
 
+        WorldClient world = MC.theWorld;
+        final Vec3 eyePos = MC.thePlayer.getPositionEyes(event.partialTicks);
         for (Entity entity : world.loadedEntityList) {
-            if (entity instanceof EntityArmorStand) {
-                EntityArmorStand armorStand = (EntityArmorStand) entity;
-                if (armorStand.getName().contains("Spirit Bow")) {
-                    if (!Config.feature.dungeons.general.dungeonsSpiritBow) return;
-                    RenderUtils.draw3DLine(new Vec3(entity.posX, entity.posY + 0.5, entity.posZ),
-                            Minecraft.getMinecraft().thePlayer.getPositionEyes(event.partialTicks),
-                            Color.RED,
-                            8,
-                            true,
-                            event.partialTicks
-                    );
-                }
-            }
+            if (!(entity instanceof EntityArmorStand)) continue;
+
+            EntityArmorStand armorStand = (EntityArmorStand) entity;
+            String name = armorStand.getName();
+            if (name == null || !name.contains(SPIRIT_BOW_NAME)) continue;
+
+            RenderUtils.draw3DLine(
+                    entity.posX, entity.posY + 0.5D, entity.posZ,
+                    eyePos.xCoord, eyePos.yCoord, eyePos.zCoord,
+                    SPIRIT_BOW_COLOR, 8, true, event.partialTicks
+            );
+            break;
         }
     }
     @SubscribeEvent
     public void render(RenderEntityModelEvent e) {
         EntityLivingBase entity = e.getEntity();
-        if (mc.thePlayer == null || mc.theWorld == null) return;
+        if (MC.thePlayer == null || MC.theWorld == null) return;
         if (entity instanceof EntityWither) {
             String name = EnumChatFormatting.getTextWithoutFormattingCodes(entity.getName());
             if ((name.equals("Maxor") || name.equals("Storm") || name.equals("Goldor") || name.equals("Necron"))) {

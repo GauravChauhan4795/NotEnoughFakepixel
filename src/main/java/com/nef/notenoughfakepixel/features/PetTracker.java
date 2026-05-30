@@ -1,5 +1,6 @@
 package com.nef.notenoughfakepixel.features;
 
+import com.nef.notenoughfakepixel.config.gui.Config;
 import com.nef.notenoughfakepixel.env.registers.RegisterEvents;
 import com.nef.notenoughfakepixel.utils.PetData;
 import com.nef.notenoughfakepixel.utils.RenderUtils;
@@ -21,6 +22,7 @@ import org.lwjgl.input.Mouse;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +52,7 @@ public class PetTracker {
 
     @SubscribeEvent
     public void onGuiDraw(GuiScreenEvent.DrawScreenEvent.Post event) {
+        if (!Config.feature.pets.petTracker) return;
         if (event.gui instanceof GuiChest) {
             GuiChest chest = (GuiChest) event.gui;
             ContainerChest container = (ContainerChest) chest.inventorySlots;
@@ -90,6 +93,7 @@ public class PetTracker {
 
     @SubscribeEvent
     public void onMouseInput(GuiScreenEvent.MouseInputEvent.Pre event) {
+        if (!Config.feature.pets.petTracker) return;
         if (event.gui instanceof GuiChest) {
             GuiChest chest = (GuiChest) event.gui;
             IInventory inv = ((ContainerChest) chest.inventorySlots).getLowerChestInventory();
@@ -120,6 +124,9 @@ public class PetTracker {
     private void scanPets(IInventory inventory) {
         Map<String, Rarity> allPets = PetData.getAllPets();
 
+        List<String> petNamesByLength = new ArrayList<>(allPets.keySet());
+        petNamesByLength.sort(Comparator.comparingInt(String::length).reversed());
+
         for (int i = 0; i < inventory.getSizeInventory(); i++) {
             ItemStack item = inventory.getStackInSlot(i);
 
@@ -134,7 +141,7 @@ public class PetTracker {
             cleanName = cleanName.replaceAll("\\[Lvl \\d+\\] ", "").trim();
             int rarityScore = getRarityScoreFromColor(rawDisplayName);
 
-            for (String petName : allPets.keySet()) {
+            for (String petName : petNamesByLength) {
                 if (cleanName.contains(petName)) {
                     int currentHighest = ownedPets.getOrDefault(petName, 0);
                     ownedPets.put(petName, Math.max(currentHighest, rarityScore));

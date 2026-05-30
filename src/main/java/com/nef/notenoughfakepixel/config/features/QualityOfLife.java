@@ -98,6 +98,16 @@ public class QualityOfLife {
     public boolean qolDisableSellingRanks = false;
 
     @Expose
+    @ConfigOption(name = "Disable Server Announcements", desc = "Disable Fakepixel announcement/promo spam messages (help, store, discord, report, social media, etc.).")
+    @ConfigEditorBoolean
+    public boolean qolDisableServerAnnouncements = true;
+
+    @Expose
+    @ConfigOption(name = "Disable Game Invite Spam", desc = "Disable server-wide game invitation messages (e.g. 'invites you to play BedWars Solo').")
+    @ConfigEditorBoolean
+    public boolean qolDisableGameInvites = true;
+
+    @Expose
     @ConfigOption(name = "No Hurt Camera", desc = "Disable hurt camera effect.")
     @ConfigEditorBoolean
     public boolean qolNoHurtCam = true;

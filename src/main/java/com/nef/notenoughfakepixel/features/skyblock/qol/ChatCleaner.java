@@ -20,6 +20,17 @@ public class ChatCleaner {
     private final Pattern potatoDropPattern = Pattern.compile("§r§6§lRARE DROP! §r§fPotato§r§b");
     private final Pattern poisonousPotatoDropPattern = Pattern.compile("§r§6§lRARE DROP! §r§fPoisonous Potato§r§b");
     private final Pattern carrotDropPattern = Pattern.compile("§r§6§lRARE DROP! §r§fCarrot§r§b");
+    private final Pattern gameInvitePattern = Pattern.compile("§finvites you to play §6", Pattern.DOTALL);
+    private final Pattern serverAnnouncementPattern = Pattern.compile(
+            "§7\\[(?:VISIT|OPEN|GET|JOIN)\\b[^\\]]*\\]"
+                    + "|Use §6/(?:help|report|streams)\\b"
+                    + "|§fis the best rank for price and benefits"
+                    + "|Protect yourself from §6scams"
+                    + "|§fSpotted a cheater"
+                    + "|A special §6discount"
+                    + "|§fis streaming §fon the server"
+                    + "|§8\\?(?:§r)?\\s*$",
+            Pattern.DOTALL);
 
     @SubscribeEvent
     public void onChatRecieve(ClientChatReceivedEvent event) {
@@ -33,6 +44,15 @@ public class ChatCleaner {
         cancelMessage(Config.feature.qol.qolDisableZombieRareDrops, event, potatoDropPattern, true);
         cancelMessage(Config.feature.qol.qolDisableZombieRareDrops, event, poisonousPotatoDropPattern, true);
         cancelMessage(Config.feature.qol.qolDisableZombieRareDrops, event, carrotDropPattern, true);
+
+        // Check game invites first so they don't get swallowed by the broader announcement match.
+        String formatted = event.message.getFormattedText();
+        if (gameInvitePattern.matcher(formatted).find()) {
+            if (Config.feature.qol.qolDisableGameInvites) event.setCanceled(true);
+        } else if (Config.feature.qol.qolDisableServerAnnouncements
+                && serverAnnouncementPattern.matcher(formatted).find()) {
+            event.setCanceled(true);
+        }
     }
 
     private void cancelMessage(boolean option, ClientChatReceivedEvent e, Pattern pattern, boolean formatted) {

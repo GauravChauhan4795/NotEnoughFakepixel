@@ -25,8 +25,26 @@ import java.util.List;
 public class ScoreOverlay {
 
     private static final int chatDisplaySeconds = 40;
+    private static final String[] SIMPLE_EXAMPLE_LINES = {
+            "\u00a77Total score: \u00a7a300\u00a76 (S+)",
+            "",
+            "\u00a77Secrets: \u00a7a100% \u00a7a/ 80% \u00a7a/ 100%"
+    };
+    private static final String[] FULL_EXAMPLE_LINES = {
+            "\u00a77Total score: \u00a7a300\u00a76 (S+)",
+            "",
+            "\u00a77Skill: \u00a7a100",
+            "\u00a77Exploration: \u00a7a100",
+            "\u00a77Speed: \u00a7a100",
+            "\u00a77Bonus: \u00a7a5",
+            "",
+            "\u00a77Secrets: \u00a7a100% \u00a7a/ 80% \u00a7a/ 100%"
+    };
     private long readyTime = Long.MAX_VALUE;
     private final Minecraft mc = Minecraft.getMinecraft();
+    private final List<String> lineBuffer = new ArrayList<>(8);
+    private String cachedBackgroundConfig;
+    private int cachedBackgroundColor;
 
     @SubscribeEvent
     public void onRender(RenderGameOverlayEvent.Post event) {
@@ -51,32 +69,25 @@ public class ScoreOverlay {
         GlStateManager.translate(x, y, 0);
         GlStateManager.scale(scale, scale, scale);
 
-        List<String> lines = new ArrayList<>();
-        getLines(lines, example);
-
-        // Parse background color
-        String[] colorParts = Config.feature.dungeons.scoreSecrets.scoreOverlayBackgroundColor.split(":");
-        int alpha = Integer.parseInt(colorParts[1]);
-        int red = Integer.parseInt(colorParts[2]);
-        int green = Integer.parseInt(colorParts[3]);
-        int blue = Integer.parseInt(colorParts[4]);
-        int bgColor = (alpha << 24) | (red << 16) | (green << 8) | blue;
+        lineBuffer.clear();
+        getLines(lineBuffer, example);
+        int bgColor = getBackgroundColor();
 
         // Calculate text dimensions (unscaled)
         int textWidth = 0;
-        for (String line : lines) {
+        for (String line : lineBuffer) {
             int lineWidth = mc.fontRendererObj.getStringWidth(line);
             if (lineWidth > textWidth) textWidth = lineWidth;
         }
         textWidth += 4; // 2px padding on each side
-        int textHeight = lines.size() * 11; // 11px per line (8px font + 3px spacing)
+        int textHeight = lineBuffer.size() * 11; // 11px per line (8px font + 3px spacing)
 
         // Draw background matching text dimensions
         Gui.drawRect(0, 0, textWidth, textHeight, bgColor);
 
         // Draw text
-        for (int i = 0; i < lines.size(); i++) {
-            mc.fontRendererObj.drawString(lines.get(i), 2, i * 11, -1); // 2px left padding
+        for (int i = 0; i < lineBuffer.size(); i++) {
+            mc.fontRendererObj.drawString(lineBuffer.get(i), 2, i * 11, -1); // 2px left padding
         }
 
         GlStateManager.color(1.0f,1.0f,1.0f,1.0f);
@@ -103,19 +114,9 @@ public class ScoreOverlay {
 
     private void getLines(List<String> lines, boolean example) {
         if (example) {
-            if (Config.feature.dungeons.scoreSecrets.dungeonsScoreSimple) {
-                lines.add("\u00a77Total score: \u00a7a300\u00a76 (S+)");
-                lines.add("");
-                lines.add("\u00a77Secrets: \u00a7a100% \u00a7a/ 80% \u00a7a/ 100%");
-            } else {
-                lines.add("\u00a77Total score: \u00a7a300\u00a76 (S+)");
-                lines.add("");
-                lines.add("\u00a77Skill: \u00a7a100");
-                lines.add("\u00a77Exploration: \u00a7a100");
-                lines.add("\u00a77Speed: \u00a7a100");
-                lines.add("\u00a77Bonus: \u00a7a5");
-                lines.add("");
-                lines.add("\u00a77Secrets: \u00a7a100% \u00a7a/ 80% \u00a7a/ 100%");
+            String[] source = Config.feature.dungeons.scoreSecrets.dungeonsScoreSimple ? SIMPLE_EXAMPLE_LINES : FULL_EXAMPLE_LINES;
+            for (String line : source) {
+                lines.add(line);
             }
         } else {
             if (Config.feature.dungeons.scoreSecrets.dungeonsScoreSimple) {
@@ -133,6 +134,23 @@ public class ScoreOverlay {
                 lines.add(getSecretDisplay());
             }
         }
+    }
+
+    private int getBackgroundColor() {
+        String backgroundConfig = Config.feature.dungeons.scoreSecrets.scoreOverlayBackgroundColor;
+        if (backgroundConfig.equals(cachedBackgroundConfig)) {
+            return cachedBackgroundColor;
+        }
+
+        String[] colorParts = backgroundConfig.split(":");
+        int alpha = Integer.parseInt(colorParts[1]);
+        int red = Integer.parseInt(colorParts[2]);
+        int green = Integer.parseInt(colorParts[3]);
+        int blue = Integer.parseInt(colorParts[4]);
+
+        cachedBackgroundConfig = backgroundConfig;
+        cachedBackgroundColor = (alpha << 24) | (red << 16) | (green << 8) | blue;
+        return cachedBackgroundColor;
     }
 
     private String getRankingDisplay() {

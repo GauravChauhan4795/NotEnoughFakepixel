@@ -610,6 +610,12 @@ public class RenderUtils {
         draw3DLine(pos1, pos2, color, lineWidth, depth, partialTicks, false, false, null);
     }
 
+    public static void draw3DLine(double startX, double startY, double startZ,
+                                  double endX, double endY, double endZ,
+                                  Color color, int lineWidth, boolean depth, float partialTicks) {
+        draw3DLine(new Vec3(startX, startY, startZ), new Vec3(endX, endY, endZ), color, lineWidth, depth, partialTicks);
+    }
+
     /**
      * Draws a 3D line between two world-space positions using OpenGL line rendering.
      * <p>
@@ -749,6 +755,22 @@ public class RenderUtils {
 
     public static void highlightBlock(BlockPos pos, Color color, boolean disableDepth, float partialTicks) {
         highlightBlock(pos, color, disableDepth, false, partialTicks);
+    }
+
+    public static void renderFilledBoundingBox(AxisAlignedBB bb, Color color, boolean disableDepth) {
+        GlStateManager.pushMatrix();
+        if (disableDepth) GlStateManager.disableDepth();
+        GlStateManager.disableCull();
+        GlStateManager.disableTexture2D();
+        GlStateManager.disableLighting();
+        GL11.glDisable(GL11.GL_LIGHTING);
+        drawFilledBoundingBox(bb, color, 1f);
+        GL11.glEnable(GL11.GL_LIGHTING);
+        GlStateManager.enableLighting();
+        GlStateManager.enableTexture2D();
+        GlStateManager.enableCull();
+        if (disableDepth) GlStateManager.enableDepth();
+        GlStateManager.popMatrix();
     }
 
     public static void highlightBlock(BlockPos pos, Color color, boolean disableDepth, boolean isButton, float partialTicks) {

@@ -198,8 +198,6 @@ public class DragonCloseAlert {
         if (!(entity instanceof EntityDragon) || entity.isInvisible() || isDying(entity))
             return;
 
-        Logger.logOnlyOnce("Rendering dragon outline for entity: " + entity);
-
         EntityDragon dragon = (EntityDragon) entity;
         if (dragon.isDead || dragon.getHealth() <= 0.1f) return;
 
