@@ -1,6 +1,6 @@
 # NotEnoughFakepixel
 
-![NEF](https://github.com/user-attachments/assets/9fa18c7e-fd19-4011-8a97-2b04445fba10)
+![NEF](https://raw.githubusercontent.com/davidbelesp/NotEnoughFakepixel/daee8f12b5f60e4f9f4eaf6096a41c9df20d7552/src/main/resources/assets/notenoughfakepixel/logo.png)
 
 This is a remaster of NotEnoughFakepixel mod from GinaFro.
 
