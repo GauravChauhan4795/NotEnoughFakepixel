@@ -8,7 +8,8 @@ This privacy policy explains what data NotEnoughFakepixel collects, why it is co
 When you play Minecraft with NotEnoughFakepixel installed, the mod automatically sends a small analytics payload. This data includes:
 * **Your Minecraft Username:** Used purely to count unique players and prevent duplicate analytics data.
 * **The Server IP You Are Connected To:** We collect the IP of the Fakepixel you are playing on (not your personal/home IP address) to verify that the mod is being used on our intended server and avoid usage out of it.
-* **The NEF version you are using:** NotEnoughFakepixel version used at the moment. We use this specifically to check version usage and updates.
+* **The NEF version you are using:** NotEnoughFakepixel version used at the moment in the modlist. We use this specifically to check version usage and updates.
+* **Optifine:** We use the modlist to also detect Optifine installation for better user experience recommendation (Client Side).
 
 ### 2. Why We Collect This Data
 We use this data strictly for basic analytics and development purposes. It helps us understand:
