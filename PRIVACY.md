@@ -2,7 +2,7 @@
 
 **Last Updated:** 3 June 2026
 
-NotEnoughFakepixel does not collect, transmit, store, or sell personal data.
+NotEnoughFakepixel does not collect, transmit, store, or sell personal data. Starting version 1.2.5-beta+42
 
 ### 1. Data Collection
 NEF no longer sends analytics, usernames, server information, mod lists, or other gameplay data to any external server.
