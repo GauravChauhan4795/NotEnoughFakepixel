@@ -60,6 +60,7 @@ public enum Area {
     VOLCANO("Blazing Volcano"),
     SPIDER("Spider's Den"),
     BIRCH_PARK("Birch Park"),
+    MUSEUM("Museum"),
 
     CH_JUNGLE("Jungle"),
     CH_NUCLEUS("Crystal Nucleus"),
