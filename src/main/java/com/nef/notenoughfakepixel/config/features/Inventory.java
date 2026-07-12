@@ -13,6 +13,10 @@ public class Inventory {
     @Category(name = "Item Search", desc = "Item Search settings.")
     public ItemSearch itemSearch = new ItemSearch();
 
+    @Expose
+    @ConfigOption(name = "Item Search", desc = "Enable Item Search.")
+    public boolean itemSearchEnabled = true;
+
     public static class ItemSearch {
 
         @Expose

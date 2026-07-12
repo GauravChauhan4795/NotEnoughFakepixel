@@ -142,6 +142,7 @@ class ChestTracker {
 
     @SubscribeEvent
     public void onInteract(PlayerInteractEvent event) {
+        if (!Config.feature.inventory.itemSearchEnabled) return;
         if (event.action != PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) return;
         if (SkyblockData.getCurrentLocation() != Location.PRIVATE_ISLAND) return;
 
@@ -165,6 +166,7 @@ class ChestTracker {
 
     @SubscribeEvent
     public void onGuiOpen(GuiOpenEvent event) {
+        if (!Config.feature.inventory.itemSearchEnabled) return;
         if (pendingPos == null) return;
         if (System.currentTimeMillis() - pendingTime > 1000) {
             pendingPos = null;
@@ -184,6 +186,7 @@ class ChestTracker {
 
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
+        if (!Config.feature.inventory.itemSearchEnabled) return;
         if (event.phase != TickEvent.Phase.END) return;
 
         GuiScreen current = Minecraft.getMinecraft().currentScreen;

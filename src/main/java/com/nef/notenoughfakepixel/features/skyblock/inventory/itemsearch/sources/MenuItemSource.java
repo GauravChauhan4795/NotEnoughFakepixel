@@ -43,7 +43,7 @@ final class MenuItemSource implements ItemSource {
         List<TrackedEntry> items = new ArrayList<>();
         for (Storage.VirtualEntry entry : Storage.getAll()) {
             if (entry.type != menu.storageType) continue;
-            ItemContext context = new MenuItemContext(menu, entry.displayName);
+            ItemContext context = new MenuItemContext(menu, entry.displayName, entry.index);
             for (ChestStorage.SavedItem saved : entry.items) {
                 ItemStack stack = ChestStorage.deserialize(saved.nbt);
                 if (stack != null) items.add(new SingleTrackedEntry(stack, context));
@@ -55,14 +55,19 @@ final class MenuItemSource implements ItemSource {
     private static class MenuItemContext implements ItemContext {
         private final StorageMenu menu;
         private final String title;
+        private final int index;
 
-        private MenuItemContext(StorageMenu menu, String title) {
+        private MenuItemContext(StorageMenu menu, String title, int index) {
             this.menu = menu;
             this.title = title;
+            this.index = index;
         }
 
         @Override public ItemSources getSource() { return ItemSources.valueOf(menu.name()); }
         @Override public List<String> getLocationLines() {
+            if (menu == StorageMenu.PETS || menu == StorageMenu.ACCESSORY_BAG) {
+                return Collections.singletonList(menu.name + " Page " + index);
+            }
             return Collections.singletonList(title == null || title.equals(menu.name) ? menu.name : title);
         }
 

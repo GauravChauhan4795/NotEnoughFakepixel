@@ -280,6 +280,11 @@ class ItemSearchKeybind {
     public void onClientTick(TickEvent.ClientTickEvent event) {
         if (event.phase != TickEvent.Phase.END) return;
 
+        if (!Config.feature.inventory.itemSearchEnabled) {
+            keyHeld = false;
+            return;
+        }
+
         Minecraft mc = Minecraft.getMinecraft();
         if (mc.thePlayer == null) {
             keyHeld = false;

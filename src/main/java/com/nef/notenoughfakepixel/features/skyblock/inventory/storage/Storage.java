@@ -71,4 +71,12 @@ public class Storage {
     public static Collection<VirtualEntry> getAll() {
         return currentProfileMap().values();
     }
+
+    public static int nextIndex(StorageType type) {
+        int highest = 0;
+        for (VirtualEntry entry : currentProfileMap().values()) {
+            if (entry.type == type) highest = Math.max(highest, entry.index);
+        }
+        return highest + 1;
+    }
 }
